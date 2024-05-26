@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/user/oauth")
 @RequiredArgsConstructor
@@ -16,6 +18,8 @@ public class Oauth2Controller {
     @GetMapping("/kakao")
     public void login(@RequestParam String code) {
         String accessTokenFromKakao = authService.getAccessTokenFromKakao(code);
-        authService.getUserInfoFromKakao(accessTokenFromKakao);
+        Map<String, Object> userInfoFromKakao = authService.getUserInfoFromKakao(accessTokenFromKakao);
+
+        System.out.println(userInfoFromKakao);
     }
 }

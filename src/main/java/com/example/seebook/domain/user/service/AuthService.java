@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -33,13 +36,24 @@ public class AuthService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        ResponseEntity<KakaoTokenResponse> response = restTemplate.postForEntity(tokenUrl, request, KakaoTokenResponse.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(tokenUrl, request, String.class);
 
-        return response.getBody().toOAuth2AccessToken();
+        if (response.getStatusCode() == HttpStatus.OK) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode root = objectMapper.readTree(response.getBody());
+                return root.path("access_token").asText();
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to parse access token from Kakao response", e);
+            }
+        } else {
+            throw new RuntimeException("Failed to get access token from Kakao, response status: " + response.getStatusCode());
+        }
     }
 
-    public void getUserInfoFromKakao(String accessToken) {
+    public Map<String, Object> getUserInfoFromKakao(String accessToken) {
         String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
+        HashMap<String, Object> userInfo = new HashMap<String, Object>();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
@@ -50,6 +64,26 @@ public class AuthService {
 
         Map<String, Object> attributes = response.getBody();
 
-        System.out.println(attributes);
+        Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
+
+
+        Long id = (Long) attributes.get("id");
+        String name = kakao_account.get("name").toString();
+        String email = kakao_account.get("email").toString();
+        String phone_number = kakao_account.get("phone_number").toString();
+        String gender = kakao_account.get("gender").toString();
+        String birthyear = kakao_account.get("birthyear").toString();
+        String birthday = kakao_account.get("birthday").toString();
+
+        //userInfo에 넣기
+        userInfo.put("id", id);
+        userInfo.put("name", name);
+        userInfo.put("email", email);
+        userInfo.put("phone_number", phone_number);
+        userInfo.put("birthyear", birthyear);
+        userInfo.put("birthday", birthday);
+        userInfo.put("gender", gender);
+
+        return userInfo;
     }
 }
