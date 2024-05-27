@@ -3,9 +3,13 @@ package com.example.seebook.domain.user.service;
 import com.example.seebook.domain.roletype.entity.RoleCode;
 import com.example.seebook.domain.roletype.entity.RoleType;
 import com.example.seebook.domain.user.domain.User;
+import com.example.seebook.domain.user.dto.oauth2.LoginResponse;
+import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
+import com.example.seebook.domain.user.dto.oauth2.Oauth2LoginResponseDTO;
+import com.example.seebook.domain.user.dto.oauth2.Oauth2SignUpRequestDTO;
 import com.example.seebook.domain.user.dto.requset.ChangePasswordRequestDTO;
 import com.example.seebook.domain.user.dto.requset.LoginRequestDTO;
-import com.example.seebook.domain.user.dto.requset.sms.SignUpRequestDTO;
+import com.example.seebook.domain.user.dto.requset.SignUpRequestDTO;
 import com.example.seebook.domain.user.dto.response.LoginResponseDTO;
 import com.example.seebook.domain.user.dto.response.Suspend;
 import com.example.seebook.domain.user.repository.UserRepository;
@@ -26,9 +30,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public LoginResponse processOAuth2Login(Oauth2DTO oauth2DTO) {
+        Optional<User> byPhoneNumber = userRepository.findByPhoneNumber(oauth2DTO.getPhoneNumber());
+        if (byPhoneNumber.isPresent()) {
+            //이미 가입된 경우 바로 정보 반환
+            return Oauth2LoginResponseDTO.form(byPhoneNumber.get(), new Suspend(false, LocalDateTime.now(), LocalDateTime.now(), "임시"));
+        } else {
+            //최초로그인 -> 카카오 정보를 반환 -> 토탈 회원가입 할때 api로 가입시킴
+            return Oauth2SignUpRequestDTO.form(oauth2DTO);
+        }
+    }
     public void signUp(SignUpRequestDTO signUpRequestDTO) {
-//        userRepository.findByPhoneNumber(signUpRequestDTO.getPhoneNumber())
-//                .orElseThrow(UserException.DuplicatedPhoneNumberException::new);
+        userRepository.findByPhoneNumber(signUpRequestDTO.getPhoneNumber())
+                .orElseThrow(UserException.DuplicatedPhoneNumberException::new);
 
         User user = User.builder()
                 .email(signUpRequestDTO.getEmail())
@@ -43,6 +57,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+
     public String findEmail(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(UserException.NotFoundEmailException::new)
@@ -53,6 +68,7 @@ public class UserService {
         User user = userRepository.findByEmail(changePasswordRequestDTO.getEmail())
                 .orElseThrow(UserException.NotFoundEmailException::new);
         user.changePassword(changePasswordRequestDTO.getPassword());
+        userRepository.save(user);
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {

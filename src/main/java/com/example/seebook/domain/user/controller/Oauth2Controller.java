@@ -1,12 +1,16 @@
 package com.example.seebook.domain.user.controller;
 
+import com.example.seebook.domain.user.dto.oauth2.LoginResponse;
+import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
+import com.example.seebook.domain.user.dto.requset.SignUpRequestDTO;
+import com.example.seebook.domain.user.dto.response.LoginResponseDTO;
 import com.example.seebook.domain.user.service.AuthService;
+import com.example.seebook.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -15,11 +19,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class Oauth2Controller {
     private final AuthService authService;
+    private final UserService userService;
     @GetMapping("/kakao")
-    public void login(@RequestParam String code) {
-        String accessTokenFromKakao = authService.getAccessTokenFromKakao(code);
-        Map<String, Object> userInfoFromKakao = authService.getUserInfoFromKakao(accessTokenFromKakao);
+    public ResponseEntity<LoginResponse> login(@RequestParam String code) {
+        String accessToken = authService.getAccessTokenFromKakao(code);
+        Oauth2DTO userInfo = authService.getUserInfoFromKakao(accessToken);
+        return  ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.processOAuth2Login(userInfo));
+    }
 
-        System.out.println(userInfoFromKakao);
+    @PostMapping("/total-signup")
+    public ResponseEntity<?> totalSignUp(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
+        userService.signUp(signUpRequestDTO);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 }

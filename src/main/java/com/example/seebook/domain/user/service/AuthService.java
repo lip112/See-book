@@ -1,5 +1,6 @@
 package com.example.seebook.domain.user.service;
 
+import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -51,9 +52,8 @@ public class AuthService {
         }
     }
 
-    public Map<String, Object> getUserInfoFromKakao(String accessToken) {
+    public Oauth2DTO getUserInfoFromKakao(String accessToken) {
         String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
-        HashMap<String, Object> userInfo = new HashMap<String, Object>();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
@@ -66,24 +66,27 @@ public class AuthService {
 
         Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
 
+        return Oauth2DTO.builder()
+                .name(kakao_account.get("name").toString())
+                .email(kakao_account.get("email").toString())
+                .phoneNumber(kakao_account.get("phone_number").toString())
+                .gender(kakao_account.get("gender").toString())
+                .birthday(formatDate(kakao_account.get("birthyear").toString()+kakao_account.get("birthday").toString()))
+                .build();
+    }
 
-        Long id = (Long) attributes.get("id");
-        String name = kakao_account.get("name").toString();
-        String email = kakao_account.get("email").toString();
-        String phone_number = kakao_account.get("phone_number").toString();
-        String gender = kakao_account.get("gender").toString();
-        String birthyear = kakao_account.get("birthyear").toString();
-        String birthday = kakao_account.get("birthday").toString();
+    private String formatPhoneNumber(String phoneNumber) {
+        // Step 1: 공백, 하이픈을 제거하고 "82 "를 "0"으로 대체합니다.
+        String intermediate = phoneNumber.replaceAll("\\+82 ", "0").replaceAll("[\\s-]", "");
 
-        //userInfo에 넣기
-        userInfo.put("id", id);
-        userInfo.put("name", name);
-        userInfo.put("email", email);
-        userInfo.put("phone_number", phone_number);
-        userInfo.put("birthyear", birthyear);
-        userInfo.put("birthday", birthday);
-        userInfo.put("gender", gender);
+        // Step 2: 결과 반환
+        return intermediate;
+    }
+    private String formatDate(String date) {
+        String year = date.substring(0, 4);
+        String month = date.substring(4, 6);
+        String day = date.substring(6, 8);
 
-        return userInfo;
+        return year + "-" + month + "-" + day;
     }
 }

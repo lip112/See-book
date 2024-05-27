@@ -1,10 +1,7 @@
 package com.example.seebook.domain.user.controller;
 
-import com.example.seebook.domain.user.dto.requset.ChangePasswordRequestDTO;
-import com.example.seebook.domain.user.dto.requset.LoginRequestDTO;
-import com.example.seebook.domain.user.dto.requset.PhoneNumberDTO;
+import com.example.seebook.domain.user.dto.requset.*;
 import com.example.seebook.domain.user.dto.requset.sms.VerificationRequestDTO;
-import com.example.seebook.domain.user.dto.requset.sms.SignUpRequestDTO;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.global.exception.UserException;
 import com.example.seebook.global.sms.SmsService;
@@ -20,14 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final SmsService smsService;
-
-    @GetMapping("/pp")
-    public ResponseEntity<?> sss() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .build();
-    }
-
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
         userService.signUp(signUpRequestDTO);
@@ -76,5 +65,12 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.login(loginRequestDTO));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDTO logoutRequestDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 }

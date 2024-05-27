@@ -29,5 +29,11 @@ public class UserException extends RuntimeException{
         }
     }
 
+    public static class NotFoundPhoneNumberException extends UserException {
+        public NotFoundPhoneNumberException() {
+            super(ErrorCode.NOT_FOUND_PHONE_NUMBER);
+        }
+    }
+
 
 }
