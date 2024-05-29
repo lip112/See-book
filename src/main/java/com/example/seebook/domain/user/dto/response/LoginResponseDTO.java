@@ -1,7 +1,6 @@
 package com.example.seebook.domain.user.dto.response;
 
 import com.example.seebook.domain.user.domain.User;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +15,7 @@ public class LoginResponseDTO {
 
     public static LoginResponseDTO form(User user, Suspend suspend){
         return LoginResponseDTO.builder()
-                .user_id(user.getId())
+                .user_id(user.getUserId())
                 .provider("seebook")
                 .suspend(suspend)
                 .build();

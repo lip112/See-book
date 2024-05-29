@@ -16,7 +16,7 @@ public class Oauth2LoginResponseDTO extends LoginResponse  {
 
     public static Oauth2LoginResponseDTO form(User user, Suspend suspend){
         Oauth2LoginResponseDTO seebook = Oauth2LoginResponseDTO.builder()
-                .user_id(user.getId())
+                .user_id(user.getUserId())
                 .provider("kakao")
                 .suspend(suspend)
                 .build();

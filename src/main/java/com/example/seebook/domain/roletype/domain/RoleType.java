@@ -1,4 +1,4 @@
-package com.example.seebook.domain.roletype.entity;
+package com.example.seebook.domain.roletype.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.example.seebook.domain.user.service;
 
-import com.example.seebook.domain.roletype.entity.RoleCode;
-import com.example.seebook.domain.roletype.entity.RoleType;
+import com.example.seebook.domain.roletype.domain.RoleCode;
+import com.example.seebook.domain.roletype.domain.RoleType;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.dto.oauth2.LoginResponse;
 import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;

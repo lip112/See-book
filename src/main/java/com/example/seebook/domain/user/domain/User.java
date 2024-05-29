@@ -1,9 +1,8 @@
 package com.example.seebook.domain.user.domain;
 
-import com.example.seebook.domain.roletype.entity.RoleType;
+import com.example.seebook.domain.roletype.domain.RoleType;
 import com.example.seebook.global.audit.BaseTime;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long id;
+    private Long userId;
 
     @Column(unique = true)
     private String email;
@@ -41,7 +39,7 @@ public class User extends BaseTime {
 
     @Builder
     public User(Long id, String email, RoleType role, String password, String nickname, String name, Gender gender, String phoneNumber, String birthday) {
-        this.id = id;
+        this.userId = id;
         this.email = email;
         this.role = role;
         this.password = password;
