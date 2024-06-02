@@ -35,5 +35,11 @@ public class UserException extends RuntimeException{
         }
     }
 
+    public static class NotFoundUserException extends UserException {
+        public NotFoundUserException() {
+            super(ErrorCode.NOT_FOUND_USER);
+        }
+    }
+
 
 }

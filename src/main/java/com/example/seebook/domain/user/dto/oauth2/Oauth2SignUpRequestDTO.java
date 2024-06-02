@@ -23,6 +23,5 @@ public class Oauth2SignUpRequestDTO extends LoginResponse {
                 .build();
         seebook.setSuccess(false);
         return seebook;
-
     }
 }

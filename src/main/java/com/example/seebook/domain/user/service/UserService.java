@@ -63,6 +63,10 @@ public class UserService {
                 .orElseThrow(UserException.NotFoundEmailException::new)
                 .getEmail();
     }
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserException.NotFoundUserException::new);
+    }
 
     public void changePassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
         User user = userRepository.findByEmail(changePasswordRequestDTO.getEmail())

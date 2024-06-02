@@ -23,9 +23,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AWTEventListener.class)
 public class BaseTime {
     @CreatedDate
-    @Column(name = "create_time")
-    private LocalDateTime createdAt ;
+    private LocalDateTime createdDate;
     @LastModifiedDate
-    @Column(name = "modify_time")
-    private LocalDateTime modifiedAt;
+    private LocalDateTime modifiedDate;
 }

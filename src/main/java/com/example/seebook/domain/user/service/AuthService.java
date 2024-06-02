@@ -69,7 +69,7 @@ public class AuthService {
         return Oauth2DTO.builder()
                 .name(kakao_account.get("name").toString())
                 .email(kakao_account.get("email").toString())
-                .phoneNumber(kakao_account.get("phone_number").toString())
+                .phoneNumber(formatPhoneNumber(kakao_account.get("phone_number").toString()))
                 .gender(kakao_account.get("gender").toString())
                 .birthday(formatDate(kakao_account.get("birthyear").toString()+kakao_account.get("birthday").toString()))
                 .build();
