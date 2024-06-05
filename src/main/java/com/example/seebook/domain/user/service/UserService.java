@@ -58,12 +58,12 @@ public class UserService {
     }
 
 
-    public String findEmail(String phoneNumber) {
+    public String getEmail(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(UserException.NotFoundEmailException::new)
                 .getEmail();
     }
-    public User findById(Long userId) {
+    public User getById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserException.NotFoundUserException::new);
     }
@@ -75,7 +75,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+    public LoginResponseDTO loginToEmail(LoginRequestDTO loginRequestDTO) {
         User user = userRepository.findByEmail(loginRequestDTO.getEmail())
                 .orElseThrow(NotFoundEmailException::new);
         if(passwordEncoder.matches(user.getPassword(), loginRequestDTO.getPassword()))

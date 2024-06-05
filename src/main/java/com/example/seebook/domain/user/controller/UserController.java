@@ -52,7 +52,7 @@ public class UserController {
         if (smsUtil.verifyCode(verificationRequestDTO)) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.findEmail(verificationRequestDTO.getPhoneNumber()));
+                    .body(userService.getEmail(verificationRequestDTO.getPhoneNumber()));
         } else {
             throw new UserException.NotFoundEmailException();
         }
@@ -70,7 +70,7 @@ public class UserController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.login(loginRequestDTO));
+                .body(userService.loginToEmail(loginRequestDTO));
     }
 
     @PostMapping("/logout")

@@ -15,10 +15,14 @@ public class Review extends BaseTime {
     private Long reviewId;
 
     @ManyToOne
-    private User userId;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
-    private Book bookId;
+    @JoinColumn(name = "book_id")
+    private Book book;
+
+    private String nickname;
 
     private String content;
 
@@ -33,9 +37,9 @@ public class Review extends BaseTime {
     }
 
     @Builder
-    public Review(User userId, Book bookId, String content, Long starRating) {
-        this.userId = userId;
-        this.bookId = bookId;
+    public Review(User user, Book book, String content, Long starRating) {
+        this.user = user;
+        this.book = book;
         this.content = content;
         this.starRating = starRating;
     }
