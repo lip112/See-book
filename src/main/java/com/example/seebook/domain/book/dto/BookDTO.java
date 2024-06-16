@@ -18,6 +18,20 @@ public class BookDTO {
     private String categoryId;
     private String categoryName;
     private String publisher;
+    private double avgStar;
+    private Long totalReviewCount;
+    private Long wishlistCount;
+
+    public void addWishlistCount(Long wishlistCount) {
+        this.wishlistCount = wishlistCount;
+    }
+
+    public void addAvgStar(double avgStar) {
+        this.avgStar = avgStar;
+    }
+    public void addTotalReviewCount(Long totalReviewCount) {
+        this.totalReviewCount = totalReviewCount;
+    }
 
     @Builder
     public BookDTO(Long bookId, String title, String buyLink, String author, String description, String isbn13, String imageLink, String categoryId, String categoryName, String publisher) {

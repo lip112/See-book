@@ -10,7 +10,7 @@ import java.util.BitSet;
 import java.util.Optional;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom {
 
     Optional<Book> findByIsbn13(String isbn);
 }

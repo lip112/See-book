@@ -1,6 +1,7 @@
 package com.example.seebook.domain.book.controller;
 
 import com.example.seebook.domain.book.domain.Book;
+import com.example.seebook.domain.book.dto.BookDTO;
 import com.example.seebook.domain.book.service.BookService;
 import com.example.seebook.domain.review.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.domain.review.service.ReviewService;
@@ -26,18 +27,18 @@ public class BookController {
     }
 
     @GetMapping("/detail-search")
-    public ResponseEntity<?> findDetailSearch(@RequestParam String isbn13, @RequestParam(defaultValue = "1") int page) {
-        if (bookService.validationDBInIsbn13(isbn13)){
-            Book book = bookService.getDetailBook(isbn13);
-            BookInReviewListResponseDTO reviewList = reviewService.getReviewList(book, page);
+    public ResponseEntity<BookInReviewListResponseDTO> findDetailSearch(@RequestParam String isbn13, @RequestParam(defaultValue = "1") int page) {
+        if (bookService.validationDBInIsbn13(isbn13)){ // 일단 성공했는데 쿼리를 2번 보내는 문제가 생겨서 변경할지 고민
+            BookDTO detailBook = bookService.getDetailBook(isbn13);
+            BookInReviewListResponseDTO detailBookWithReviewList = reviewService.getReviewList(detailBook, page);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(reviewList);
+                    .body(detailBookWithReviewList);
         } else {
-            bookService.findByAladin(isbn13);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(bookService.findByAladin(isbn13));
         }
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body("");
+
     }
 }

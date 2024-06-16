@@ -1,10 +1,10 @@
 package com.example.seebook.domain.review.service;
 
 import com.example.seebook.domain.book.domain.Book;
+import com.example.seebook.domain.book.dto.BookDTO;
 import com.example.seebook.domain.book.service.BookService;
 import com.example.seebook.domain.review.domain.Review;
 import com.example.seebook.domain.review.dto.request.ModifyReviewRequestDTO;
-import com.example.seebook.domain.review.dto.request.ReportReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.WriteReviewRequestDTO;
 import com.example.seebook.domain.review.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.domain.review.repository.ReviewRepository;
@@ -36,16 +36,12 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    public void ReportReview(ReportReviewRequestDTO reportReviewRequestDTO) {
-//        Report에다가 세이브해야함
-    }
-
     public void DeleteReview(Long userId) {
         reviewRepository.deleteById(userId);
     }
 
-    public BookInReviewListResponseDTO getReviewList(Book book, int page) { // page?
-        return reviewRepository.getReviewList(book, page, (page-1)*10, page*10-1);
+    public BookInReviewListResponseDTO getReviewList(BookDTO bookDTO, int page) { // page?
+        return reviewRepository.getReviewList(bookDTO, page, (page-1)*10, page*10-1);
         // 1 : 0 , 9
         // 2 : 10 , 19
         // 3 : 20 , 29

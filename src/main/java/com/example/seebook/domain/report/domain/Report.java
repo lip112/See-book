@@ -2,6 +2,7 @@ package com.example.seebook.domain.report.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,15 @@ public class Report {
 
     @Enumerated(EnumType.STRING)
     private ReportStatus isActive;
+
+    @Builder
+    public Report(Long reviewId, Long reporterId, Long reportedId, String reportType, String description, LocalDateTime reportDate, ReportStatus isActive) {
+        this.reviewId = reviewId;
+        this.reporterId = reporterId;
+        this.reportedId = reportedId;
+        this.reportType = reportType;
+        this.description = description;
+        this.reportDate = reportDate;
+        this.isActive = isActive;
+    }
 }

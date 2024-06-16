@@ -24,7 +24,6 @@ public class Book {
     private String description;
     private String buyLink;
     private String imageLink;
-    private String wishlistCount;
     private String categoryId;
     private String categoryName;
 }
