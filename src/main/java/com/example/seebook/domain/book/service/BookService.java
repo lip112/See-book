@@ -37,7 +37,7 @@ public class BookService {
         return bookRepository.getBooksReviewSummary(bookDTO);
     }
 
-    public Book getById(Long bookId) { //DTO로 변환해서 반환
+    public Book getById(Long bookId) {
         return bookRepository.findById(bookId)
                 .orElseThrow(BookException.NotFoundBookException::new);
     }

@@ -13,4 +13,7 @@ public class ProfileService {
     public void getProfileWithReviewList(ProfileWithReviewListRequestDTO profileWithReviewListRequestDTO) {
 
     }
+    public void join(Long userId) {
+        profileRepository.join();
+    }
 }

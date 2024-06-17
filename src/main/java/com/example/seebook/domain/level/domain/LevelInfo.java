@@ -25,4 +25,20 @@ public class LevelInfo {
         this.level = level;
         this.levelCount = levelCount;
     }
+
+    public void upgradeLevel() {
+        this.level++;
+        this.levelCount = 0;
+    }
+    public void downgradeLevel() {
+        this.level--;
+        this.levelCount = Level.getLevelMaxCount(level) - 1;
+    }
+
+    public void plusLevelCount() {
+        this.levelCount++;
+    }
+    public void minusLevelCount() {
+        this.levelCount--;
+    }
 }

@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-@Entity(name = "role_type")
-public class RoleType  {
+@Entity(name = "role_info")
+public class RoleInfo {
 
     @Id
     @Enumerated(EnumType.STRING)
@@ -15,7 +15,7 @@ public class RoleType  {
 
     private String roleType;
 
-    public RoleType(RoleCode roleCode) {
+    public RoleInfo(RoleCode roleCode) {
         this.roleCode = roleCode;
         this.roleType = roleCode.getDescription();
     }

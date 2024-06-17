@@ -20,17 +20,20 @@ import static com.example.seebook.domain.user.domain.QUser.user;
 public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
+    @Override
     public void getProfileWithReviewListDTO(ProfileWithReviewListRequestDTO profileWithReviewListRequestDTO){
 //        List<Tuple> results = queryFactory
-//                .select(profile.imageUrl, user.nickname, levelInfo.level, levelInfo.levelCount, review.starRating.avg().as("avgStar"),
-//                        review.book.bookId, book.imageLink, book.title , review.content)
+//                .select(profile.imageUrl, user.nickname, levelInfo.level, levelInfo.levelCount,
+//                        review.book.bookId, book.imageLink, book.title,
+//                        review.starRating.avg().as("avgStar"), review.reviewId.count().as("totalReviewCount"))
 //                .from(profile)
-//                .leftJoin(levelInfo).on(levelInfo.userId.eq(profileWithReviewListRequestDTO.getUserId()))
-//                .leftJoin(review).on(review.user.userId.eq(profileWithReviewListRequestDTO.getUserId()))
-//                .leftJoin(book).on(book.bookId.eq(review.book.bookId))
-//                .leftJoin(user).on(user.userId.eq(profileWithReviewListRequestDTO.getUserId()))
-//                .where(profile.profileId.eq(profileWithReviewListRequestDTO.getUserId()))
-//                .groupBy(review.book.bookId) //일단 데이터 가져왔는데 책의 평균 값을 어떻게 가져올지 모
+//                .leftJoin(levelInfo).on(levelInfo.userId.eq(profile.userId))
+//                .leftJoin(user).on(user.userId.eq(profile.userId))//해당 사용자의 정보
+//                .leftJoin(review).on(review.user.userId.eq(profile.userId))//해당 사용자가 작성한 모든 리뷰 리스트
+//                .leftJoin(book).on(book.bookId.eq(review.book.bookId))// 그 리뷰 리스트에 맞는 책 정보를 가져옴
+//                //해당 책의 모든 리뷰들을 가져와서 평균을 구해야 하는데 모름 따로 구성해야 하는가 서브쿼리 이용?
+//                .where(profile.userId.eq(profileWithReviewListRequestDTO.getUserId()))
+//                .groupBy(review.book.bookId)
 //                .fetch();
 //
 //        String profileImage = null;
@@ -66,5 +69,10 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom{
 //                .reviewList(reviewList)
 //                .build();
 //    }
+    }
+
+    @Override
+    public void join() {
+
     }
 }

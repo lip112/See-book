@@ -28,7 +28,7 @@ public class BookController {
 
     @GetMapping("/detail-search")
     public ResponseEntity<BookInReviewListResponseDTO> findDetailSearch(@RequestParam String isbn13, @RequestParam(defaultValue = "1") int page) {
-        if (bookService.validationDBInIsbn13(isbn13)){ // 일단 성공했는데 쿼리를 2번 보내는 문제가 생겨서 변경할지 고민
+        if (bookService.validationDBInIsbn13(isbn13)){
             BookDTO detailBook = bookService.getDetailBook(isbn13);
             BookInReviewListResponseDTO detailBookWithReviewList = reviewService.getReviewList(detailBook, page);
             return ResponseEntity

@@ -1,7 +1,7 @@
 package com.example.seebook.domain.user.service;
 
 import com.example.seebook.domain.roletype.domain.RoleCode;
-import com.example.seebook.domain.roletype.domain.RoleType;
+import com.example.seebook.domain.roletype.domain.RoleInfo;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.dto.oauth2.LoginResponse;
 import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
@@ -52,7 +52,7 @@ public class UserService {
                 .gender(signUpRequestDTO.getGender())
                 .birthday(signUpRequestDTO.getBirthday())
                 .phoneNumber(signUpRequestDTO.getPhoneNumber())
-                .role(new RoleType(RoleCode.USER))
+                .role(new RoleInfo(RoleCode.USER))
                 .build();
         userRepository.save(user);
     }

@@ -1,6 +1,6 @@
 package com.example.seebook.domain.user.domain;
 
-import com.example.seebook.domain.roletype.domain.RoleType;
+import com.example.seebook.domain.roletype.domain.RoleInfo;
 import com.example.seebook.global.audit.BaseTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,7 +28,7 @@ public class User extends BaseTime {
 
     @ManyToOne
     @JoinColumn(name = "role_type")
-    private RoleType role;
+    private RoleInfo role;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -38,7 +38,7 @@ public class User extends BaseTime {
     private LocalDate birthday;
 
     @Builder
-    public User(Long id, String email, RoleType role, String password, String nickname, String name, Gender gender, String phoneNumber, String birthday) {
+    public User(Long id, String email, RoleInfo role, String password, String nickname, String name, Gender gender, String phoneNumber, String birthday) {
         this.userId = id;
         this.email = email;
         this.role = role;
