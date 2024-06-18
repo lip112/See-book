@@ -1,9 +1,10 @@
 package com.example.seebook.domain.profile.repository;
 
 import com.example.seebook.domain.profile.dto.request.ProfileWithReviewListRequestDTO;
+import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
 
 public interface ProfileRepositoryCustom {
     void getProfileWithReviewListDTO(ProfileWithReviewListRequestDTO profileWithReviewListRequestDTO);
 
-    void join();
+    JoinResponseDTO joinProfile(Long userId);
 }

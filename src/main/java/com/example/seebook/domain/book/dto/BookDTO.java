@@ -34,7 +34,7 @@ public class BookDTO {
     }
 
     @Builder
-    public BookDTO(Long bookId, String title, String buyLink, String author, String description, String isbn13, String imageLink, String categoryId, String categoryName, String publisher) {
+    public BookDTO(Long bookId, String title, String buyLink, String author, String description, String isbn13, String imageLink, String categoryId, String categoryName, String publisher, Double avgStar, Long totalReviewCount) {
         this.bookId = bookId;
         this.title = title;
         this.buyLink = buyLink;
@@ -45,6 +45,8 @@ public class BookDTO {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.publisher = publisher;
+        this.avgStar = avgStar;
+        this.totalReviewCount = totalReviewCount;
     }
     public static BookDTO form(Book book) {
         return BookDTO.builder()

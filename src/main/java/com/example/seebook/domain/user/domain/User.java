@@ -1,6 +1,6 @@
 package com.example.seebook.domain.user.domain;
 
-import com.example.seebook.domain.roletype.domain.RoleInfo;
+import com.example.seebook.domain.role.domain.RoleInfo;
 import com.example.seebook.global.audit.BaseTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -52,5 +52,8 @@ public class User extends BaseTime {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

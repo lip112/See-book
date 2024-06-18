@@ -1,7 +1,7 @@
 package com.example.seebook.domain.user.service;
 
-import com.example.seebook.domain.roletype.domain.RoleCode;
-import com.example.seebook.domain.roletype.domain.RoleInfo;
+import com.example.seebook.domain.role.domain.RoleCode;
+import com.example.seebook.domain.role.domain.RoleInfo;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.dto.oauth2.LoginResponse;
 import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
@@ -40,7 +40,7 @@ public class UserService {
             return Oauth2SignUpRequestDTO.form(oauth2DTO);
         }
     }
-    public void signUp(SignUpRequestDTO signUpRequestDTO) {
+    public Long signUp(SignUpRequestDTO signUpRequestDTO) {
         userRepository.findByPhoneNumber(signUpRequestDTO.getPhoneNumber())
                 .orElseThrow(UserException.DuplicatedPhoneNumberException::new);
 
@@ -55,6 +55,7 @@ public class UserService {
                 .role(new RoleInfo(RoleCode.USER))
                 .build();
         userRepository.save(user);
+        return user.getUserId();
     }
 
 
@@ -63,7 +64,7 @@ public class UserService {
                 .orElseThrow(UserException.NotFoundEmailException::new)
                 .getEmail();
     }
-    public User getById(Long userId) {
+    public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserException.NotFoundUserException::new);
     }
@@ -82,5 +83,17 @@ public class UserService {
             return LoginResponseDTO.form(user, new Suspend(false, LocalDateTime.now(), LocalDateTime.now(), "임시"));
         else
             throw new UserException.LoginFailedException();
+    }
+
+    public boolean validationNickname(String nickname) {
+        Optional<User> byNickname = userRepository.findByNickname(nickname);
+        return byNickname.isEmpty();
+    }
+
+    public void changeNickname(Long userId, String nickname) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserException.NotFoundUserException::new);
+        user.changeNickname(nickname);
+        userRepository.save(user);
     }
 }

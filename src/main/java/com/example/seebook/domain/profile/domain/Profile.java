@@ -26,4 +26,10 @@ public class Profile {
         this.originalName = originalName;
         this.imageUrl = imageUrl;
     }
+
+    public void changeImage(String uploadName, String imageUrl, String originalName) {
+        this.uploadName = uploadName;
+        this.originalName = originalName;
+        this.imageUrl = imageUrl;
+    }
 }

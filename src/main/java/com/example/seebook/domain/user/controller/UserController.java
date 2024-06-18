@@ -1,5 +1,6 @@
 package com.example.seebook.domain.user.controller;
 
+import com.example.seebook.domain.profile.service.ProfileService;
 import com.example.seebook.domain.user.dto.requset.*;
 import com.example.seebook.domain.user.dto.requset.sms.VerificationRequestDTO;
 import com.example.seebook.domain.user.service.UserService;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
+    private final ProfileService profileService;
     private final SmsUtil smsUtil;
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
-        userService.signUp(signUpRequestDTO);
+        Long userId = userService.signUp(signUpRequestDTO);
+        profileService.singUpDefaultProfileImage(userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -78,5 +81,18 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
+    }
+
+    @GetMapping("/validation-nickname")
+    public ResponseEntity<?> validationNickname(@RequestParam("nickname") String nickname) {
+        if (userService.validationNickname(nickname)) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("사용 가능한 닉네임 입니다.");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("중복된 닉네임 입니다.");
+        }
     }
 }

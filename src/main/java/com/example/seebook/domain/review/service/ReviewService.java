@@ -1,12 +1,11 @@
 package com.example.seebook.domain.review.service;
 
-import com.example.seebook.domain.book.domain.Book;
 import com.example.seebook.domain.book.dto.BookDTO;
 import com.example.seebook.domain.book.service.BookService;
 import com.example.seebook.domain.review.domain.Review;
 import com.example.seebook.domain.review.dto.request.ModifyReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.WriteReviewRequestDTO;
-import com.example.seebook.domain.review.dto.response.BookInReviewListResponseDTO;
+import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.domain.review.repository.ReviewRepository;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.global.exception.ReviewException;
@@ -21,8 +20,8 @@ public class ReviewService {
     private final BookService bookService;
     public void writeReview(WriteReviewRequestDTO writeReviewRequestDTO) {
         reviewRepository.save(Review.builder()
-                        .user(userService.getById(writeReviewRequestDTO.getUserId()))
-                        .book(bookService.getById(writeReviewRequestDTO.getBookId()))
+                        .user(userService.findById(writeReviewRequestDTO.getUserId()))
+                        .book(bookService.findById(writeReviewRequestDTO.getBookId()))
                         .content(writeReviewRequestDTO.getContent())
                         .starRating(writeReviewRequestDTO.getStarRating())
                 .build());

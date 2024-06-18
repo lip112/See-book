@@ -38,7 +38,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                         tuple -> tuple.get(book.bookId),
                         tuple -> tuple
                 ));
-
+        //sql에서 가져온 값과 일치하는 값에 매칭해서 값을 넣음 O(1)
         for (BookDTO bookDTO : bookList.getBook()) {
             if (results.containsKey(bookDTO.getBookId())){
                 bookDTO.addAvgStar(results.get(bookDTO.getBookId()).get(review.starRating.avg()));

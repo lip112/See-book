@@ -1,10 +1,7 @@
 package com.example.seebook.domain.review.repository;
 
-import com.example.seebook.domain.book.domain.Book;
 import com.example.seebook.domain.book.dto.BookDTO;
-import com.example.seebook.domain.review.dto.response.BookInReviewListResponseDTO;
-
-import java.awt.print.Pageable;
+import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 
 public interface ReviewRepositoryCustom {
 

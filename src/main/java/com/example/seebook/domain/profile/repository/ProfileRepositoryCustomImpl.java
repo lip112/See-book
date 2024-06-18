@@ -1,19 +1,13 @@
 package com.example.seebook.domain.profile.repository;
 
-import com.example.seebook.domain.profile.dto.ProfileReviewDTO;
 import com.example.seebook.domain.profile.dto.request.ProfileWithReviewListRequestDTO;
-import com.example.seebook.domain.profile.dto.response.ProfileWithReviewListResponseDTO;
+import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.example.seebook.domain.book.domain.QBook.book;
 import static com.example.seebook.domain.level.domain.QLevelInfo.levelInfo;
 import static com.example.seebook.domain.profile.domain.QProfile.profile;
-import static com.example.seebook.domain.review.domain.QReview.review;
 import static com.example.seebook.domain.user.domain.QUser.user;
 
 @RequiredArgsConstructor
@@ -72,7 +66,22 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom{
     }
 
     @Override
-    public void join() {
+    public JoinResponseDTO joinProfile(Long userId) {
+        Tuple tuple = queryFactory
+                .select(profile.imageUrl, user.nickname, user.email, levelInfo.level, levelInfo.levelCount)
+                .from(profile)
+                .innerJoin(user).on(user.userId.eq(userId))
+                .innerJoin(levelInfo).on(levelInfo.userId.eq(userId))
+                .where(profile.userId.eq(userId))
+                .fetchOne();
+
+        return JoinResponseDTO.builder()
+                .profileImage(tuple.get(profile.imageUrl))
+                .nickname(tuple.get(user.nickname))
+                .email(tuple.get(user.email))
+                .level(tuple.get(levelInfo.level))
+                .levelCount(tuple.get(levelInfo.levelCount))
+                .build();
 
     }
 }

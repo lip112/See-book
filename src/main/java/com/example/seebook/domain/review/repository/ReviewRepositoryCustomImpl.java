@@ -1,10 +1,8 @@
 package com.example.seebook.domain.review.repository;
 
-import com.example.seebook.domain.book.domain.Book;
 import com.example.seebook.domain.book.dto.BookDTO;
-import com.example.seebook.domain.level.domain.QLevelInfo;
 import com.example.seebook.domain.review.dto.ReviewDTO;
-import com.example.seebook.domain.review.dto.response.BookInReviewListResponseDTO;
+import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -62,6 +60,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .from(review)
                 .where(review.book.bookId.eq(book.bookId))
                 .fetchOne();
+
 
         System.out.println(reviewCount);
         //일단 다 만들었는데 테스트를 못 한다. 우선 댓글 부분 다 만들고 나서 북 마저 완성하기

@@ -18,7 +18,16 @@ public enum ErrorCode {
    NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "찾을수 없는 리뷰입니다"),
 
     //Book
-    NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "찾을수 없는 책입니다");
+    NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "찾을수 없는 책입니다"),
+
+    //S3
+    EMPTY_FILE_EXCEPTION(HttpStatus.BAD_REQUEST, "찾을수 없는 이메일 입니다"),
+    IO_EXCEPTION_ON_IMAGE_UPLOAD(HttpStatus.BAD_REQUEST, "찾을수 없는 이메일 입니다"),
+    NO_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "찾을수 없는 이메일 입니다"),
+    INVALID_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "찾을수 없는 이메일 입니다"),
+    PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "이미지를 업로드 할 수 없습니다"),
+    IO_EXCEPTION_ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "찾을수 없는 이메일 입니다");
+
 
     private final HttpStatus ErrorCode;
     private final String message;

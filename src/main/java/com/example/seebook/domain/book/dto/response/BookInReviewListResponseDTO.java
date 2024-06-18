@@ -1,14 +1,12 @@
-package com.example.seebook.domain.review.dto.response;
+package com.example.seebook.domain.book.dto.response;
 
 import com.example.seebook.domain.book.dto.BookDTO;
-import com.example.seebook.domain.book.dto.response.BookListResponseDTO;
 import com.example.seebook.domain.review.dto.ReviewDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,19 +15,25 @@ import java.util.Map;
 public class BookInReviewListResponseDTO {
     private Long reviewCount;
     private Long endPage;
+    private boolean isWished;
     private List<ReviewDTO> review;
-    private BookDTO bookDTO;
+    private BookDTO book;
 
     public void addBookDTO(BookDTO bookDTO) {
-        this.bookDTO = bookDTO;
+        this.book = bookDTO;
+    }
+
+    public void changeWishlistStatus(boolean wished) {
+        isWished = wished;
     }
 
     @Builder
-    public BookInReviewListResponseDTO(Long reviewCount, Long endPage, List<ReviewDTO> review, BookDTO bookDTO) {
+    public BookInReviewListResponseDTO(Long reviewCount,boolean isWished, Long endPage, List<ReviewDTO> review, BookDTO book) {
         this.reviewCount = reviewCount;
+        this.isWished = isWished;
         this.endPage = endPage;
         this.review = review;
-        this.bookDTO = bookDTO;
+        this.book = book;
     }
 
     public static BookInReviewListResponseDTO fromMap(Map<String, Object> map) {
@@ -49,10 +53,11 @@ public class BookInReviewListResponseDTO {
                     .build();
 
         return BookInReviewListResponseDTO.builder()
-                .bookDTO(book)
+                .book(book)
                 .reviewCount(0L)
                 .endPage(null)
                 .review(null)
+                .isWished(false)
                 .build();
     }
 }

@@ -4,14 +4,12 @@ import com.example.seebook.domain.book.domain.Book;
 import com.example.seebook.domain.book.dto.BookDTO;
 import com.example.seebook.domain.book.dto.response.BookListResponseDTO;
 import com.example.seebook.domain.book.repository.BookRepository;
-import com.example.seebook.domain.review.dto.response.BookInReviewListResponseDTO;
-import com.example.seebook.domain.review.service.ReviewService;
+import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.global.exception.BookException;
 import com.example.seebook.global.restclient.AladinComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -31,23 +29,23 @@ public class BookService {
         return BookInReviewListResponseDTO.fromMap(aladinComponent.findByIsbn13(TTB_KEY, isbn13, "ISBN", "js", 20131101));
     }
 
-    public BookDTO getDetailBook(String isbn13) { //DTO로 변환해서 반환
+    public BookDTO getDetailBook(String isbn13) {
         BookDTO bookDTO = BookDTO.form(bookRepository.findByIsbn13(isbn13)
                 .orElseThrow(BookException.NotFoundBookException::new));
         return bookRepository.getBooksReviewSummary(bookDTO);
     }
 
-    public Book getById(Long bookId) {
+    public Book findById(Long bookId) {
         return bookRepository.findById(bookId)
                 .orElseThrow(BookException.NotFoundBookException::new);
     }
 
     public boolean validationDBInIsbn13(String isbn13) {
         Optional<Book> byIsbn13 = bookRepository.findByIsbn13(isbn13);
-        if (byIsbn13.isPresent()) {
-            return true;
-        } else {
-            return false;
-        }
+        return byIsbn13.isPresent();
+    }
+
+    public Book addBook(BookDTO bookDTO) {
+        return bookRepository.save(Book.form(bookDTO));
     }
 }

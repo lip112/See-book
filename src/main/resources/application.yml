@@ -1,4 +1,9 @@
 spring:
+  application:
+    name: SeeBook
+  profiles:
+    active: S3
+
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     username: root

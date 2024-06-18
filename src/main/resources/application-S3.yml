@@ -1,0 +1,12 @@
+#S3
+cloud:
+  aws:
+    s3:
+      bucketName: bookbuket
+      credentials:
+        access-key: AKIAZXP2H4HFEYVN7LVR
+        secret-key: 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
+      region:
+        static: ap-northeast-2
+    stack:
+      auto: false
