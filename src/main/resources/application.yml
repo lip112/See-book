@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: SeeBook
+  profiles:
+    active: S3
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mariadb://localhost:3306/seebook
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+coolsms:
+  api:
+    key: NCSBARXZ5P4HYTEC
+    secret: I9AW7R5PHQNXPZNPIL59JJRWTLPQA09U
