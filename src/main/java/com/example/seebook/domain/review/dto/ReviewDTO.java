@@ -11,10 +11,10 @@ public class ReviewDTO {
     private String profileImage;
     private String nickname;
     private int level;
-    private Long starRating;
+    private Double starRating;
     private String content;
     @Builder
-    public ReviewDTO(Long reviewId, Long userId, String profileImage, String nickname, int level, Long starRating, String content) {
+    public ReviewDTO(Long reviewId, Long userId, String profileImage, String nickname, int level, Double starRating, String content) {
         this.reviewId = reviewId;
         this.userId = userId;
         this.profileImage = profileImage;

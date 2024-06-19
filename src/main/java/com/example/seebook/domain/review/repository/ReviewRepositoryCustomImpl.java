@@ -1,8 +1,11 @@
 package com.example.seebook.domain.review.repository;
 
 import com.example.seebook.domain.book.dto.BookDTO;
+import com.example.seebook.domain.review.dto.ProfileReviewDTO;
 import com.example.seebook.domain.review.dto.ReviewDTO;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
+import com.example.seebook.domain.review.dto.request.ProfileReviewRequestDTO;
+import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,7 +25,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public BookInReviewListResponseDTO getReviewList(BookDTO bookDTO, int page, int offset, int limit) {
+    public BookInReviewListResponseDTO getBookInReviewList(BookDTO bookDTO, int page, int offset, int limit) {
 
         List<ReviewDTO> reviewDTOList = queryFactory
                 .select(
@@ -69,6 +72,41 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .endPage(reviewCount/10 +1)
                 .review(reviewDTOList)
                 .book(bookDTO)
+                .build();
+    }
+
+    @Override
+    public ProfileReviewResponseDTO getProfileReviewList(Long userId, int offset, int limit) {
+        List<ProfileReviewDTO> list = queryFactory
+                .select(book.isbn13, book.title, book.imageLink,
+                        review.reviewId, review.content, review.starRating)
+                .from(review)
+                .leftJoin(book).on(book.bookId.eq(review.book.bookId))
+                .where(review.user.userId.eq(userId))
+                .offset(offset)
+                .limit(limit)
+                .fetch()
+                .stream()
+                .map(tuple -> ProfileReviewDTO.builder()
+                        .userId(userId)
+                        .isbn13(tuple.get(book.isbn13))
+                        .title(tuple.get(book.title))
+                        .imageLink(tuple.get(book.imageLink))
+                        .reviewId(tuple.get(review.reviewId))
+                        .content(tuple.get(review.content))
+                        .starRating(tuple.get(review.starRating))
+                        .build())
+                .toList();
+        Long reviewCount = queryFactory
+                .select(review.count())
+                .from(review)
+                .where(review.user.userId.eq(userId))
+                .fetchOne();
+
+        return ProfileReviewResponseDTO.builder()
+                .totalReviewCont(reviewCount)
+                .endPage(reviewCount / 10 + 1)
+                .review(list)
                 .build();
     }
 }

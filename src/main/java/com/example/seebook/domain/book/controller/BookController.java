@@ -36,7 +36,7 @@ public class BookController {
                                                                         @RequestParam(defaultValue = "1") int page, @RequestParam("userId") Long userId) {
         if (bookService.validationDBInIsbn13(isbn13)){
             BookDTO detailBook = bookService.getDetailBook(isbn13);
-            BookInReviewListResponseDTO detailBookWithReviewList = reviewService.getReviewList(detailBook, page);
+            BookInReviewListResponseDTO detailBookWithReviewList = reviewService.getBookInReviewList(detailBook, page);
             Book book = bookService.findById(detailBook.getBookId());
             User user = userService.findById(userId);
             detailBookWithReviewList.changeWishlistStatus(wishlistService.getWishedStatus(user, book));

@@ -8,6 +8,6 @@ import lombok.Getter;
 public class ModifyReviewRequestDTO {
     private Long userId;
     private Long reviewId;
-    private Long starRating;
+    private Double starRating;
     private String content;
 }

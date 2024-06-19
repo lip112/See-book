@@ -4,7 +4,9 @@ import com.example.seebook.domain.level.service.LevelService;
 import com.example.seebook.domain.report.service.ReportService;
 import com.example.seebook.domain.review.dto.request.DeleteReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.ModifyReviewRequestDTO;
+import com.example.seebook.domain.review.dto.request.ProfileReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.WriteReviewRequestDTO;
+import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
 import com.example.seebook.domain.review.service.ReviewService;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.service.UserService;
@@ -46,5 +48,12 @@ public class ReviewController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
+    }
+
+    @PostMapping("/list")
+    public ResponseEntity<ProfileReviewResponseDTO> getProfileList(@Valid @RequestBody ProfileReviewRequestDTO profileReviewRequestDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviewService.getProfileReviewList(profileReviewRequestDTO));
     }
 }

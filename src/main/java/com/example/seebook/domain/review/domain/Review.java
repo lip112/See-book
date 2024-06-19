@@ -26,18 +26,18 @@ public class Review extends BaseTime {
 
     private String content;
 
-    private Long starRating;
+    private Double starRating;
 
     public void changeContent(String content) {
         this.content = content;
     }
 
-    public void changeStarRating(Long starRating) {
+    public void changeStarRating(Double starRating) {
         this.starRating = starRating;
     }
 
     @Builder
-    public Review(User user, Book book, String content, Long starRating) {
+    public Review(User user, Book book, String content, Double starRating) {
         this.user = user;
         this.book = book;
         this.content = content;
