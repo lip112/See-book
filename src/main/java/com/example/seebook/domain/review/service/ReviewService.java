@@ -7,6 +7,7 @@ import com.example.seebook.domain.review.dto.request.ModifyReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.WriteReviewRequestDTO;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.domain.review.repository.ReviewRepository;
+import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.global.exception.ReviewException;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +36,8 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    public void DeleteReview(Long userId) {
-        reviewRepository.deleteById(userId);
+    public void DeleteReview(Long reviewId, User user) {
+        reviewRepository.deleteById(reviewId, user);
     }
 
     public BookInReviewListResponseDTO getReviewList(BookDTO bookDTO, int page) { // page?

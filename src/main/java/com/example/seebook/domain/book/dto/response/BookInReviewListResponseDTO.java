@@ -28,7 +28,7 @@ public class BookInReviewListResponseDTO {
     }
 
     @Builder
-    public BookInReviewListResponseDTO(Long reviewCount,boolean isWished, Long endPage, List<ReviewDTO> review, BookDTO book) {
+    public BookInReviewListResponseDTO(Long reviewCount, boolean isWished, Long endPage, List<ReviewDTO> review, BookDTO book) {
         this.reviewCount = reviewCount;
         this.isWished = isWished;
         this.endPage = endPage;

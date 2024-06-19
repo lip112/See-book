@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class Book {
     @Id

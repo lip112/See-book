@@ -64,6 +64,11 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
         System.out.println(reviewCount);
         //일단 다 만들었는데 테스트를 못 한다. 우선 댓글 부분 다 만들고 나서 북 마저 완성하기
-        return new BookInReviewListResponseDTO(reviewCount, reviewCount/10 +1, reviewDTOList , bookDTO);
+        return BookInReviewListResponseDTO.builder()
+                .reviewCount(reviewCount)
+                .endPage(reviewCount/10 +1)
+                .review(reviewDTOList)
+                .book(bookDTO)
+                .build();
     }
 }
