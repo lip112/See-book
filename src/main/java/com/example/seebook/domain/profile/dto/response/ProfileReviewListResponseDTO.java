@@ -1,24 +1,22 @@
 package com.example.seebook.domain.profile.dto.response;
 
+import com.example.seebook.domain.profile.dto.AnotherProfileReviewDTO;
 import com.example.seebook.domain.review.dto.ReviewDTO;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-public class ProfileWithReviewListResponseDTO {
+public class ProfileReviewListResponseDTO {
     private String profileImage;
     private String nickname;
     private int level;
     private int levelCount;
-    private int totalReviewCount;
-    private int endPage;
+    private Long totalReviewCount;
+    private Long endPage;
 
-    private List<ReviewDTO> reviewList;
+    private List<AnotherProfileReviewDTO> reviewList;
     @Builder
-    public ProfileWithReviewListResponseDTO(String profileImage, String nickname, int level, int levelCount, int totalReviewCount, int endPage, List<ReviewDTO> reviewList) {
+    public ProfileReviewListResponseDTO(String profileImage, String nickname, int level, int levelCount, Long totalReviewCount, Long endPage, List<AnotherProfileReviewDTO> reviewList) {
         this.profileImage = profileImage;
         this.nickname = nickname;
         this.level = level;

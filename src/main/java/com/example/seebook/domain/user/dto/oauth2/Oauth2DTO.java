@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 public class Oauth2DTO {
 
+    private Long kakaoId;
     private String name;
     private String email;
     private String phoneNumber;
@@ -13,7 +14,8 @@ public class Oauth2DTO {
     private String birthday;
 
     @Builder
-    public Oauth2DTO(String name, String email, String phoneNumber, String gender, String birthday) {
+    public Oauth2DTO(Long kakaoId, String name, String email, String phoneNumber, String gender, String birthday) {
+        this.kakaoId = kakaoId;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;

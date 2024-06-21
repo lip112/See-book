@@ -17,6 +17,8 @@ public class User extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    private Long kakaoId;
+
     @Column(unique = true)
     private String email;
 
@@ -38,9 +40,10 @@ public class User extends BaseTime {
     private LocalDate birthday;
 
     @Builder
-    public User(Long id, String email, RoleInfo role, String password, String nickname, String name, Gender gender, String phoneNumber, String birthday) {
+    public User(Long id,Long kakaoId, String email, RoleInfo role, String password, String nickname, String name, Gender gender, String phoneNumber, String birthday) {
         this.userId = id;
         this.email = email;
+        this.kakaoId = kakaoId;
         this.role = role;
         this.password = password;
         this.nickname = nickname;

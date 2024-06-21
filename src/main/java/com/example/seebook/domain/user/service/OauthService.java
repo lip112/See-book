@@ -1,6 +1,7 @@
 package com.example.seebook.domain.user.service;
 
 import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -9,17 +10,22 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
 @Service
-public class AuthService {
+public class OauthService {
+    @Value("${kakao.clientId}")
+    private String clientId;
 
-//    restapi 키
-    private final String clientId = "5e44324a700c1117fe9b5e9ad20383b3";
-    private final String clientSecret = "R3r9TinZXZnf7Ro06AVMGHiBAS0zvLrK";
-    private final String redirectUri = "http://localhost:8080/api/user/oauth/kakao";
+    @Value("${kakao.clientSecret}")
+    private String clientSecret;
+
+    @Value("${kakao.redirectUri}")
+    private String redirectUri;
+
+    @Value("${kakao.adminKey}")
+    private String adminKey;
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String getAccessTokenFromKakao(String code) {
@@ -67,11 +73,12 @@ public class AuthService {
         Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
 
         return Oauth2DTO.builder()
+                .kakaoId((Long) attributes.get("id"))
                 .name(kakao_account.get("name").toString())
                 .email(kakao_account.get("email").toString())
-                .phoneNumber(formatPhoneNumber(kakao_account.get("phone_number").toString()))
+                .phoneNumber(this.formatPhoneNumber(kakao_account.get("phone_number").toString()))
                 .gender(kakao_account.get("gender").toString())
-                .birthday(formatDate(kakao_account.get("birthyear").toString()+kakao_account.get("birthday").toString()))
+                .birthday(this.formatDate(kakao_account.get("birthyear").toString()+kakao_account.get("birthday").toString()))
                 .build();
     }
 
@@ -89,4 +96,35 @@ public class AuthService {
 
         return year + "-" + month + "-" + day;
     }
+
+    public void deleteAccount(Long kakaoId) {
+        String deleteUrl = "https://kapi.kakao.com/v1/user/unlink";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "KakaoAK " + adminKey);
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        params.add("target_id_type", "user_id");
+        params.add("target_id", kakaoId);
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(deleteUrl, request, String.class);
+    }
+
+    public void logoutAccount(Long kakaoId) {
+        String logoutUrl = "https://kapi.kakao.com/v1/user/logout";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "KakaoAK " + adminKey);
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        params.add("target_id_type", "user_id");
+        params.add("target_id", kakaoId);
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(logoutUrl, request, String.class);
+    }
+
 }

@@ -10,13 +10,13 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class Oauth2LoginResponseDTO extends LoginResponse  {
-    private Long user_id;
+    private Long userId;
     private String provider;
     private Suspend suspend;
 
     public static Oauth2LoginResponseDTO form(User user, Suspend suspend){
         Oauth2LoginResponseDTO seebook = Oauth2LoginResponseDTO.builder()
-                .user_id(user.getUserId())
+                .userId(user.getUserId())
                 .provider("kakao")
                 .suspend(suspend)
                 .build();

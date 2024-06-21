@@ -12,6 +12,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class SignUpRequestDTO {
 
     @NotBlank
+    private Long kakaoId;
+
+    @NotBlank
     @Email(message = "이메일 형식으로 작성 되지 않았습니다.")
     private String email;
 
@@ -36,7 +39,8 @@ public class SignUpRequestDTO {
     private String phoneNumber;
 
     @Builder
-    public SignUpRequestDTO(String email, String password, String nickname, String name, Gender gender, String birthday, String phoneNumber) {
+    public SignUpRequestDTO(Long kakaoId, String email, String password, String nickname, String name, Gender gender, String birthday, String phoneNumber) {
+        this.kakaoId = kakaoId;
         this.email = email;
         this.password = password;
         this.nickname = nickname;

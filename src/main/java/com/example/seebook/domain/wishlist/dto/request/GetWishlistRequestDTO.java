@@ -1,13 +1,14 @@
 package com.example.seebook.domain.wishlist.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
 public class GetWishlistRequestDTO {
-    @NotBlank
+    @NotNull
     private Long userId;
 
-    @NotBlank
+    @NotNull
     private int page;
 }

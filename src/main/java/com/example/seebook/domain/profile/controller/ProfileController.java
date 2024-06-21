@@ -1,17 +1,14 @@
 package com.example.seebook.domain.profile.controller;
 
-import com.example.seebook.domain.profile.dto.request.ChangeImageRequestDTO;
 import com.example.seebook.domain.profile.dto.request.ChangeNicknameRequestDTO;
 import com.example.seebook.domain.profile.dto.request.JoinRequestDTO;
-import com.example.seebook.domain.profile.dto.request.ProfileWithReviewListRequestDTO;
+import com.example.seebook.domain.profile.dto.request.ProfileReviewListRequestDTO;
 import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
 import com.example.seebook.domain.profile.service.ProfileService;
-import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,8 +21,8 @@ public class ProfileController {
     private final UserService userService;
 
 
-    @PostMapping("/review")
-    public void getProfileWithReviewList(@Valid @RequestBody ProfileWithReviewListRequestDTO profileWithReviewListRequestDTO) {
+    @PostMapping("/review-list")
+    public void getProfileReviewList(@Valid @RequestBody ProfileReviewListRequestDTO profileReviewListRequestDTO) {
 
     }
 

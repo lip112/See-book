@@ -9,13 +9,13 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class LoginResponseDTO {
-    private Long user_id;
+    private Long userId;
     private String provider;
     private Suspend suspend;
 
     public static LoginResponseDTO form(User user, Suspend suspend){
         return LoginResponseDTO.builder()
-                .user_id(user.getUserId())
+                .userId(user.getUserId())
                 .provider("seebook")
                 .suspend(suspend)
                 .build();

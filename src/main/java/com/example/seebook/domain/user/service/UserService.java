@@ -10,6 +10,7 @@ import com.example.seebook.domain.user.dto.oauth2.Oauth2SignUpRequestDTO;
 import com.example.seebook.domain.user.dto.requset.ChangePasswordRequestDTO;
 import com.example.seebook.domain.user.dto.requset.LoginRequestDTO;
 import com.example.seebook.domain.user.dto.requset.SignUpRequestDTO;
+import com.example.seebook.domain.user.dto.requset.sms.DeleteAccountRequestDTO;
 import com.example.seebook.domain.user.dto.response.LoginResponseDTO;
 import com.example.seebook.domain.user.dto.response.Suspend;
 import com.example.seebook.domain.user.repository.UserRepository;
@@ -45,6 +46,7 @@ public class UserService {
                 .orElseThrow(UserException.DuplicatedPhoneNumberException::new);
 
         User user = User.builder()
+                .kakaoId(signUpRequestDTO.getKakaoId())
                 .email(signUpRequestDTO.getEmail())
                 .password(passwordEncoder.encode(signUpRequestDTO.getPassword()))
                 .nickname(signUpRequestDTO.getNickname())
@@ -96,4 +98,10 @@ public class UserService {
         user.changeNickname(nickname);
         userRepository.save(user);
     }
+
+    public void deleteAccount(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+
 }

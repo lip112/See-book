@@ -2,7 +2,9 @@ package com.example.seebook.domain.user.controller;
 
 import com.example.seebook.domain.profile.service.ProfileService;
 import com.example.seebook.domain.user.dto.requset.*;
+import com.example.seebook.domain.user.dto.requset.sms.DeleteAccountRequestDTO;
 import com.example.seebook.domain.user.dto.requset.sms.VerificationRequestDTO;
+import com.example.seebook.domain.user.service.OauthService;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.global.exception.UserException;
 import com.example.seebook.global.sms.SmsUtil;
@@ -18,11 +20,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final ProfileService profileService;
+    private final OauthService oauthService;
     private final SmsUtil smsUtil;
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
         Long userId = userService.signUp(signUpRequestDTO);
-        profileService.singUpDefaultProfileImage(userId);
+        profileService.addSingUpDefaultProfileImage(userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -78,6 +81,13 @@ public class UserController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDTO logoutRequestDTO) {
+        if (logoutRequestDTO.getProvider().equals("kakao")) {
+            Long kakaoId = userService.findById(logoutRequestDTO.getUserId()).getKakaoId();
+            oauthService.logoutAccount(kakaoId);
+            //토큰 날리기
+        } else {
+            //토큰 날리기
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -94,5 +104,19 @@ public class UserController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body("중복된 닉네임 입니다.");
         }
+    }
+
+    @DeleteMapping("/delete-account")
+    public ResponseEntity<?> deleteAccount(@Valid @RequestBody DeleteAccountRequestDTO deleteAccountRequestDTO) {
+        if (deleteAccountRequestDTO.getProvider().equals("kakao")) {
+            Long kakaoId = userService.findById(deleteAccountRequestDTO.getUserId()).getKakaoId();
+            oauthService.deleteAccount(kakaoId);
+        }
+
+        userService.deleteAccount(deleteAccountRequestDTO.getUserId());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 }
