@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.example.seebook.global.config.UserDefaultConfig.DEFAULT_PROFILE_IMAGE;
+
 @Getter
 @NoArgsConstructor
 @Entity
@@ -32,4 +34,11 @@ public class Profile {
         this.originalName = originalName;
         this.imageUrl = imageUrl;
     }
+
+    public void resetDefaultImage() {
+        this.uploadName = "default_profile.png";
+        this.originalName = "default_profile.png";
+        this.imageUrl = DEFAULT_PROFILE_IMAGE;
+    }
+
 }

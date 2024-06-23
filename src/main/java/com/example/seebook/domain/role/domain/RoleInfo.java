@@ -32,4 +32,6 @@ public class RoleInfo {
             this.Description = Code.getDescription();
         }
     }
+
+
 }

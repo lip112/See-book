@@ -59,4 +59,12 @@ public class User extends BaseTime {
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public void changeGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void changeRole(RoleInfo role) {
+        this.role = role;
+    }
 }
