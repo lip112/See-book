@@ -5,6 +5,7 @@ import com.example.seebook.domain.review.dto.ProfileReviewDTO;
 import com.example.seebook.domain.review.dto.ReviewDTO;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.request.ProfileReviewRequestDTO;
+import com.example.seebook.domain.review.dto.response.HomeReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -108,5 +109,18 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .endPage(reviewCount / 10 + 1)
                 .review(list)
                 .build();
+    }
+
+    @Override
+    public HomeReviewListResponseDTO getHomeReviewList() {
+        queryFactory
+                .select()
+                .from(review)
+                .orderBy(review.reviewId.desc())
+                .offset(0)
+                .limit(30)
+                .fetch();
+
+        return null;
     }
 }

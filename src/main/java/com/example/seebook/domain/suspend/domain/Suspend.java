@@ -1,8 +1,6 @@
 package com.example.seebook.domain.suspend.domain;
 
-import com.example.seebook.domain.user.domain.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
@@ -16,25 +14,22 @@ public class Suspend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long suspendId;
 
-    @OneToOne
-    private User userId;
+    private Long userId;
 
-    private boolean isSuspended;
     private String reason;
     private LocalDateTime startDate;
-    private LocalDateTime endTime;
+    private LocalDateTime endDate;
 
     @Builder
-    public Suspend(User userId, boolean isSuspended, String reason, LocalDateTime startDate, LocalDateTime endTime) {
+    public Suspend(Long userId, String reason, LocalDateTime startDate, LocalDateTime endDate) {
         this.userId = userId;
-        this.isSuspended = isSuspended;
         this.reason = reason;
         this.startDate = startDate;
-        this.endTime = endTime;
+        this.endDate = endDate;
     }
 
     public void changeDate(LocalDateTime startDate, LocalDateTime endTime) {
         this.startDate = startDate;
-        this.endTime = endTime;
+        this.endDate = endTime;
     }
 }

@@ -54,5 +54,8 @@ public class ReviewService {
                 (profileReviewRequestDTO.getPage()-1)*10, profileReviewRequestDTO.getPage()*10-1);
     }
 
+    public void GetHomeReviewList() {
+
+    }
 
 }

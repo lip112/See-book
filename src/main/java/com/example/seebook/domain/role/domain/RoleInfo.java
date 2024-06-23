@@ -11,25 +11,25 @@ public class RoleInfo {
 
     @Id
     @Enumerated(EnumType.STRING)
-    private RoleCode roleCode;
+    private RoleCode Code;
 
-    private String roleType;
+    private String Description;
 
-    public RoleInfo(RoleCode roleCode) {
-        this.roleCode = roleCode;
-        this.roleType = roleCode.getDescription();
+    public RoleInfo(RoleCode Code) {
+        this.Code = Code;
+        this.Description = Code.getDescription();
     }
 
     public void upgradeRole() {
-        if (this.roleCode == RoleCode.USER) {
-            this.roleCode = RoleCode.ADMIN;
-            this.roleType = roleCode.getDescription();
+        if (this.Code == RoleCode.USER) {
+            this.Code = RoleCode.ADMIN;
+            this.Description = Code.getDescription();
         }
     }
     public void downgradeRole() {
-        if (this.roleCode == RoleCode.ADMIN) {
-            this.roleCode = RoleCode.USER;
-            this.roleType = roleCode.getDescription();
+        if (this.Code == RoleCode.ADMIN) {
+            this.Code = RoleCode.USER;
+            this.Description = Code.getDescription();
         }
     }
 }

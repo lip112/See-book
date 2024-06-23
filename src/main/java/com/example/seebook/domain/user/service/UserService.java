@@ -10,9 +10,8 @@ import com.example.seebook.domain.user.dto.oauth2.Oauth2SignUpRequestDTO;
 import com.example.seebook.domain.user.dto.requset.ChangePasswordRequestDTO;
 import com.example.seebook.domain.user.dto.requset.LoginRequestDTO;
 import com.example.seebook.domain.user.dto.requset.SignUpRequestDTO;
-import com.example.seebook.domain.user.dto.requset.sms.DeleteAccountRequestDTO;
 import com.example.seebook.domain.user.dto.response.LoginResponseDTO;
-import com.example.seebook.domain.user.dto.response.Suspend;
+import com.example.seebook.domain.suspend.dto.SuspendDTO;
 import com.example.seebook.domain.user.repository.UserRepository;
 import com.example.seebook.global.exception.UserException;
 import com.example.seebook.global.exception.UserException.NotFoundEmailException;
@@ -35,7 +34,7 @@ public class UserService {
         Optional<User> byPhoneNumber = userRepository.findByPhoneNumber(oauth2DTO.getPhoneNumber());
         if (byPhoneNumber.isPresent()) {
             //이미 가입된 경우 바로 정보 반환
-            return Oauth2LoginResponseDTO.form(byPhoneNumber.get(), new Suspend(false, LocalDateTime.now(), LocalDateTime.now(), "임시"));
+            return Oauth2LoginResponseDTO.form(byPhoneNumber.get(), new SuspendDTO(false, LocalDateTime.now(), LocalDateTime.now(), "임시"));
         } else {
             //최초로그인 -> 카카오 정보를 반환 -> 토탈 회원가입 할때 api로 가입시킴
             return Oauth2SignUpRequestDTO.form(oauth2DTO);
@@ -82,7 +81,7 @@ public class UserService {
         User user = userRepository.findByEmail(loginRequestDTO.getEmail())
                 .orElseThrow(NotFoundEmailException::new);
         if(passwordEncoder.matches(user.getPassword(), loginRequestDTO.getPassword()))
-            return LoginResponseDTO.form(user, new Suspend(false, LocalDateTime.now(), LocalDateTime.now(), "임시"));
+            return LoginResponseDTO.form(user, new SuspendDTO(false, LocalDateTime.now(), LocalDateTime.now(), "임시"));
         else
             throw new UserException.LoginFailedException();
     }
