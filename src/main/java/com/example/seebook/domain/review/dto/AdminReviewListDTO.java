@@ -1,28 +1,29 @@
 package com.example.seebook.domain.review.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class ReviewDTO {
+public class AdminReviewListDTO {
     private Long reviewId;
-    private Long userId;
-    private String profileImage;
     private String nickname;
-    private int level;
+    private LocalDateTime createDate;
     private Double starRating;
     private String content;
+    private String title;
+    private String author;
+
+
     @Builder
-    public ReviewDTO(Long reviewId, Long userId, String profileImage, String nickname, int level, Double starRating, String content) {
+    public AdminReviewListDTO(Long reviewId, String nickname, LocalDateTime createDate, Double starRating, String content, String title, String author) {
         this.reviewId = reviewId;
-        this.userId = userId;
-        this.profileImage = profileImage;
         this.nickname = nickname;
-        this.level = level;
+        this.createDate = createDate;
         this.starRating = starRating;
         this.content = content;
+        this.title = title;
+        this.author = author;
     }
 }

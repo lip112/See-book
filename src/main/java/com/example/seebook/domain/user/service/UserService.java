@@ -2,6 +2,8 @@ package com.example.seebook.domain.user.service;
 
 import com.example.seebook.domain.role.domain.RoleCode;
 import com.example.seebook.domain.role.domain.RoleInfo;
+import com.example.seebook.domain.suspend.domain.Suspend;
+import com.example.seebook.domain.suspend.repository.SuspendRepository;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.dto.oauth2.LoginResponse;
 import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
@@ -28,13 +30,19 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final SuspendRepository suspendRepository;
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponse processOAuth2Login(Oauth2DTO oauth2DTO) {
-        Optional<User> byPhoneNumber = userRepository.findByPhoneNumber(oauth2DTO.getPhoneNumber());
-        if (byPhoneNumber.isPresent()) {
+        Optional<User> user = userRepository.findByPhoneNumber(oauth2DTO.getPhoneNumber());
+        if (user.isPresent()) {
             //이미 가입된 경우 바로 정보 반환
-            return Oauth2LoginResponseDTO.form(byPhoneNumber.get(), new SuspendDTO(false, LocalDateTime.now(), LocalDateTime.now(), "임시"));
+            Optional<Suspend> userSuspend = suspendRepository.findByUserId(user.get().getUserId());
+            if (userSuspend.isPresent()) {
+                return LoginResponseDTO.form(user.get(), SuspendDTO.from(userSuspend.get()));
+            } else {
+                return LoginResponseDTO.form(user.get(), SuspendDTO.notSuspend());
+            }
         } else {
             //최초로그인 -> 카카오 정보를 반환 -> 토탈 회원가입 할때 api로 가입시킴
             return Oauth2SignUpRequestDTO.form(oauth2DTO);
@@ -80,10 +88,17 @@ public class UserService {
     public LoginResponseDTO loginToEmail(LoginRequestDTO loginRequestDTO) {
         User user = userRepository.findByEmail(loginRequestDTO.getEmail())
                 .orElseThrow(NotFoundEmailException::new);
-        if(passwordEncoder.matches(user.getPassword(), loginRequestDTO.getPassword()))
-            return LoginResponseDTO.form(user, new SuspendDTO(false, LocalDateTime.now(), LocalDateTime.now(), "임시"));
-        else
+
+        if(passwordEncoder.matches(user.getPassword(), loginRequestDTO.getPassword())) {
+            Optional<Suspend> userSuspend = suspendRepository.findByUserId(user.getUserId());
+            if (userSuspend.isPresent()) {
+                return LoginResponseDTO.form(user, SuspendDTO.from(userSuspend.get()));
+            } else {
+                return LoginResponseDTO.form(user, SuspendDTO.notSuspend());
+            }
+        } else {
             throw new UserException.LoginFailedException();
+        }
     }
 
     public boolean validationNickname(String nickname) {
@@ -101,6 +116,4 @@ public class UserService {
     public void deleteAccount(Long userId) {
         userRepository.deleteById(userId);
     }
-
-
 }

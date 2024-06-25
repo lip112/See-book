@@ -1,16 +1,21 @@
 package com.example.seebook.domain.review.repository;
 
 import com.example.seebook.domain.book.dto.BookDTO;
+import com.example.seebook.domain.review.dto.AdminReviewListDTO;
 import com.example.seebook.domain.review.dto.ProfileReviewDTO;
 import com.example.seebook.domain.review.dto.ReviewDTO;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.request.ProfileReviewRequestDTO;
+import com.example.seebook.domain.review.dto.response.AdminReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.response.HomeReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,6 +118,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
     @Override
     public HomeReviewListResponseDTO getHomeReviewList() {
+        //미완
         queryFactory
                 .select()
                 .from(review)
@@ -121,6 +127,59 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .limit(30)
                 .fetch();
 
+        return null;
+    }
+
+    @Override
+    public AdminReviewListResponseDTO getAdminReviewList(int offset, int limit, String query, String queryType) {
+        List<AdminReviewListDTO> list = queryFactory
+                .select(review.reviewId, review.nickname, review.content, review.starRating, review.createdDate,
+                        review.book.title, review.book.author)
+                .from(review)
+                .where(eqQueryType(queryType, query))
+                .orderBy(review.reviewId.desc())
+                .offset(offset)
+                .limit(limit)
+                .fetch()
+                .stream()
+                .map(tuple -> AdminReviewListDTO.builder()
+                        .reviewId(tuple.get(review.reviewId))
+                        .nickname(tuple.get(review.nickname))
+                        .content(tuple.get(review.content))
+                        .starRating(tuple.get(review.starRating))
+                        .createDate(tuple.get(review.createdDate))
+                        .title(tuple.get(review.book.title))
+                        .author(tuple.get(review.book.author))
+                        .build())
+                .toList();
+
+        Long reviewCount = queryFactory
+                .select(review.count())
+                .from(review)
+                .where(eqQueryType(queryType, query))
+                .fetchOne();
+
+        return AdminReviewListResponseDTO.builder()
+                .totalReviewCount(reviewCount)
+                .endPage(reviewCount / 10 + 1)
+                .review(list)
+                .build();
+    }
+
+    private BooleanExpression eqQueryType(String queryType, String query) {
+        if (queryType.equals("all")) {
+            if (queryType.equals("nickname")) {
+                return review.nickname.contains(query);
+            } else if (queryType.equals("content")) {
+                return review.content.contains(query);
+            } else if (queryType.equals("createDate")) {
+                return review.createdDate.eq(LocalDateTime.parse(query));
+            } else if (queryType.equals("title")) {
+                return review.book.title.contains(query);
+            } else if (queryType.equals("author")) {
+                return review.book.author.contains(query);
+            }
+        }
         return null;
     }
 }

@@ -8,6 +8,7 @@ import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.global.exception.BookException;
 import com.example.seebook.global.restclient.AladinComponent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,7 +19,8 @@ public class BookService {
     private final BookRepository bookRepository;
     private final AladinComponent aladinComponent;
 
-    private final String TTB_KEY ="ttbwhaud15971218001";
+    @Value("${aladin.key}")
+    private String TTB_KEY;
 
     public BookListResponseDTO getBookByText(String Query, String QueryType, int start) {
         BookListResponseDTO alainBookList = BookListResponseDTO.form(aladinComponent.findAllByQuery(TTB_KEY, Query, QueryType, "js", start, 20131101));

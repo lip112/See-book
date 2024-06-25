@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static com.amazonaws.services.ec2.model.PrincipalType.Role;
 
 @Service
@@ -62,9 +64,11 @@ public class AdminUserService {
         profile.resetDefaultImage();
         profileRepository.save(profile);
 
-        Suspend suspend = suspendRepository.findByUserId(adminUserModifyRequestDTO.getUserId())
-                .orElseThrow(UserException.NotFoundUserException::new);
-        suspend.changeDate(adminUserModifyRequestDTO.getSuspend().getStartDate(), adminUserModifyRequestDTO.getSuspend().getEndDate());
-        suspendRepository.save(suspend);
+        Optional<Suspend> suspendOptional = suspendRepository.findByUserId(adminUserModifyRequestDTO.getUserId());
+        if (suspendOptional.isEmpty()) {
+            return;
+        }
+        suspendOptional.get().changeDate(adminUserModifyRequestDTO.getSuspend().getStartDate(), adminUserModifyRequestDTO.getSuspend().getEndDate());
+        suspendRepository.save(suspendOptional.get());
     }
 }
