@@ -38,7 +38,7 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    public void DeleteReview(Long reviewId, User user) {
+    public void deleteReview(Long reviewId, User user) {
         reviewRepository.deleteByReviewIdAndUser(reviewId, user);
     }
 

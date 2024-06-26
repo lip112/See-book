@@ -24,6 +24,9 @@ public class SmsUtil {
     @Value("${coolsms.api.secret}")
     private String apiSecretKey;
 
+    @Value("${coolsms.myphoneNumber}")
+    private String myPhoneNumber;
+
     private DefaultMessageService messageService;
     private final ConcurrentHashMap<String, VerificationEntry> verificationMap = new ConcurrentHashMap<>();
 
@@ -36,7 +39,7 @@ public class SmsUtil {
         String code = String.valueOf(new Random().nextInt(899999) + 100000);
         Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom("01037202853");
+        message.setFrom(myPhoneNumber);
         message.setTo(to);
         message.setText("[See-book] 아래의 인증번호를 입력해주세요\n" + code);
         verificationMap.put(to, new VerificationEntry(code, System.currentTimeMillis()));

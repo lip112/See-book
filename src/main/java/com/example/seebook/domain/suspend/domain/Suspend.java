@@ -34,4 +34,8 @@ public class Suspend {
         this.startDate = startDate;
         this.endDate = endTime;
     }
+
+    public void changePeriod(Long period) {
+        this.endDate = this.endDate.plusDays(period);
+    }
 }

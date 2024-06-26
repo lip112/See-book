@@ -1,7 +1,6 @@
 package com.example.seebook.domain.review.controller;
 
 import com.example.seebook.domain.level.service.LevelService;
-import com.example.seebook.domain.report.service.ReportService;
 import com.example.seebook.domain.review.dto.request.DeleteReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.ModifyReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.ProfileReviewRequestDTO;
@@ -44,7 +43,7 @@ public class ReviewController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@Valid @RequestBody DeleteReviewRequestDTO deleteReviewRequestDTO) {
         User user = userService.findById(deleteReviewRequestDTO.getUserId());
-        reviewService.DeleteReview(deleteReviewRequestDTO.getReviewId(), user);
+        reviewService.deleteReview(deleteReviewRequestDTO.getReviewId(), user);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

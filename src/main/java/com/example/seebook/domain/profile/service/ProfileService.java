@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.example.seebook.global.config.UserDefaultConfig.DEFAULT_PROFILE_IMAGE;
+
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
@@ -48,5 +50,11 @@ public class ProfileService {
         profile.changeImage(uploadName, uploadUrl, multipartFile.getOriginalFilename());
 
         profileRepository.save(profile);
+    }
+
+    public void resetDefaultImage(Long userId) {
+        Profile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(UserException.NotFoundUserException::new);
+        profile.resetDefaultImage();
     }
 }
