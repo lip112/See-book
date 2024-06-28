@@ -91,6 +91,7 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
                         report.reportedId.nickname,
                         report.reportType,
                         report.reportDate,
+                        report.description,
                         report.reviewId,
                         profile.imageUrl,
                         report.reviewId.starRating,
@@ -108,6 +109,7 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
                 .reportedNickname(tuple.get(report.reportedId.nickname))
                 .reportType(tuple.get(report.reportType))
                 .reportDate(tuple.get(report.reportDate).toString())
+                .description(tuple.get(report.description))
                 .reviewId(tuple.get(report.reviewId).getReviewId())
                 .profileIamge(tuple.get(profile.imageUrl))
                 .starRating(tuple.get(report.reviewId.starRating))

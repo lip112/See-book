@@ -19,7 +19,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final AladinComponent aladinComponent;
 
-    @Value("${aladin.key}")
+    @Value("${aladin.ttbKey}")
     private String TTB_KEY;
 
     public BookListResponseDTO getBookByText(String Query, String QueryType, int start) {

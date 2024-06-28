@@ -85,6 +85,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public boolean validationPassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
+        User user = userRepository.findByEmail(changePasswordRequestDTO.getEmail())
+                .orElseThrow(UserException.NotFoundEmailException::new);
+        return passwordEncoder.matches(user.getPassword(), changePasswordRequestDTO.getPassword());
+    }
+
     public LoginResponseDTO loginToEmail(LoginRequestDTO loginRequestDTO) {
         User user = userRepository.findByEmail(loginRequestDTO.getEmail())
                 .orElseThrow(NotFoundEmailException::new);

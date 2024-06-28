@@ -5,6 +5,7 @@ import com.example.seebook.domain.profile.dto.request.JoinRequestDTO;
 import com.example.seebook.domain.profile.dto.request.ProfileReviewListRequestDTO;
 import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
 import com.example.seebook.domain.profile.service.ProfileService;
+import com.example.seebook.domain.user.dto.requset.ChangePasswordRequestDTO;
 import com.example.seebook.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,5 +62,25 @@ public class ProfileController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
+        userService.changePassword(changePasswordRequestDTO);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+    @PostMapping("/validation-password")
+    public ResponseEntity<?> validationPassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
+        if (userService.validationPassword(changePasswordRequestDTO)) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("사용 가능한 비밀번호 입니다.");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("비밀번호는 8자 이상이어야 합니다.");
+        }
     }
 }
