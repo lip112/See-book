@@ -92,7 +92,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
                 .email(tuple.get(user.email))
                 .nickname(tuple.get(user.nickname))
                 .name(tuple.get(user.name))
-                .gender(tuple.get(user.gender).getValue())
+                .gender(tuple.get(user.gender).name())
                 .role(tuple.get(user.role.Description))
                 .password(tuple.get(user.password))
                 .suspend(SuspendDTO.builder()

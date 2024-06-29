@@ -15,6 +15,9 @@ import org.springframework.security.web.PortResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -32,15 +35,16 @@ public class SecurityConfig  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable) //header로 전송되는 http방식 무효화
-                .formLogin(AbstractHttpConfigurer::disable) // Thymeleaf와 같은 서버 사이드랑 했을때 유용, 프론트엔드랑 하면 필요x
-
-                //JwtAuthFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(
                         new JwtAuthFilter(customUserDetailsService, jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated()) //이외의 모든 경로는 인증이 필요함
+                        .requestMatchers(
+                                "/api/user/login", "/api/user/signup", "/api/user/send-otp", "/api/user/verify-otp",
+                                "/api/user/find-email", "/api/user/change-password", "/api/user/validation-nickname",
+                                "/api/user/validation-email", "/api/user/oauth/kakao/total-signup","/api/user/oauth/kakao/login").permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );

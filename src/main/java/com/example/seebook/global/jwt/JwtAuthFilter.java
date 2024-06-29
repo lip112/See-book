@@ -20,9 +20,6 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
     private final JwtProvider jwtProvider;
 
     @Override
-    /**
-     * JWT 토큰 검증 필터 수행
-     */
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
 
@@ -33,7 +30,7 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
             if (jwtProvider.validateToken(token)) {
 
                 Claims authentication = jwtProvider.getAuthentication(token);
-                String username = authentication.get("username", String.class);
+                String username = authentication.get("email", String.class);
 
                 //유저와 토큰 일치 시 userDetails 생성
                 CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(username);

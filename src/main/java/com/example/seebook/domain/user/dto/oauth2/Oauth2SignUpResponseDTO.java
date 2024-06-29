@@ -2,13 +2,12 @@ package com.example.seebook.domain.user.dto.oauth2;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class Oauth2SignUpRequestDTO extends LoginResponse {
+public class Oauth2SignUpResponseDTO extends LoginResponse {
     @NotNull
     private Long kakaoId;
     @NotBlank
@@ -22,8 +21,8 @@ public class Oauth2SignUpRequestDTO extends LoginResponse {
     @NotBlank
     private String birthday;
 
-    public static Oauth2SignUpRequestDTO form(Oauth2DTO oauth2DTO) {
-        Oauth2SignUpRequestDTO seebook = Oauth2SignUpRequestDTO.builder()
+    public static Oauth2SignUpResponseDTO form(Oauth2DTO oauth2DTO) {
+        Oauth2SignUpResponseDTO seebook = Oauth2SignUpResponseDTO.builder()
                 .kakaoId(oauth2DTO.getKakaoId())
                 .name(oauth2DTO.getName())
                 .email(oauth2DTO.getEmail())

@@ -10,14 +10,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class LoginResponseDTO extends LoginResponse {
-    private Long userId;
+public class LoginResponseDTO {
     private String provider;
     private SuspendDTO suspend;
 
-    public static LoginResponseDTO form(User user, SuspendDTO suspend){
+    public static LoginResponseDTO form(SuspendDTO suspend){
         return LoginResponseDTO.builder()
-                .userId(user.getUserId())
                 .provider("seebook")
                 .suspend(suspend)
                 .build();

@@ -38,15 +38,15 @@ public class JwtProvider {
         key = Keys.hmacShaKeyFor(encodedKey.getBytes());
     }
 
-    public String generateAccessToken(CustomUserDetails userDetails) {
-        return this.generateToken(userDetails, accessTokenValidTime);
+    public String createAccessToken(CustomUserDetails userDetails) {
+        return this.createToken(userDetails, accessTokenValidTime);
     }
 
-    public String generateRefreshToken(CustomUserDetails userDetails) {
-        return this.generateToken(userDetails, refreshTokenValidTime);
+    public String createRefreshToken(CustomUserDetails userDetails) {
+        return this.createToken(userDetails, refreshTokenValidTime);
     }
 
-    private String generateToken(CustomUserDetails userDetails, Long accessTokenValidTime) {
+    private String createToken(CustomUserDetails userDetails, Long accessTokenValidTime) {
         Claims claims = Jwts.claims();
         claims.put("userId", userDetails.getUser().getUserId());
         claims.put("email", userDetails.getUsername());

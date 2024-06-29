@@ -7,9 +7,6 @@ import lombok.Getter;
 
 @Getter
 public class DeleteAccountRequestDTO {
-    @NotNull
-    private Long userId;
-
     @NotBlank
     private String provider;
 

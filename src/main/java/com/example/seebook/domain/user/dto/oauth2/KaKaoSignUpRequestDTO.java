@@ -1,4 +1,4 @@
-package com.example.seebook.domain.user.dto.requset;
+package com.example.seebook.domain.user.dto.oauth2;
 
 import com.example.seebook.domain.user.domain.Gender;
 import jakarta.validation.constraints.Email;
@@ -7,9 +7,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
-public class SignUpRequestDTO {
+public class KaKaoSignUpRequestDTO {
+
+    @NotNull
+    private Long kakaoId;
 
     @NotBlank
     @Email(message = "이메일 형식으로 작성 되지 않았습니다.")
@@ -28,7 +32,7 @@ public class SignUpRequestDTO {
     @Pattern(regexp = "^[가-힣]{3,4}$", message = "이름은 3~4자리의 한글로 이루어져야 합니다.")
     private String name;
 
-    @NotNull
+    @NotNull(message = " MALE 혹은 FEMALE만 입력 가능합니다")
     private Gender gender;
 
     @NotBlank()
@@ -40,7 +44,8 @@ public class SignUpRequestDTO {
     private String phoneNumber;
 
     @Builder
-    public SignUpRequestDTO(String email, String password, String nickname, String name, Gender gender, String birthday, String phoneNumber) {
+    public KaKaoSignUpRequestDTO(Long kakaoId, String email, String password, String nickname, String name, Gender gender, String birthday, String phoneNumber) {
+        this.kakaoId = kakaoId;
         this.email = email;
         this.password = password;
         this.nickname = nickname;

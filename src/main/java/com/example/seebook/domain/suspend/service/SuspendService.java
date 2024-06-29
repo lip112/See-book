@@ -1,6 +1,7 @@
 package com.example.seebook.domain.suspend.service;
 
 import com.example.seebook.domain.suspend.domain.Suspend;
+import com.example.seebook.domain.suspend.dto.SuspendDTO;
 import com.example.seebook.domain.suspend.repository.SuspendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,15 @@ public class SuspendService {
             suspend.changePeriod(period);
             suspendRepository.save(suspend);
         };
+    }
 
+    public SuspendDTO getSuspend(Long userId) {
+        Optional<Suspend> optionalSuspend = suspendRepository.findByUserId(userId);
+        if (optionalSuspend.isPresent()) {
+            return SuspendDTO.from(optionalSuspend.get());
+        } else {
+            return SuspendDTO.notSuspend();
+        }
     }
 
 }

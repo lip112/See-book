@@ -8,13 +8,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class LogoutRequestDTO {
-
-    @NotNull
-    private Long userId;
-
     @NotBlank
     private String provider;
-
-    @NotNull
-    private Long kakaoId;
-}
+ }

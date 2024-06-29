@@ -5,10 +5,10 @@ import com.example.seebook.domain.role.domain.RoleInfo;
 import com.example.seebook.domain.suspend.domain.Suspend;
 import com.example.seebook.domain.suspend.repository.SuspendRepository;
 import com.example.seebook.domain.user.domain.User;
+import com.example.seebook.domain.user.dto.oauth2.KaKaoSignUpRequestDTO;
 import com.example.seebook.domain.user.dto.oauth2.LoginResponse;
 import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
-import com.example.seebook.domain.user.dto.oauth2.Oauth2LoginResponseDTO;
-import com.example.seebook.domain.user.dto.oauth2.Oauth2SignUpRequestDTO;
+import com.example.seebook.domain.user.dto.oauth2.Oauth2SignUpResponseDTO;
 import com.example.seebook.domain.user.dto.requset.ChangePasswordRequestDTO;
 import com.example.seebook.domain.user.dto.requset.LoginRequestDTO;
 import com.example.seebook.domain.user.dto.requset.SignUpRequestDTO;
@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -33,24 +32,51 @@ public class UserService {
     private final SuspendRepository suspendRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginResponse processOAuth2Login(Oauth2DTO oauth2DTO) {
-        Optional<User> user = userRepository.findByPhoneNumber(oauth2DTO.getPhoneNumber());
-        if (user.isPresent()) {
-            //이미 가입된 경우 바로 정보 반환
-            Optional<Suspend> userSuspend = suspendRepository.findByUserId(user.get().getUserId());
-            if (userSuspend.isPresent()) {
-                return LoginResponseDTO.form(user.get(), SuspendDTO.from(userSuspend.get()));
-            } else {
-                return LoginResponseDTO.form(user.get(), SuspendDTO.notSuspend());
-            }
+    public boolean checkRegistration(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber).isPresent();
+    }
+    public User loginToKakao(Oauth2DTO oauth2DTO) {
+        return userRepository.findByPhoneNumber(oauth2DTO.getPhoneNumber()).get();
+    }
+
+    public User loginToEmail(LoginRequestDTO loginRequestDTO) {
+        User user = userRepository.findByEmail(loginRequestDTO.getEmail())
+                .orElseThrow(NotFoundEmailException::new);
+
+        if(passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {
+            return user;
         } else {
-            //최초로그인 -> 카카오 정보를 반환 -> 토탈 회원가입 할때 api로 가입시킴
-            return Oauth2SignUpRequestDTO.form(oauth2DTO);
+            throw new UserException.LoginFailedException();
         }
     }
+
     public Long signUp(SignUpRequestDTO signUpRequestDTO) {
-        userRepository.findByPhoneNumber(signUpRequestDTO.getPhoneNumber())
-                .orElseThrow(UserException.DuplicatedPhoneNumberException::new);
+        Optional<User> byPhoneNumber = userRepository.findByPhoneNumber(signUpRequestDTO.getPhoneNumber());
+
+        if (byPhoneNumber.isPresent()) {
+            throw new UserException.DuplicatedPhoneNumberException();
+        }
+
+        User user = User.builder()
+                .email(signUpRequestDTO.getEmail())
+                .password(passwordEncoder.encode(signUpRequestDTO.getPassword()))
+                .nickname(signUpRequestDTO.getNickname())
+                .name(signUpRequestDTO.getNickname())
+                .gender(signUpRequestDTO.getGender())
+                .birthday(signUpRequestDTO.getBirthday())
+                .phoneNumber(signUpRequestDTO.getPhoneNumber())
+                .role(new RoleInfo(RoleCode.USER))
+                .build();
+        userRepository.save(user);
+        return user.getUserId();
+    }
+
+    public Long signUpKaKao(KaKaoSignUpRequestDTO signUpRequestDTO) {
+        Optional<User> byPhoneNumber = userRepository.findByPhoneNumber(signUpRequestDTO.getPhoneNumber());
+
+        if (byPhoneNumber.isPresent()) {
+            throw new UserException.DuplicatedPhoneNumberException();
+        }
 
         User user = User.builder()
                 .kakaoId(signUpRequestDTO.getKakaoId())
@@ -91,25 +117,15 @@ public class UserService {
         return passwordEncoder.matches(user.getPassword(), changePasswordRequestDTO.getPassword());
     }
 
-    public LoginResponseDTO loginToEmail(LoginRequestDTO loginRequestDTO) {
-        User user = userRepository.findByEmail(loginRequestDTO.getEmail())
-                .orElseThrow(NotFoundEmailException::new);
 
-        if(passwordEncoder.matches(user.getPassword(), loginRequestDTO.getPassword())) {
-            Optional<Suspend> userSuspend = suspendRepository.findByUserId(user.getUserId());
-            if (userSuspend.isPresent()) {
-                return LoginResponseDTO.form(user, SuspendDTO.from(userSuspend.get()));
-            } else {
-                return LoginResponseDTO.form(user, SuspendDTO.notSuspend());
-            }
-        } else {
-            throw new UserException.LoginFailedException();
-        }
-    }
 
     public boolean validationNickname(String nickname) {
         Optional<User> byNickname = userRepository.findByNickname(nickname);
         return byNickname.isEmpty();
+    }
+    public boolean validationEmail(String email) {
+        Optional<User> byEmail = userRepository.findByEmail(email);
+        return byEmail.isEmpty();
     }
 
     public void changeNickname(Long userId, String nickname) {
