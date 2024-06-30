@@ -2,6 +2,8 @@ package com.example.seebook.domain.user.dto.requset;
 
 import com.example.seebook.domain.suspend.dto.SuspendDTO;
 import com.example.seebook.global.config.UserDefaultConfig;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
