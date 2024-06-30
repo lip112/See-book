@@ -13,8 +13,8 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookInReviewListResponseDTO {
-    private Long reviewCount;
-    private Long endPage;
+    private Long reviewCount = 0L;
+    private Long endPage = 0L;;
     private boolean isWished;
     private List<ReviewDTO> review;
     private BookDTO book;
@@ -26,6 +26,8 @@ public class BookInReviewListResponseDTO {
     public void changeWishlistStatus(boolean wished) {
         isWished = wished;
     }
+
+
 
     @Builder
     public BookInReviewListResponseDTO(Long reviewCount, boolean isWished, Long endPage, List<ReviewDTO> review, BookDTO book) {
@@ -55,7 +57,7 @@ public class BookInReviewListResponseDTO {
         return BookInReviewListResponseDTO.builder()
                 .book(book)
                 .reviewCount(0L)
-                .endPage(null)
+                .endPage(0L)
                 .review(null)
                 .isWished(false)
                 .build();

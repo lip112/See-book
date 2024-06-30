@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,7 +30,7 @@ public class WishlistController {
             User user = userService.findById(addWishlistRequestDTO.getUserId());
             wishlistService.addWishlist(book, user);
         } else {
-            Book book = bookService.addBook(addWishlistRequestDTO.getBook());
+            Book book = bookService.saveBook(addWishlistRequestDTO.getBook());
             User user = userService.findById(addWishlistRequestDTO.getUserId());
             wishlistService.addWishlist(book, user);
         }

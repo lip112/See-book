@@ -18,9 +18,9 @@ public class BookDTO {
     private String categoryId;
     private String categoryName;
     private String publisher;
-    private double avgStar;
-    private Long totalReviewCount;
-    private Long wishlistCount;
+    private Double avgStar = 0.0;
+    private Long totalReviewCount = 0L;;
+    private Long wishlistCount = 0L;;
 
     public void addWishlistCount(Long wishlistCount) {
         this.wishlistCount = wishlistCount;
@@ -31,6 +31,10 @@ public class BookDTO {
     }
     public void addTotalReviewCount(Long totalReviewCount) {
         this.totalReviewCount = totalReviewCount;
+    }
+
+    public void changeBookId(Long bookId) {
+        this.bookId = bookId;
     }
 
     @Builder
@@ -45,8 +49,8 @@ public class BookDTO {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.publisher = publisher;
-        this.avgStar = avgStar;
-        this.totalReviewCount = totalReviewCount;
+        this.avgStar = (avgStar != null) ? avgStar : 0.0;
+        this.totalReviewCount = (totalReviewCount != null) ? totalReviewCount : 0L;
     }
     public static BookDTO form(Book book) {
         return BookDTO.builder()

@@ -1,5 +1,8 @@
 package com.example.seebook.global.exception;
 
+import lombok.Getter;
+
+@Getter
 public class BookException extends RuntimeException{
     private final ErrorCode errorCode;
 

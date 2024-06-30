@@ -102,7 +102,7 @@ public class OauthService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "KakaoAK " + adminKey);
-        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        headers.add("Content-Type", "application/x-www-from-urlencoded");
 
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
         params.add("target_id_type", "user_id");
@@ -117,7 +117,7 @@ public class OauthService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "KakaoAK " + adminKey);
-        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        headers.add("Content-Type", "application/x-www-from-urlencoded");
 
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
         params.add("target_id_type", "user_id");

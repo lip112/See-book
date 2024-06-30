@@ -18,7 +18,7 @@ public class BookListResponseDTO {
     private List<BookDTO> book;
 
 
-    public static BookListResponseDTO form(Map<String, Object> map) {
+    public static BookListResponseDTO from(Map<String, Object> map) {
         List<BookDTO> books = new ArrayList<>();
         List<Map<String, String>> item1 = (List<Map<String, String>>) map.get("item");
         for (Map<String, String> bookData : item1) {

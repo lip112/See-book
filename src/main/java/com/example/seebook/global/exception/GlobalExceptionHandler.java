@@ -42,8 +42,20 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(new ErrorResponse("IllegalArgumentException", e.getMessage()));
     }
-    @ExceptionHandler(UserException.class)
-    public ResponseEntity<ErrorResponse> processUserException(UserException e) {
+    @ExceptionHandler(ReviewException.class)
+    public ResponseEntity<ErrorResponse> processReviewException(ReviewException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorResponse(e.getErrorCode().name(), e.getMessage()));
+    }
+    @ExceptionHandler(BookException.class)
+    public ResponseEntity<ErrorResponse> processBookException(BookException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorResponse(e.getErrorCode().name(), e.getMessage()));
+    }
+    @ExceptionHandler(S3Exception.class)
+    public ResponseEntity<ErrorResponse> processS3Exception(S3Exception e) {
         return ResponseEntity
                 .badRequest()
                 .body(new ErrorResponse(e.getErrorCode().name(), e.getMessage()));

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -23,11 +24,15 @@ public class BookService {
     private String TTB_KEY;
 
     public BookListResponseDTO getBookByText(String Query, String QueryType, int start) {
-        BookListResponseDTO alainBookList = BookListResponseDTO.form(aladinComponent.findAllByQuery(TTB_KEY, Query, QueryType, "js", start, 20131101));
+        BookListResponseDTO alainBookList = BookListResponseDTO.from(aladinComponent.findAllByQuery(TTB_KEY, Query, QueryType, "js", start, 20131101));
         return bookRepository.getBooksReviewSummary(alainBookList);
     }
 
     public BookInReviewListResponseDTO findByAladin(String isbn13) {
+        Map<String, Object> byIsbn13 = aladinComponent.findByIsbn13(TTB_KEY, isbn13, "ISBN", "js", 20131101);
+        if (byIsbn13.get("item") == null) {
+            throw new BookException.NotFoundBookException();
+        }
         return BookInReviewListResponseDTO.fromMap(aladinComponent.findByIsbn13(TTB_KEY, isbn13, "ISBN", "js", 20131101));
     }
 
@@ -47,7 +52,12 @@ public class BookService {
         return byIsbn13.isPresent();
     }
 
-    public Book addBook(BookDTO bookDTO) {
+    public Book saveBook(BookDTO bookDTO) {
         return bookRepository.save(Book.form(bookDTO));
+    }
+    public BookInReviewListResponseDTO saveAladinBook(BookInReviewListResponseDTO bookInReviewListResponseDTO) {
+        Long bookId = bookRepository.save(Book.form(bookInReviewListResponseDTO.getBook())).getBookId();
+        bookInReviewListResponseDTO.getBook().changeBookId(bookId);
+        return bookInReviewListResponseDTO;
     }
 }

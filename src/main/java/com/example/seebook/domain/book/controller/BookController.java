@@ -8,6 +8,7 @@ import com.example.seebook.domain.review.service.ReviewService;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.domain.wishlist.service.WishlistService;
+import com.example.seebook.global.jwt.UserAuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,20 +34,21 @@ public class BookController {
 
     @GetMapping("/detail-search")
     public ResponseEntity<BookInReviewListResponseDTO> findDetailSearch(@RequestParam String isbn13,
-                                                                        @RequestParam(defaultValue = "1") int page, @RequestParam("userId") Long userId) {
+                                                                        @RequestParam(defaultValue = "1") int page) {
         if (bookService.validationDBInIsbn13(isbn13)){
             BookDTO detailBook = bookService.getDetailBook(isbn13);
             BookInReviewListResponseDTO detailBookWithReviewList = reviewService.getBookInReviewList(detailBook, page);
             Book book = bookService.findById(detailBook.getBookId());
-            User user = userService.findById(userId);
+            User user = userService.findById(UserAuthorizationUtil.getLoginUserId());
             detailBookWithReviewList.changeWishlistStatus(wishlistService.getWishedStatus(user, book));
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(detailBookWithReviewList);
         } else {
+            BookInReviewListResponseDTO byAladinBook = bookService.findByAladin(isbn13);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(bookService.findByAladin(isbn13));
+                    .body(bookService.saveAladinBook(byAladinBook));
         }
     }
 }

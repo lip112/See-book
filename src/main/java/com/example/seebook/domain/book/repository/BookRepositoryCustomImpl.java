@@ -63,9 +63,23 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                 .where(book.bookId.eq(bookDTO.getBookId()))
                 .fetchOne();
 
-        bookDTO.addAvgStar(results.get(review.starRating.avg()));
-        bookDTO.addTotalReviewCount(results.get(review.reviewId.count()));
-        bookDTO.addWishlistCount(results.get(wishlist.book.bookId.count()));
+        Double avgStarRating = results.get(review.starRating.avg());
+        Long reviewCount = results.get(review.reviewId.count());
+        Long wishlistCount = results.get(wishlist.book.bookId.count());
+
+        if (avgStarRating == null) {
+            avgStarRating = 0.0;  // 기본값 설정
+        }
+        if (reviewCount == null) {
+            reviewCount = 0L;  // 기본값 설정
+        }
+        if (wishlistCount == null) {
+            wishlistCount = 0L;  // 기본값 설정
+        }
+
+        bookDTO.addAvgStar(avgStarRating);
+        bookDTO.addTotalReviewCount(reviewCount);
+        bookDTO.addWishlistCount(wishlistCount);
 
         return bookDTO;
     }

@@ -26,7 +26,7 @@ public class JwtProvider {
     //key는 실제로 JWT를 서명하고 검증할 때 사용하는 Key 객체입니다. 이 객체는 secretKey를 기반으로 초기화됩니다.
     private Key key;
 
-    private final long accessTokenValidTime = (60 * 1000) * 30; // 30분
+    private final long accessTokenValidTime = (60 * 1000) * 60 * 24; // 60분
     private final long refreshTokenValidTime = (60 * 1000) * 60 * 24 * 7; // 7일
 
     private final RefreshTokenRepository refreshTokenRepository; // refresh token을 저장하는 로직 추가해야함

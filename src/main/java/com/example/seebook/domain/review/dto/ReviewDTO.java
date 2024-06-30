@@ -13,7 +13,7 @@ public class ReviewDTO {
     private String profileImage;
     private String nickname;
     private int level;
-    private Double starRating;
+    private Double starRating = 0.0;
     private String content;
     @Builder
     public ReviewDTO(Long reviewId, Long userId, String profileImage, String nickname, int level, Double starRating, String content) {
