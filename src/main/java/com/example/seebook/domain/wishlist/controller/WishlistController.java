@@ -6,9 +6,9 @@ import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.domain.wishlist.dto.request.AddWishlistRequestDTO;
 import com.example.seebook.domain.wishlist.dto.request.DeleteWishlistRequestDTO;
-import com.example.seebook.domain.wishlist.dto.request.GetWishlistRequestDTO;
 import com.example.seebook.domain.wishlist.dto.response.GetWishlistResponseDTO;
 import com.example.seebook.domain.wishlist.service.WishlistService;
+import com.example.seebook.global.jwt.UserAuthorizationUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,15 +25,12 @@ public class WishlistController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addWishlist(@Valid @RequestBody AddWishlistRequestDTO addWishlistRequestDTO) {
-        if (bookService.validationDBInIsbn13(addWishlistRequestDTO.getBook().getIsbn13())) {
-            Book book = bookService.findById(addWishlistRequestDTO.getBook().getBookId());
-            User user = userService.findById(addWishlistRequestDTO.getUserId());
-            wishlistService.addWishlist(book, user);
-        } else {
-            Book book = bookService.saveBook(addWishlistRequestDTO.getBook());
-            User user = userService.findById(addWishlistRequestDTO.getUserId());
-            wishlistService.addWishlist(book, user);
-        }
+        Long userId = UserAuthorizationUtil.getLoginUserId();
+        Book book = bookService.findById(addWishlistRequestDTO.getBookId());
+        User user = userService.findById(userId);
+
+        wishlistService.addWishlist(book, user);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -41,19 +38,20 @@ public class WishlistController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteWishlist(@Valid @RequestBody DeleteWishlistRequestDTO deleteWishlistRequestDTO) {
+        Long userId = UserAuthorizationUtil.getLoginUserId();
         Book book = bookService.findById(deleteWishlistRequestDTO.getBookId());
-        User user = userService.findById(deleteWishlistRequestDTO.getUserId());
+        User user = userService.findById(userId);
         wishlistService.deleteWishlist(book, user, deleteWishlistRequestDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
-    @PostMapping("/list")
-    public ResponseEntity<GetWishlistResponseDTO> getWishlist(@Valid @RequestBody GetWishlistRequestDTO getWishlistRequestDTO) {
+    @GetMapping("/list")
+    public ResponseEntity<GetWishlistResponseDTO> getWishlist(@RequestParam("page") int page) {
+        Long userId = UserAuthorizationUtil.getLoginUserId();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(wishlistService.getWishlist(getWishlistRequestDTO));
-
+                .body(wishlistService.getWishlist(page, userId));
     }
 }

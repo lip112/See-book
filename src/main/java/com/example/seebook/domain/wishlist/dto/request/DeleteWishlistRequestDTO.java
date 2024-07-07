@@ -10,8 +10,5 @@ public class DeleteWishlistRequestDTO {
     private Long wishlistId;
 
     @NotNull
-    private Long userId;
-
-    @NotNull
     private Long bookId;
 }

@@ -1,19 +1,15 @@
 package com.example.seebook.domain.user.service;
 
+import com.example.seebook.domain.profile.dto.request.ProfileChangePasswordRequestDTO;
 import com.example.seebook.domain.role.domain.RoleCode;
 import com.example.seebook.domain.role.domain.RoleInfo;
-import com.example.seebook.domain.suspend.domain.Suspend;
 import com.example.seebook.domain.suspend.repository.SuspendRepository;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.dto.oauth2.KaKaoSignUpRequestDTO;
-import com.example.seebook.domain.user.dto.oauth2.LoginResponse;
 import com.example.seebook.domain.user.dto.oauth2.Oauth2DTO;
-import com.example.seebook.domain.user.dto.oauth2.Oauth2SignUpResponseDTO;
 import com.example.seebook.domain.user.dto.requset.ChangePasswordRequestDTO;
 import com.example.seebook.domain.user.dto.requset.LoginRequestDTO;
 import com.example.seebook.domain.user.dto.requset.SignUpRequestDTO;
-import com.example.seebook.domain.user.dto.response.LoginResponseDTO;
-import com.example.seebook.domain.suspend.dto.SuspendDTO;
 import com.example.seebook.domain.user.repository.UserRepository;
 import com.example.seebook.global.exception.UserException;
 import com.example.seebook.global.exception.UserException.NotFoundEmailException;
@@ -29,7 +25,6 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final SuspendRepository suspendRepository;
     private final PasswordEncoder passwordEncoder;
 
     public boolean checkRegistration(String phoneNumber) {
@@ -104,17 +99,24 @@ public class UserService {
                 .orElseThrow(UserException.NotFoundUserException::new);
     }
 
-    public void changePassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
+    public void changeHomeByPassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
         User user = userRepository.findByEmail(changePasswordRequestDTO.getEmail())
                 .orElseThrow(UserException.NotFoundEmailException::new);
-        user.changePassword(changePasswordRequestDTO.getPassword());
+        user.changePassword(passwordEncoder.encode(changePasswordRequestDTO.getPassword()));
         userRepository.save(user);
     }
 
-    public boolean validationPassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
-        User user = userRepository.findByEmail(changePasswordRequestDTO.getEmail())
+    public void changeProfilePassword(ProfileChangePasswordRequestDTO profileChangePasswordRequestDTO, Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserException.NotFoundEmailException::new);
-        return passwordEncoder.matches(user.getPassword(), changePasswordRequestDTO.getPassword());
+        user.changePassword(passwordEncoder.encode(profileChangePasswordRequestDTO.getPassword()));
+        userRepository.save(user);
+    }
+
+    public boolean validationProfilePassword(ProfileChangePasswordRequestDTO profileChangePasswordRequestDTO, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserException.NotFoundEmailException::new);
+        return passwordEncoder.matches(profileChangePasswordRequestDTO.getPassword(), user.getPassword());
     }
 
 
@@ -135,6 +137,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void deleteAccount(Long userId) {
         userRepository.deleteById(userId);
     }

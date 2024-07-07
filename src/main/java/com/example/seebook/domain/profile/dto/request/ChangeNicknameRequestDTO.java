@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Getter
 public class ChangeNicknameRequestDTO {
-
-    @NotNull
-    private Long userId;
-
     @NotBlank
     private String nickname;
 }

@@ -1,12 +1,12 @@
 package com.example.seebook.domain.profile.controller;
 
 import com.example.seebook.domain.profile.dto.request.ChangeNicknameRequestDTO;
-import com.example.seebook.domain.profile.dto.request.JoinRequestDTO;
+import com.example.seebook.domain.profile.dto.request.ProfileChangePasswordRequestDTO;
 import com.example.seebook.domain.profile.dto.request.ProfileReviewListRequestDTO;
 import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
 import com.example.seebook.domain.profile.service.ProfileService;
-import com.example.seebook.domain.user.dto.requset.ChangePasswordRequestDTO;
 import com.example.seebook.domain.user.service.UserService;
+import com.example.seebook.global.jwt.UserAuthorizationUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,17 +27,18 @@ public class ProfileController {
 
     }
 
-    @PostMapping("/join")
-    public ResponseEntity<JoinResponseDTO> joinProfile(@Valid @RequestBody JoinRequestDTO joinRequestDTO) {
+    @GetMapping("/join")
+    public ResponseEntity<JoinResponseDTO> joinProfile(){
+        Long userId = UserAuthorizationUtil.getLoginUserId();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(profileService.joinProfile(joinRequestDTO.getUserId()));
+                .body(profileService.joinProfile(userId));
     }
 
-    @PostMapping("/image-change")//RequestParam는 쿼리매개변수도 관여하지만 폼데이터를 핸들링할때도 사용
-    public ResponseEntity<?> changeImage(@RequestParam("userId") Long userId,
-                                         @RequestParam("file") MultipartFile file) {
-        profileService.changeImage(userId, file);
+    @PostMapping("/change-image")//RequestParam는 쿼리매개변수도 관여하지만 폼데이터를 핸들링할때도 사용
+    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile image) {
+        Long userId = UserAuthorizationUtil.getLoginUserId();
+        profileService.changeImage(userId, image);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -58,29 +59,32 @@ public class ProfileController {
 
     @PostMapping("/change-nickname")
     public ResponseEntity<?> changeNickname(@Valid @RequestBody ChangeNicknameRequestDTO changeNicknameRequestDTO) {
-        userService.changeNickname(changeNicknameRequestDTO.getUserId(), changeNicknameRequestDTO.getNickname());
+        Long userId = UserAuthorizationUtil.getLoginUserId();
+        userService.changeNickname(userId, changeNicknameRequestDTO.getNickname());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
-        userService.changePassword(changePasswordRequestDTO);
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ProfileChangePasswordRequestDTO profileChangePasswordRequestDTO) {
+        Long userId = UserAuthorizationUtil.getLoginUserId();
+        userService.changeProfilePassword(profileChangePasswordRequestDTO, userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
     @PostMapping("/validation-password")
-    public ResponseEntity<?> validationPassword(ChangePasswordRequestDTO changePasswordRequestDTO) {
-        if (userService.validationPassword(changePasswordRequestDTO)) {
+    public ResponseEntity<?> validationPassword(@Valid @RequestBody ProfileChangePasswordRequestDTO profileChangePasswordRequestDTO) {
+        Long userId = UserAuthorizationUtil.getLoginUserId();
+        if (userService.validationProfilePassword(profileChangePasswordRequestDTO, userId)) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body("사용 가능한 비밀번호 입니다.");
         } else {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body("비밀번호는 8자 이상이어야 합니다.");
+                    .body("비밀번호가 일치하지 않습니다.");
         }
     }
 }

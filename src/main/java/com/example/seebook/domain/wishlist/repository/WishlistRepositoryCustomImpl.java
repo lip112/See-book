@@ -1,7 +1,6 @@
 package com.example.seebook.domain.wishlist.repository;
 
 import com.example.seebook.domain.book.dto.BookDTO;
-import com.example.seebook.domain.wishlist.dto.request.GetWishlistRequestDTO;
 import com.example.seebook.domain.wishlist.dto.response.GetWishlistResponseDTO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +17,13 @@ public class WishlistRepositoryCustomImpl implements WishlistRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public GetWishlistResponseDTO getWIshlist(GetWishlistRequestDTO getWishlistRequestDTO, int offset, int limit) {
+    public GetWishlistResponseDTO getWIshlist(Long userId, int offset, int limit) {
 
         //해당 userId에 10개씩 bookId를 가져옴
         List<Long> bookIds = queryFactory
                 .select(wishlist.book.bookId)
                 .from(wishlist)
-                .where(wishlist.user.userId.eq(getWishlistRequestDTO.getUserId()))
+                .where(wishlist.user.userId.eq(userId))
                 .offset(offset)
                 .limit(limit)
                 .fetch();
@@ -52,7 +51,7 @@ public class WishlistRepositoryCustomImpl implements WishlistRepositoryCustom{
         Long totalWishlistCount = queryFactory
                 .select(wishlist.count())
                 .from(wishlist)
-                .where(wishlist.user.userId.eq(getWishlistRequestDTO.getUserId()))
+                .where(wishlist.user.userId.eq(userId))
                 .fetchOne();
 
         return GetWishlistResponseDTO.builder()

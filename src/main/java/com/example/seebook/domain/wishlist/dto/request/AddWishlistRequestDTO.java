@@ -7,8 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class AddWishlistRequestDTO {
-    @NotBlank
-    private BookDTO book;
     @NotNull
-    private Long userId;
+    private Long bookId;
+
 }
