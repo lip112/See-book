@@ -90,6 +90,10 @@ public class UserService {
 
 
     public String getEmail(String phoneNumber) {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(NotFoundEmailException::new);
+        System.out.println("user.getPhoneNumber() = " + user.getPhoneNumber());
+        System.out.println("user.getEmail() = " + user.getEmail());
         return userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(UserException.NotFoundEmailException::new)
                 .getEmail();
