@@ -172,8 +172,6 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 return review.nickname.contains(query);
             } else if (queryType.equals("content")) {
                 return review.content.contains(query);
-            } else if (queryType.equals("createDate")) {
-                return review.createdDate.eq(LocalDateTime.parse(query));
             } else if (queryType.equals("title")) {
                 return review.book.title.contains(query);
             } else if (queryType.equals("author")) {

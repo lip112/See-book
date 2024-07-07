@@ -12,6 +12,7 @@ import com.example.seebook.domain.review.repository.ReviewRepository;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.global.exception.ReviewException;
+import com.example.seebook.global.jwt.UserAuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserService userService;
     private final BookService bookService;
-    public void writeReview(WriteReviewRequestDTO writeReviewRequestDTO) {
+    public void writeReview(WriteReviewRequestDTO writeReviewRequestDTO, Long userId) {
         reviewRepository.save(Review.builder()
-                        .user(userService.findById(writeReviewRequestDTO.getUserId()))
+                        .user(userService.findById(userId))
                         .book(bookService.findById(writeReviewRequestDTO.getBookId()))
                         .content(writeReviewRequestDTO.getContent())
                         .starRating(writeReviewRequestDTO.getStarRating())
@@ -33,6 +34,8 @@ public class ReviewService {
     public void modifyReview(ModifyReviewRequestDTO modifyReviewRequestDTO) {
         Review review = reviewRepository.findById(modifyReviewRequestDTO.getReviewId())
                 .orElseThrow(ReviewException.NotFoundReviewIdException::new);
+        if (review.getUser().getUserId() != UserAuthorizationUtil.getLoginUserId())
+            throw new ReviewException.NotMatchUserException();
         review.changeContent(modifyReviewRequestDTO.getContent());
         review.changeStarRating(modifyReviewRequestDTO.getStarRating());
         reviewRepository.save(review);
@@ -50,7 +53,7 @@ public class ReviewService {
     }
 
     public ProfileReviewResponseDTO getProfileReviewList(ProfileReviewRequestDTO profileReviewRequestDTO) {
-        return reviewRepository.getProfileReviewList(profileReviewRequestDTO.getUserId(),
+        return reviewRepository.getProfileReviewList(UserAuthorizationUtil.getLoginUserId(),
                 (profileReviewRequestDTO.getPage()-1)*10, profileReviewRequestDTO.getPage()*10-1);
     }
 

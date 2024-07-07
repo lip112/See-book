@@ -7,8 +7,5 @@ import lombok.Getter;
 @Getter
 public class ProfileReviewRequestDTO {
     @NotNull
-    private Long userId;
-
-    @NotNull
     private int page;
 }

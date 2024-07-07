@@ -1,5 +1,6 @@
 package com.example.seebook.domain.user.controller;
 
+import com.example.seebook.domain.level.service.LevelService;
 import com.example.seebook.domain.profile.service.ProfileService;
 import com.example.seebook.domain.suspend.service.SuspendService;
 import com.example.seebook.domain.user.domain.User;
@@ -36,11 +37,13 @@ public class UserController {
     private final OauthService oauthService;
     private final SmsUtil smsUtil;
     private final JwtProvider jwtProvider;
+    private final LevelService levelService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
         Long userId = userService.signUp(signUpRequestDTO);
         profileService.addSingUpDefaultProfileImage(userId);
+        levelService.createLevelInfo(userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

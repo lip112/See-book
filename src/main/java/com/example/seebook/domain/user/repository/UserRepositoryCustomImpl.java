@@ -40,8 +40,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
                 builder.and(user.gender.eq(Gender.valueOf(query)));
             } else if (queryType.equals("role")) {
                 builder.and(user.role.Code.eq(RoleCode.valueOf(query)));
-            } else if (queryType.equals("createDate")) {
-                builder.and(user.createdDate.eq(LocalDateTime.parse(query, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
             }
         }
 

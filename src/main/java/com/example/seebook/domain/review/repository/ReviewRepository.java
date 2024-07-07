@@ -12,6 +12,4 @@ import java.awt.print.Pageable;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
     void deleteByReviewIdAndUser(Long reviewId, User user);
-
-
 }

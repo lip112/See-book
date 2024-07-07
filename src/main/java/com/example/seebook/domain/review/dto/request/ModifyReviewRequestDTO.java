@@ -9,8 +9,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ModifyReviewRequestDTO {
     @NotNull
-    private Long userId;
-    @NotNull
     private Long reviewId;
     @NotNull
     private Double starRating;

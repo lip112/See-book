@@ -8,17 +8,11 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Oauth2SignUpResponseDTO extends LoginResponse {
-    @NotNull
     private Long kakaoId;
-    @NotBlank
     private String name;
-    @NotBlank
     private String email;
-    @NotBlank
     private String phoneNumber;
-    @NotBlank
     private String gender;
-    @NotBlank
     private String birthday;
 
     public static Oauth2SignUpResponseDTO form(Oauth2DTO oauth2DTO) {

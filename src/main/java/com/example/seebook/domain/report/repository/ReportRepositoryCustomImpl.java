@@ -74,8 +74,6 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
                 );
             } else if (queryType.equals("reportType")) {
                 return report.reportType.eq(query);
-            } else if (queryType.equals("reportDate")) {
-                return report.reportDate.eq(LocalDateTime.parse(query));
             }
         }
         return null;

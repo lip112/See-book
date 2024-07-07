@@ -9,6 +9,7 @@ import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
 import com.example.seebook.domain.review.service.ReviewService;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.service.UserService;
+import com.example.seebook.global.jwt.UserAuthorizationUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,12 @@ public class ReviewController {
 
     @PostMapping("/write")
     public ResponseEntity<?> register(@Valid @RequestBody WriteReviewRequestDTO writeRequestDTO) {
-        reviewService.writeReview(writeRequestDTO);
-        levelService.plusLevelCount(writeRequestDTO.getUserId());
+        System.out.println("실생1");
+        Long userId = 2L;
+        reviewService.writeReview(writeRequestDTO, userId);
+        System.out.println("실생2");
+        levelService.plusLevelCount(userId);
+        System.out.println("실생3");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -42,7 +47,7 @@ public class ReviewController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@Valid @RequestBody DeleteReviewRequestDTO deleteReviewRequestDTO) {
-        User user = userService.findById(deleteReviewRequestDTO.getUserId());
+        User user = userService.findById(UserAuthorizationUtil.getLoginUserId());
         reviewService.deleteReview(deleteReviewRequestDTO.getReviewId(), user);
         return ResponseEntity
                 .status(HttpStatus.OK)

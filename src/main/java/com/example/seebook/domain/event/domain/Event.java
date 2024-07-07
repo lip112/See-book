@@ -19,8 +19,6 @@ public class Event {
 
     private String title;
 
-    private String content;
-
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
@@ -28,10 +26,9 @@ public class Event {
     private String imageUrl;
 
     @Builder
-    public Event(Long eventId, String title, String content, LocalDateTime startDate, LocalDateTime endDate, String imageUrl) {
+    public Event(Long eventId, String title, LocalDateTime startDate, LocalDateTime endDate, String imageUrl) {
         this.eventId = eventId;
         this.title = title;
-        this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageUrl = imageUrl;
@@ -39,7 +36,6 @@ public class Event {
 
     public void changeEvent(EventDTO eventDTO) {
         this.title = eventDTO.getTitle();
-        this.content = eventDTO.getContent();
         this.startDate = LocalDateTime.parse(eventDTO.getStartDate());
         this.endDate = LocalDateTime.parse(eventDTO.getEndDate());
         this.imageUrl = eventDTO.getImageUrl();

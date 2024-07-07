@@ -1,5 +1,7 @@
 package com.example.seebook.global.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,8 @@ public enum ErrorCode {
     LOGIN_FAILED(HttpStatus.BAD_REQUEST, "아이디 및 비밀번호가 일치하지 않습니다."),
 
    //review
-   NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "찾을 수 없는 리뷰입니다"),
+    NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "찾을 수 없는 리뷰입니다"),
+    NOT_MATCH_USER_EXCEPTION(HttpStatus.BAD_REQUEST, "본인의 리뷰만 삭제할 수 있습니다"),
 
     //Book
     NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "찾을 수 없는 책입니다"),
@@ -26,7 +29,13 @@ public enum ErrorCode {
     NO_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다"),
     INVALID_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다"),
     PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "이미지를 업로드 할 수 없습니다"),
-    IO_EXCEPTION_ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다");
+    IO_EXCEPTION_ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다"),
+
+
+    //jwt
+    SIGNATURE_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다."),
+    MALFORMED_JWT_EXCEPTION(HttpStatus.UNAUTHORIZED, "올바르지 않은 토큰입니다."),
+    EXPIRED_JWT_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다. 다시 로그인해주세요.");
 
 
     private final HttpStatus ErrorCode;

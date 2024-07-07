@@ -1,5 +1,6 @@
 package com.example.seebook.global.jwt;
 
+import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.repository.UserRepository;
 import com.example.seebook.global.exception.UserException;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override // userName은 이메일
-    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return CustomUserDetails.from(userRepository.findByEmail(username)
-                .orElseThrow(UserException.NotFoundUserException::new));
+    public CustomUserDetails loadUserByUsername(String username){
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(UserException.NotFoundUserException::new);
+        return CustomUserDetails.from(user);
     }
 }

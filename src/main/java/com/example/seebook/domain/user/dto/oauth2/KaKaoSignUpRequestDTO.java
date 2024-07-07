@@ -25,7 +25,7 @@ public class KaKaoSignUpRequestDTO {
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,8}$", message = "닉네임은 2~8자리의 문자와 숫자로 이루어져야 합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,10}$", message = "닉네임은 2~8자리의 문자와 숫자로 이루어져야 합니다.")
     private String nickname;
 
     @NotBlank

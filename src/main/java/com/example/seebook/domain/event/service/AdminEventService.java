@@ -35,7 +35,6 @@ public class AdminEventService {
     public void registerEvent(EventDTO eventDTO) {
         Event event = Event.builder()
                 .title(eventDTO.getTitle())
-                .content(eventDTO.getContent())
                 .startDate(LocalDateTime.parse(eventDTO.getStartDate()))
                 .endDate(LocalDateTime.parse(eventDTO.getEndDate()))
                 .imageUrl(eventDTO.getImageUrl())

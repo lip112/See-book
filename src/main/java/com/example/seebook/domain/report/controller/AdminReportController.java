@@ -49,7 +49,7 @@ public class AdminReportController {
             reviewService.deleteReview(requestDTO.getReviewId(), user);
         }
         if (requestDTO.isResetNickname()) {
-            userService.changeNickname(requestDTO.getReportedId(), "꿀먹은오둥이" + new Random(90000) + 10000);
+            userService.changeNickname(requestDTO.getReportedId(), "오둥이" + new Random(9999999) + 1000000);
         }
         if (requestDTO.isResetProfileImage()) {
             profileService.resetDefaultImage(requestDTO.getReportedId());

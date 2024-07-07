@@ -61,7 +61,7 @@ public class UserService {
                 .email(signUpRequestDTO.getEmail())
                 .password(passwordEncoder.encode(signUpRequestDTO.getPassword()))
                 .nickname(signUpRequestDTO.getNickname())
-                .name(signUpRequestDTO.getNickname())
+                .name(signUpRequestDTO.getName())
                 .gender(signUpRequestDTO.getGender())
                 .birthday(signUpRequestDTO.getBirthday())
                 .phoneNumber(signUpRequestDTO.getPhoneNumber())

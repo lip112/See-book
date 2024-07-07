@@ -2,8 +2,10 @@ package com.example.seebook.global.jwt;
 
 import com.example.seebook.domain.refreshToken.domain.RefreshToken;
 import com.example.seebook.domain.refreshToken.repository.RefreshTokenRepository;
+import com.example.seebook.global.exception.JwtException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,7 @@ public class JwtProvider {
     //key는 실제로 JWT를 서명하고 검증할 때 사용하는 Key 객체입니다. 이 객체는 secretKey를 기반으로 초기화됩니다.
     private Key key;
 
-    private final long accessTokenValidTime = (60 * 1000) * 60 * 24; // 60분
+    private final long accessTokenValidTime = (60 * 1000) * 60 * 24 * 9000; // 60분
     private final long refreshTokenValidTime = (60 * 1000) * 60 * 24 * 7; // 7일
 
     private final RefreshTokenRepository refreshTokenRepository; // refresh token을 저장하는 로직 추가해야함
@@ -73,22 +75,18 @@ public class JwtProvider {
         return claims;
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(final String token) throws JwtException {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
+            System.out.println(String.format("exception : %s, message : 잘못된 JWT 서명입니다.", e.getClass().getName()));
+            throw new JwtException.MalformedJwtException();
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
+            System.out.println(String.format("exception : %s, message : 만료된 JWT 토큰입니다.", e.getClass().getName()));
+            throw new JwtException.ExpiredJwtException();
         }
-        return false;
     }
-
     public Long getUserId(String token) {
         Claims claims = getAuthentication(token);
         return claims.get("userId", Long.class);
@@ -100,5 +98,7 @@ public class JwtProvider {
                 .orElseThrow(() -> new IllegalArgumentException("refresh token이 존재하지 않습니다."));
         return refreshToken.getRefreshToken();
     }
+
+
 }
 

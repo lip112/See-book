@@ -1,5 +1,6 @@
 package com.example.seebook.domain.user.controller;
 
+import com.example.seebook.domain.level.service.LevelService;
 import com.example.seebook.domain.profile.service.ProfileService;
 import com.example.seebook.domain.suspend.service.SuspendService;
 import com.example.seebook.domain.user.domain.User;
@@ -26,6 +27,7 @@ public class Oauth2Controller {
     private final ProfileService profileService;
     private final SuspendService suspendService;
     private final JwtProvider jwtProvider;
+    private final LevelService levelService;
 
     @GetMapping("/kakao/login")
     public ResponseEntity<LoginResponse> login(@RequestParam String code, HttpServletResponse httpResponse) {
@@ -50,6 +52,7 @@ public class Oauth2Controller {
     public ResponseEntity<?> totalSignUp(@Valid @RequestBody KaKaoSignUpRequestDTO kaKaoSignUpRequestDTO) {
         Long userId = userService.signUpKaKao(kaKaoSignUpRequestDTO);
         profileService.addSingUpDefaultProfileImage(userId);
+        levelService.createLevelInfo(userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

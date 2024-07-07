@@ -2,6 +2,7 @@ package com.example.seebook.global.security;
 
 import com.example.seebook.global.jwt.CustomUserDetailsService;
 import com.example.seebook.global.jwt.JwtAuthFilter;
+import com.example.seebook.global.jwt.JwtAuthenticationEntryPoint;
 import com.example.seebook.global.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -25,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig  {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtProvider jwtProvider;
+    private final JwtAuthenticationEntryPoint entryPoint;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -37,18 +40,21 @@ public class SecurityConfig  {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .exceptionHandling(handler -> handler.authenticationEntryPoint(entryPoint))
                 .addFilterBefore(
                         new JwtAuthFilter(customUserDetailsService, jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(
-                                "/api/user/login", "/api/user/signup", "/api/user/send-otp", "/api/user/verify-otp",
-                                "/api/user/find-email", "/api/user/change-password", "/api/user/validation-nickname",
-                                "/api/user/validation-email", "/api/user/oauth/kakao/total-signup","/api/user/oauth/kakao/login").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers( "/",
+                                "/api/user/**", "/api/book/**", "/api/review/**",
+                                                    //swagger 전용
+                                "/swagger-ui/**", "/v3/api-docs/**"
+                        ).permitAll()
+                        .requestMatchers("/api/user/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
         return http.build();
     }
-
 }

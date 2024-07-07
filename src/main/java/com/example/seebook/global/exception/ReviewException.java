@@ -16,5 +16,10 @@ public class ReviewException extends RuntimeException{
             super(ErrorCode.NOT_FOUND_REVIEW);
         }
     }
+    public static class NotMatchUserException extends ReviewException{
+        public NotMatchUserException() {
+            super(ErrorCode.NOT_MATCH_USER_EXCEPTION);
+        }
+    }
 
 }

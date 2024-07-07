@@ -32,4 +32,12 @@ public class LevelService {
         levelRepository.save(levelInfo);
     }
 
+    public void createLevelInfo(Long userId) {
+        levelRepository.save(LevelInfo.builder()
+                .userId(userId)
+                .level(1)
+                .levelCount(0)
+                .build());
+    }
+
 }

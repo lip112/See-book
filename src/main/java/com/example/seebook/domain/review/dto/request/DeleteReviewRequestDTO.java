@@ -7,7 +7,5 @@ import lombok.Getter;
 public class DeleteReviewRequestDTO {
 
     @NotNull
-    private Long userId;
-    @NotNull
     private Long reviewId;
 }

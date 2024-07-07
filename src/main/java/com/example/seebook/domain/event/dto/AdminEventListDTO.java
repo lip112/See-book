@@ -9,17 +9,15 @@ import java.time.LocalDateTime;
 public class AdminEventListDTO {
     private Long eventId;
     private String title;
-    private String content;
     private String startDate;
     private String endDate;
     private String imageUrl;
     private boolean isActivated;
 
     @Builder
-    public AdminEventListDTO(Long eventId, String title, String content, String startDate, String endDate, String imageUrl) {
+    public AdminEventListDTO(Long eventId, String title, String startDate, String endDate, String imageUrl) {
         this.eventId = eventId;
         this.title = title;
-        this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageUrl = imageUrl;
