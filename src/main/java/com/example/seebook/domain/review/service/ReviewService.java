@@ -1,31 +1,29 @@
 package com.example.seebook.domain.review.service;
 
+import com.example.seebook.domain.book.domain.Book;
 import com.example.seebook.domain.book.dto.BookDTO;
-import com.example.seebook.domain.book.service.BookService;
 import com.example.seebook.domain.review.domain.Review;
 import com.example.seebook.domain.review.dto.request.ModifyReviewRequestDTO;
-import com.example.seebook.domain.review.dto.request.ProfileReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.WriteReviewRequestDTO;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
 import com.example.seebook.domain.review.repository.ReviewRepository;
 import com.example.seebook.domain.user.domain.User;
-import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.global.exception.ReviewException;
 import com.example.seebook.global.jwt.UserAuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final UserService userService;
-    private final BookService bookService;
-    public void writeReview(WriteReviewRequestDTO writeReviewRequestDTO, Long userId) {
+    public void writeReview(WriteReviewRequestDTO writeReviewRequestDTO, Book book, User user) {
         reviewRepository.save(Review.builder()
-                        .user(userService.findById(userId))
-                        .book(bookService.findById(writeReviewRequestDTO.getBookId()))
+                        .user(user)
+                        .book(book)
+                        .nickname(user.getNickname())
                         .content(writeReviewRequestDTO.getContent())
                         .starRating(writeReviewRequestDTO.getStarRating())
                 .build());
@@ -41,6 +39,7 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
+    @Transactional
     public void deleteReview(Long reviewId, User user) {
         reviewRepository.deleteByReviewIdAndUser(reviewId, user);
     }
@@ -52,9 +51,9 @@ public class ReviewService {
         // 3 : 20 , 29
     }
 
-    public ProfileReviewResponseDTO getProfileReviewList(ProfileReviewRequestDTO profileReviewRequestDTO) {
-        return reviewRepository.getProfileReviewList(UserAuthorizationUtil.getLoginUserId(),
-                (profileReviewRequestDTO.getPage()-1)*10, profileReviewRequestDTO.getPage()*10-1);
+    public ProfileReviewResponseDTO getProfileReviewList(int page, Long userId) {
+        return reviewRepository.getProfileReviewList(userId,
+                (page-1)*10, page*10-1);
     }
 
     public void GetHomeReviewList() {

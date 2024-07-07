@@ -37,8 +37,9 @@ public class Review extends BaseTime {
     }
 
     @Builder
-    public Review(User user, Book book, String content, Double starRating) {
+    public Review(User user, String nickname,  Book book, String content, Double starRating) {
         this.user = user;
+        this.nickname = nickname;
         this.book = book;
         this.content = content;
         this.starRating = starRating;

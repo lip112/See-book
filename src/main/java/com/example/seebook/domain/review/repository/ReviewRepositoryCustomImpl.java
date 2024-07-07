@@ -5,17 +5,14 @@ import com.example.seebook.domain.review.dto.AdminReviewListDTO;
 import com.example.seebook.domain.review.dto.ProfileReviewDTO;
 import com.example.seebook.domain.review.dto.ReviewDTO;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
-import com.example.seebook.domain.review.dto.request.ProfileReviewRequestDTO;
 import com.example.seebook.domain.review.dto.response.AdminReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.response.HomeReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

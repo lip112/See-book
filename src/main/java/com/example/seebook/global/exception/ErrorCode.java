@@ -18,7 +18,7 @@ public enum ErrorCode {
 
    //review
     NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "찾을 수 없는 리뷰입니다"),
-    NOT_MATCH_USER_EXCEPTION(HttpStatus.BAD_REQUEST, "본인의 리뷰만 삭제할 수 있습니다"),
+    NOT_MATCH_USER_EXCEPTION(HttpStatus.BAD_REQUEST, "본인이 작성한 리뷰가 아닙니다."),
 
     //Book
     NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "찾을 수 없는 책입니다"),

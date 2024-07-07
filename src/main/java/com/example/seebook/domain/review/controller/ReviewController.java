@@ -1,9 +1,10 @@
 package com.example.seebook.domain.review.controller;
 
+import com.example.seebook.domain.book.domain.Book;
+import com.example.seebook.domain.book.service.BookService;
 import com.example.seebook.domain.level.service.LevelService;
 import com.example.seebook.domain.review.dto.request.DeleteReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.ModifyReviewRequestDTO;
-import com.example.seebook.domain.review.dto.request.ProfileReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.WriteReviewRequestDTO;
 import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
 import com.example.seebook.domain.review.service.ReviewService;
@@ -23,15 +24,15 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final LevelService levelService;
     private final UserService userService;
+    private final BookService bookService;
 
     @PostMapping("/write")
     public ResponseEntity<?> register(@Valid @RequestBody WriteReviewRequestDTO writeRequestDTO) {
-        System.out.println("실생1");
-        Long userId = 2L;
-        reviewService.writeReview(writeRequestDTO, userId);
-        System.out.println("실생2");
+        Long userId = UserAuthorizationUtil.getLoginUserId();
+        User user = userService.findById(userId);
+        Book book = bookService.findById(writeRequestDTO.getBookId());
+        reviewService.writeReview(writeRequestDTO, book, user);
         levelService.plusLevelCount(userId);
-        System.out.println("실생3");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -47,17 +48,20 @@ public class ReviewController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@Valid @RequestBody DeleteReviewRequestDTO deleteReviewRequestDTO) {
-        User user = userService.findById(UserAuthorizationUtil.getLoginUserId());
+        Long userId = UserAuthorizationUtil.getLoginUserId();
+        User user = userService.findById(userId);
         reviewService.deleteReview(deleteReviewRequestDTO.getReviewId(), user);
+        levelService.minusLevelCount(userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
-    @PostMapping("/list")
-    public ResponseEntity<ProfileReviewResponseDTO> getProfileList(@Valid @RequestBody ProfileReviewRequestDTO profileReviewRequestDTO) {
+    @GetMapping("/list")
+    public ResponseEntity<ProfileReviewResponseDTO> getProfileList(@RequestParam("page") int page) {
+        Long userId = UserAuthorizationUtil.getLoginUserId();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(reviewService.getProfileReviewList(profileReviewRequestDTO));
+                .body(reviewService.getProfileReviewList(page, userId));
     }
 }
