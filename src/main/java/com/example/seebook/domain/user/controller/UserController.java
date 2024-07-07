@@ -85,15 +85,12 @@ public class UserController {
 
     @PostMapping("/find-email")
     public ResponseEntity<FindEmailResponseDTO> findEmail(@Valid @RequestBody VerificationRequestDTO verificationRequestDTO) {
-        System.out.println("verificationRequestDTO.getPhoneNumber() = " + verificationRequestDTO.getPhoneNumber());
-        System.out.println("verificationRequestDTO.getOtp() = " + verificationRequestDTO.getOtp());
         if (smsUtil.verifyCode(verificationRequestDTO)) {
-            System.out.println("인증성공");
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new FindEmailResponseDTO(userService.getEmail(verificationRequestDTO.getPhoneNumber())));
         } else {
-            throw new UserException.NotFoundEmailException();
+            throw new UserException.InvalidVerificationCodeException();
         }
     }
 

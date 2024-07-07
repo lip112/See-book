@@ -43,15 +43,11 @@ public class SmsUtil {
         message.setTo(to);
         message.setText("[See-book] 아래의 인증번호를 입력해주세요\n" + code);
         verificationMap.put(to, new VerificationEntry(code, System.currentTimeMillis()));
-        System.out.println("sendOneSMS.verificationMap.size() = " + verificationMap.size());
-        System.out.println("sendOneSMS.verificationMap.get(to) = " + verificationMap.get(to));
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
         return response;
     }
 
     public boolean verifyCode(VerificationRequestDTO verificationRequestDTO) {
-        System.out.println("verifyCode.verificationMap.size() = " + verificationMap.size());
-        System.out.println("verifyCode.verificationMap.get(to) = " + verificationMap.get(verificationRequestDTO.getPhoneNumber()));
         VerificationEntry entry = verificationMap.get(verificationRequestDTO.getPhoneNumber());
         if (entry != null && entry.getCode().equals(verificationRequestDTO.getOtp()) &&
                 System.currentTimeMillis() - entry.getTimestamp() <= TimeUnit.MINUTES.toMillis(5)) {

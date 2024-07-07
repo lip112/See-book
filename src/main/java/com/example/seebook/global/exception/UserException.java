@@ -40,6 +40,11 @@ public class UserException extends RuntimeException{
             super(ErrorCode.NOT_FOUND_USER);
         }
     }
+    public static class InvalidVerificationCodeException extends UserException {
+        public InvalidVerificationCodeException() {
+            super(ErrorCode.INVALID_VERIFICATION_CODE_EXCEPTION);
+        }
+    }
 
 
 }

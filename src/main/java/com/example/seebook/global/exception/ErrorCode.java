@@ -15,6 +15,7 @@ public enum ErrorCode {
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "찾을 수 없는 계정 입니다"),
     NOT_FOUND_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "찾을 수 없는 전화번호 입니다"),
     LOGIN_FAILED(HttpStatus.BAD_REQUEST, "아이디 및 비밀번호가 일치하지 않습니다."),
+    INVALID_VERIFICATION_CODE_EXCEPTION(HttpStatus.BAD_REQUEST, "인증번호가 일치하지 않습니다."),
 
    //review
     NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "찾을 수 없는 리뷰입니다"),
