@@ -44,8 +44,8 @@ public class SecurityConfig  {
                 .addFilterBefore(
                         new JwtAuthFilter(customUserDetailsService, jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers( "/",
-                                "/api/user/**",
+                        .requestMatchers( "/","/**",
+                                "/api/user/**","/api/user/admin/login",
                                                     //swagger 전용
                                 "/swagger-ui/**", "/v3/api-docs/**"
                         ).permitAll()

@@ -50,6 +50,7 @@ public class SmsUtil {
 
     public boolean verifyCode(VerificationRequestDTO verificationRequestDTO) {
         VerificationEntry entry = verificationMap.get(verificationRequestDTO.getPhoneNumber());
+        System.out.println("entry.getCode() = " + entry.getCode());
         if (entry != null && entry.getCode().equals(verificationRequestDTO.getOtp()) &&
                 System.currentTimeMillis() - entry.getTimestamp() <= TimeUnit.MINUTES.toMillis(5)) {
             verificationMap.remove(verificationRequestDTO.getPhoneNumber()); // 검증 후 항목 제거

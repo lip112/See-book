@@ -48,8 +48,6 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
                         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                     }
                 }
-            } else {
-                throw new JwtException.MalformedJwtException();
             }
         } catch (JwtException | UserException e) {
             log.error("Exception shows in filter = {}", e.toString());
