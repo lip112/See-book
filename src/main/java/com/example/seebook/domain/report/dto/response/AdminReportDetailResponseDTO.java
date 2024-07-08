@@ -3,6 +3,8 @@ package com.example.seebook.domain.report.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class AdminReportDetailResponseDTO {
     private Long reportId;
@@ -10,16 +12,15 @@ public class AdminReportDetailResponseDTO {
     private Long reportedId;
     private String reportedNickname;
     private String reportType;
-    private String reportDate;
+    private LocalDateTime reportDate;
     private String description;
+    private String profileIamge;
 
     private Long reviewId;
-    private String profileIamge;
-    private Double starRating;
     private String content;
 
     @Builder
-    public AdminReportDetailResponseDTO(Long reportId, String reporterNickname, Long reportedId, String reportedNickname, String reportType, String reportDate, String description, Long reviewId, String profileIamge, Double starRating, String content) {
+    public AdminReportDetailResponseDTO(Long reportId, String reporterNickname, Long reportedId, String reportedNickname, String reportType, LocalDateTime reportDate, String description, Long reviewId, String profileIamge, String content) {
         this.reportId = reportId;
         this.reporterNickname = reporterNickname;
         this.reportedId = reportedId;
@@ -29,7 +30,6 @@ public class AdminReportDetailResponseDTO {
         this.description = description;
         this.reviewId = reviewId;
         this.profileIamge = profileIamge;
-        this.starRating = starRating;
         this.content = content;
     }
 }

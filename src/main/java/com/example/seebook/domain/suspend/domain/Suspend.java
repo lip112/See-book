@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 public class Suspend {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long suspendId;

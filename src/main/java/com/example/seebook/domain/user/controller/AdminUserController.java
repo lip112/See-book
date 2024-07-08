@@ -39,7 +39,7 @@ public class AdminUserController {
     @PutMapping("/modify")
     public ResponseEntity<?> modifyUser(@Valid @RequestBody AdminUserModifyRequestDTO adminUserModifyRequestDTO) {
         if (adminUserModifyRequestDTO.isResetProfileImage()) {
-            profileService.resetDefaultImage(adminUserModifyRequestDTO.getUserId());
+            profileService.resetDefaultProfileImage(adminUserModifyRequestDTO.getUserId());
         }
         if (adminUserModifyRequestDTO.getEndDate() != null) {
             suspendService.changeSuspendByAdminModify(adminUserModifyRequestDTO.getUserId(), adminUserModifyRequestDTO.getEndDate());

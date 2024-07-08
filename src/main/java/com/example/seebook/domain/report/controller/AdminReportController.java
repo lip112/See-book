@@ -10,16 +10,16 @@ import com.example.seebook.domain.review.service.ReviewService;
 import com.example.seebook.domain.suspend.service.SuspendService;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/report")
+@RequestMapping("/api/admin/report")
 public class AdminReportController {
     private final AdminReportService adminReportService;
     private final ReviewService reviewService;
@@ -37,22 +37,23 @@ public class AdminReportController {
     }
 
     @PostMapping("/detail")
-    public ResponseEntity<AdminReportDetailResponseDTO> getReportDetail(@RequestBody AdminReportDetailRequestDTO requestDTO) {
+    public ResponseEntity<AdminReportDetailResponseDTO> getReportDetail(@Valid @RequestBody AdminReportDetailRequestDTO requestDTO) {
         return ResponseEntity.ok()
                 .body(adminReportService.getReportDetail(requestDTO.getReportId()));
     }
 
-    @PostMapping("/process")
-    public ResponseEntity<Void> processReport(@RequestBody AdminReportProcessRequestDTO requestDTO) {
+    @PutMapping("/process")
+    public ResponseEntity<Void> processReport(@Valid @RequestBody AdminReportProcessRequestDTO requestDTO) {
         if (requestDTO.isDeleteReview()) {
-            User user = userService.findById(requestDTO.getReviewId());
+            User user = userService.findById(requestDTO.getReportedId());
             reviewService.deleteReview(requestDTO.getReviewId(), user);
         }
         if (requestDTO.isResetNickname()) {
-            userService.changeNickname(requestDTO.getReportedId(), "오둥이" + new Random(9999999) + 1000000);
+            String randomNickname = "오둥이" + String.valueOf(new Random().nextInt(8999999) + 1000000);
+            userService.changeNickname(requestDTO.getReportedId(), randomNickname);
         }
         if (requestDTO.isResetProfileImage()) {
-            profileService.resetDefaultImage(requestDTO.getReportedId());
+            profileService.resetDefaultProfileImage(requestDTO.getReportedId());
         }
         if (requestDTO.getSuspensionPeriod() > 0) {
             suspendService.changeSuspensionPeriod(requestDTO.getReportedId(), requestDTO.getSuspensionPeriod(), requestDTO.getReportType());

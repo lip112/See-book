@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReportReviewRequestDTO {
     @NotNull
-    private Long reporterId;
-    @NotNull
     private Long reportedId;
     @NotNull
     private Long reviewId;
@@ -20,8 +18,7 @@ public class ReportReviewRequestDTO {
     @NotBlank
     private String description;
     @Builder
-    public ReportReviewRequestDTO(Long reporterId, Long reportedId, Long reviewId, String reportType, String description) {
-        this.reporterId = reporterId;
+    public ReportReviewRequestDTO(Long reportedId, Long reviewId, String reportType, String description) {
         this.reportedId = reportedId;
         this.reviewId = reviewId;
         this.reportType = reportType;

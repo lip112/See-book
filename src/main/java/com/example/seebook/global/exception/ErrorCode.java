@@ -36,7 +36,10 @@ public enum ErrorCode {
     //jwt
     SIGNATURE_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다."),
     MALFORMED_JWT_EXCEPTION(HttpStatus.UNAUTHORIZED, "올바르지 않은 토큰입니다."),
-    EXPIRED_JWT_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다. 다시 로그인해주세요.");
+    EXPIRED_JWT_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다. 다시 로그인해주세요."),
+
+    //Report
+    NOT_FOUND_REPORT(HttpStatus.BAD_REQUEST, "존재 하지 않는 reportId입니다.");
 
 
     private final HttpStatus ErrorCode;

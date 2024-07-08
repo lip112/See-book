@@ -14,5 +14,5 @@ public interface ReviewRepositoryCustom {
 
     HomeReviewListResponseDTO getHomeReviewList();
 
-    AdminReviewListResponseDTO getAdminReviewList(int offset, int limit, String query, String queryType);
+    AdminReviewListResponseDTO getAdminReviewList(int offset, int limit, String queryType, String query);
 }

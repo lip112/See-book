@@ -1,7 +1,10 @@
 package com.example.seebook.domain.report.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 public class ReportDTO {
@@ -11,12 +14,13 @@ public class ReportDTO {
     private Long reportedId;
     private String reportedNickname;
     private String reportType;
-    private String reportDate;
+
+    private LocalDateTime reportDate;
     private String description;
     private boolean isProcessed;
 
     @Builder
-    public ReportDTO(Long reportId, Long reporterId, String reporterNickname, Long reportedId, String reportedNickname, String reportType, String reportDate, String description, boolean isProcessed) {
+    public ReportDTO(Long reportId, Long reporterId, String reporterNickname, Long reportedId, String reportedNickname, String reportType, LocalDateTime reportDate, String description, boolean isProcessed) {
         this.reportId = reportId;
         this.reporterId = reporterId;
         this.reporterNickname = reporterNickname;

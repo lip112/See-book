@@ -128,7 +128,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     }
 
     @Override
-    public AdminReviewListResponseDTO getAdminReviewList(int offset, int limit, String query, String queryType) {
+    public AdminReviewListResponseDTO getAdminReviewList(int offset, int limit, String queryType, String query) {
         List<AdminReviewListDTO> list = queryFactory
                 .select(review.reviewId, review.nickname, review.content, review.starRating, review.createdDate,
                         review.book.title, review.book.author)
@@ -164,7 +164,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     }
 
     private BooleanExpression eqQueryType(String queryType, String query) {
-        if (queryType.equals("all")) {
+        if (!queryType.equals("all")) {
             if (queryType.equals("nickname")) {
                 return review.nickname.contains(query);
             } else if (queryType.equals("content")) {

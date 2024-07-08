@@ -60,4 +60,9 @@ public class ReviewService {
 
     }
 
+    public Review findById(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(ReviewException.NotFoundReviewIdException::new);
+    }
+
 }

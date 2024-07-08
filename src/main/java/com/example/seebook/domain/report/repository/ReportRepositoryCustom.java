@@ -5,7 +5,7 @@ import com.example.seebook.domain.report.dto.response.AdminReportListResponseDTO
 
 public interface ReportRepositoryCustom {
 
-    AdminReportListResponseDTO getAdminReportList(int offset, int limit, String query, String queryType);
+    AdminReportListResponseDTO getAdminReportList(int offset, int limit, String queryType, String query);
 
     AdminReportDetailResponseDTO getAdminReportDetail(Long reportId);
 }

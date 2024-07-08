@@ -4,6 +4,7 @@ package com.example.seebook.domain.report.repository;
 import com.example.seebook.domain.report.dto.ReportDTO;
 import com.example.seebook.domain.report.dto.response.AdminReportDetailResponseDTO;
 import com.example.seebook.domain.report.dto.response.AdminReportListResponseDTO;
+import com.example.seebook.global.exception.ReportException;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -22,7 +23,7 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public AdminReportListResponseDTO getAdminReportList(int offset, int limit, String query, String queryType) {
+    public AdminReportListResponseDTO getAdminReportList(int offset, int limit, String queryType, String query) {
         List<ReportDTO> list = queryFactory
                 .select(report.reportId, report.reporterId.userId, report.reporterId.nickname, report.reportedId.userId, report.reportedId.nickname,
                         report.reportType, report.reportDate, report.description, report.isProcessed)
@@ -39,7 +40,7 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
                         .reportedId(tuple.get(report.reportedId.userId))
                         .reportedNickname(tuple.get(report.reportedId.nickname))
                         .reportType(tuple.get(report.reportType))
-                        .reportDate(tuple.get(report.reportDate).toString())
+                        .reportDate(tuple.get(report.reportDate))
                         .description(tuple.get(report.description))
                         .isProcessed(tuple.get(report.isProcessed))
                         .build())
@@ -90,15 +91,17 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
                         report.reportType,
                         report.reportDate,
                         report.description,
-                        report.reviewId,
                         profile.imageUrl,
-                        report.reviewId.starRating,
+                        report.reviewId.reviewId,
                         report.reviewId.content)
                 .from(report)
-                .leftJoin(profile).on(report.reportedId.userId.eq(profile.userId))
+                .leftJoin(profile).on(profile.userId.eq(report.reportedId.userId))
                 .where(report.reportId.eq(reportId))
                 .fetchOne();
 
+        if (tuple == null) {
+            throw new ReportException.NotFoundReportIdException();
+        }
 
         return AdminReportDetailResponseDTO.builder()
                 .reportId(tuple.get(report.reportId))
@@ -106,11 +109,10 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
                 .reportedId(tuple.get(report.reportedId.userId))
                 .reportedNickname(tuple.get(report.reportedId.nickname))
                 .reportType(tuple.get(report.reportType))
-                .reportDate(tuple.get(report.reportDate).toString())
+                .reportDate(tuple.get(report.reportDate))
                 .description(tuple.get(report.description))
-                .reviewId(tuple.get(report.reviewId).getReviewId())
+                .reviewId(tuple.get(report.reviewId.reviewId))
                 .profileIamge(tuple.get(profile.imageUrl))
-                .starRating(tuple.get(report.reviewId.starRating))
                 .content(tuple.get(report.reviewId.content))
                 .build();
     }
