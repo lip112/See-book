@@ -8,7 +8,6 @@ import com.example.seebook.domain.suspend.domain.Suspend;
 import com.example.seebook.domain.suspend.repository.SuspendRepository;
 import com.example.seebook.domain.user.domain.Gender;
 import com.example.seebook.domain.user.domain.User;
-import com.example.seebook.domain.user.dto.requset.AdminUserDetailRequestDTO;
 import com.example.seebook.domain.user.dto.requset.AdminUserModifyRequestDTO;
 import com.example.seebook.domain.user.dto.requset.LoginRequestDTO;
 import com.example.seebook.domain.user.dto.response.AdminUserDetailResponseDTO;
@@ -21,14 +20,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.amazonaws.services.ec2.model.PrincipalType.Role;
+import static com.example.seebook.global.config.UserDefaultConfig.DEFAULT_PASSWORD;
 
 @Service
 @RequiredArgsConstructor
 public class AdminUserService {
     private final UserRepository userRepository;
-    private final ProfileRepository profileRepository;
-    private final SuspendRepository suspendRepository;
     private final PasswordEncoder passwordEncoder;
     public void login(LoginRequestDTO loginRequestDTO) {
         User user = userRepository.findByEmail(loginRequestDTO.getEmail())
@@ -46,29 +43,21 @@ public class AdminUserService {
         return userRepository.findAdminUserList((page-1)*10, page*10-1, queryType, query);
     }
 
-    public AdminUserDetailResponseDTO getUserDetail(AdminUserDetailRequestDTO adminUserDetailRequestDTO) {
-        return userRepository.findAdminUserDetail(adminUserDetailRequestDTO.getUserId());
+    public AdminUserDetailResponseDTO getUserDetail(Long userId) {
+        return userRepository.findAdminUserDetail(userId);
     }
 
     public void modifyUser(AdminUserModifyRequestDTO adminUserModifyRequestDTO) {
         User user = userRepository.findById(adminUserModifyRequestDTO.getUserId())
                 .orElseThrow(UserException.NotFoundUserException::new);
-        user.changeNickname(adminUserModifyRequestDTO.getNickname());
-        user.changePassword(passwordEncoder.encode(adminUserModifyRequestDTO.getPassword()));
-        user.changeGender(Gender.valueOf(adminUserModifyRequestDTO.getGender()));
-        user.changeRole(new RoleInfo(RoleCode.valueOf(adminUserModifyRequestDTO.getRole())));
-        userRepository.save(user);
 
-        Profile profile = profileRepository.findByUserId(adminUserModifyRequestDTO.getUserId())
-                        .orElseThrow(UserException.NotFoundUserException::new);
-        profile.resetDefaultImage();
-        profileRepository.save(profile);
-
-        Optional<Suspend> suspendOptional = suspendRepository.findByUserId(adminUserModifyRequestDTO.getUserId());
-        if (suspendOptional.isEmpty()) {
-            return;
+        if (adminUserModifyRequestDTO.isResetPassword()) {
+            user.changePassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         }
-        suspendOptional.get().changeDate(adminUserModifyRequestDTO.getSuspend().getStartDate(), adminUserModifyRequestDTO.getSuspend().getEndDate());
-        suspendRepository.save(suspendOptional.get());
+        user.changeNickname(adminUserModifyRequestDTO.getNickname());
+        user.changeGender(Gender.fromString(adminUserModifyRequestDTO.getGender()));
+        user.changeRole(new RoleInfo(RoleCode.fromDescription(adminUserModifyRequestDTO.getRole())));
+
+        userRepository.save(user);
     }
 }

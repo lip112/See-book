@@ -6,6 +6,8 @@ import lombok.Getter;
 
 @Getter
 public class AdminUserDetailResponseDTO {
+
+    private Long userId;
     private String profileImage;
     private String email;
     private String nickname;
@@ -16,7 +18,8 @@ public class AdminUserDetailResponseDTO {
     private SuspendDTO suspend;
 
     @Builder
-    public AdminUserDetailResponseDTO(String profileImage, String email, String nickname, String name, String gender, String role, String password, SuspendDTO suspend) {
+    public AdminUserDetailResponseDTO(Long userId, String profileImage, String email, String nickname, String name, String gender, String role, String password, SuspendDTO suspend) {
+        this.userId = userId;
         this.profileImage = profileImage;
         this.email = email;
         this.nickname = nickname;

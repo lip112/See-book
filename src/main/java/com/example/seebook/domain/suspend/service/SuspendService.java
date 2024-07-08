@@ -3,6 +3,7 @@ package com.example.seebook.domain.suspend.service;
 import com.example.seebook.domain.suspend.domain.Suspend;
 import com.example.seebook.domain.suspend.dto.SuspendDTO;
 import com.example.seebook.domain.suspend.repository.SuspendRepository;
+import com.example.seebook.global.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,14 @@ public class SuspendService {
         } else {
             return SuspendDTO.notSuspend();
         }
+    }
+
+    public void changeSuspendByAdminModify(Long userId, LocalDateTime endDate) {
+        Suspend Suspend = suspendRepository.findByUserId(userId)
+                .orElseThrow(UserException.NotFoundUserException::new);
+
+        Suspend.changeEndDate(endDate);
+        suspendRepository.save(Suspend);
     }
 
 }

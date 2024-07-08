@@ -23,8 +23,8 @@ public class BookService {
     @Value("${aladin.ttbKey}")
     private String TTB_KEY;
 
-    public BookListResponseDTO getBookByText(String Query, String QueryType, int start) {
-        BookListResponseDTO alainBookList = BookListResponseDTO.from(aladinComponent.findAllByQuery(TTB_KEY, Query, QueryType, "js", start, 20131101));
+    public BookListResponseDTO getBookByText(String query, String queryType, int start) {
+        BookListResponseDTO alainBookList = BookListResponseDTO.from(aladinComponent.findAllByQuery(TTB_KEY, query, queryType, "js", start, 20131101));
         return bookRepository.getBooksReviewSummary(alainBookList);
     }
 

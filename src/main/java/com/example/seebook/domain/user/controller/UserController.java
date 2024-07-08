@@ -76,11 +76,8 @@ public class UserController {
                     .status(HttpStatus.OK)
                     .build();
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
+            throw new UserException.InvalidVerificationCodeException();
         }
-
     }
 
     @PostMapping("/find-email")
@@ -101,8 +98,6 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .build();
     }
-
-
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDTO logoutRequestDTO) {

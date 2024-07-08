@@ -4,35 +4,30 @@ import com.example.seebook.domain.suspend.dto.SuspendDTO;
 import com.example.seebook.global.config.UserDefaultConfig;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
 
 import static com.example.seebook.global.config.UserDefaultConfig.DEFAULT_PASSWORD;
 import static com.example.seebook.global.config.UserDefaultConfig.DEFAULT_PROFILE_IMAGE;
 
 @Getter
 public class AdminUserModifyRequestDTO {
+    @NotNull
     private Long userId;
-    private String profileImage;
-    private String email;
+    @NotNull
     private String nickname;
-    private String name;
+    @NotNull
     private String gender;
+    @NotNull
     private String role;
-    private String password;
-    private SuspendDTO suspend;
+
+    private LocalDateTime endDate;
+
+    @NotNull
     private boolean resetProfileImage;
+    @NotNull
     private boolean resetPassword;
-
-    public void isResetProfileImage() {
-        if (resetProfileImage) {
-            this.profileImage = DEFAULT_PROFILE_IMAGE;
-        }
-    }
-
-    public void isResetPassword() {
-        if (resetPassword) {
-            this.password = DEFAULT_PASSWORD;
-        }
-    }
 }
