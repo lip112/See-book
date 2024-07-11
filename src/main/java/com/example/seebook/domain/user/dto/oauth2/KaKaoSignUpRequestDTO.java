@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
@@ -43,15 +44,4 @@ public class KaKaoSignUpRequestDTO {
     @Pattern(regexp = "[0-9]{10,11}", message = "하이픈 없는 10~11자리 숫자를 입력해주세요")
     private String phoneNumber;
 
-    @Builder
-    public KaKaoSignUpRequestDTO(Long kakaoId, String email, String password, String nickname, String name, Gender gender, String birthday, String phoneNumber) {
-        this.kakaoId = kakaoId;
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.name = name;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.phoneNumber = phoneNumber;
-    }
 }

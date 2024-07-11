@@ -52,7 +52,6 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
         } catch (JwtException | UserException e) {
             log.error("Exception shows in filter = {}", e.toString());
             request.setAttribute("exception", e);
-            throw new AuthenticationException(e.getMessage(), e) {}; // 이 라인 추가
         }
         filterChain.doFilter(request, response); // 정상적인 경우 필터 체인 계속 진행
     }

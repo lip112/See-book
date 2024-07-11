@@ -66,6 +66,4 @@ public class BookDTO {
                 .isbn13(book.getIsbn13())
                 .build();
     }
-
-
 }
