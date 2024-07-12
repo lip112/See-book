@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class ReportReviewRequestDTO {
     @NotNull
     private Long reportedId;
@@ -17,11 +16,5 @@ public class ReportReviewRequestDTO {
     private String reportType;
     @NotBlank
     private String description;
-    @Builder
-    public ReportReviewRequestDTO(Long reportedId, Long reviewId, String reportType, String description) {
-        this.reportedId = reportedId;
-        this.reviewId = reviewId;
-        this.reportType = reportType;
-        this.description = description;
-    }
+
 }

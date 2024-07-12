@@ -1,6 +1,7 @@
 package com.example.seebook.domain.main.controller;
 
 import com.example.seebook.domain.book.service.BookService;
+import com.example.seebook.domain.main.dto.response.JoinMainPageResponseDTO;
 import com.example.seebook.domain.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

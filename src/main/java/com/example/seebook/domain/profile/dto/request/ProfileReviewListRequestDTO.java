@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class ProfileReviewListRequestDTO {
     @NotNull
     private Long userId;

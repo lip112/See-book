@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class WriteReviewRequestDTO {
     @NotNull
     private Long bookId;

@@ -1,6 +1,7 @@
 package com.example.seebook.domain.event.dto.request;
 
 import com.example.seebook.domain.event.dto.EventDTO;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class ChangeUserInfoRequestDTO {
     @NotBlank
     @Email(message = "이메일 형식으로 작성 되지 않았습니다.")
