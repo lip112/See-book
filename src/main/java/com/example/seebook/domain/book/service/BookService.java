@@ -5,12 +5,17 @@ import com.example.seebook.domain.book.dto.BookDTO;
 import com.example.seebook.domain.book.dto.response.BookListResponseDTO;
 import com.example.seebook.domain.book.repository.BookRepository;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
+import com.example.seebook.domain.main.dto.response.CategoryResponseDTO;
+import com.example.seebook.domain.main.dto.response.JoinMainPageResponseDTO;
+import com.example.seebook.domain.review.repository.ReviewRepository;
 import com.example.seebook.global.exception.BookException;
+import com.example.seebook.global.exception.ReviewException;
 import com.example.seebook.global.restclient.AladinComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,6 +24,7 @@ import java.util.Optional;
 public class BookService {
     private final BookRepository bookRepository;
     private final AladinComponent aladinComponent;
+    private final ReviewRepository reviewRepository;
 
     @Value("${aladin.ttbKey}")
     private String TTB_KEY;
@@ -59,5 +65,52 @@ public class BookService {
         Long bookId = bookRepository.save(Book.form(bookInReviewListResponseDTO.getBook())).getBookId();
         bookInReviewListResponseDTO.getBook().changeBookId(bookId);
         return bookInReviewListResponseDTO;
+    }
+
+    public List<BookDTO> getMainNewBooks() {
+        try{
+            List<BookDTO> list = reviewRepository.findTop10ByOrderByReviewIdDesc()
+                    .stream()
+                    .map(review ->
+                            BookDTO.builder()
+                                    .title(review.getBook().getTitle())
+                                    .imageLink(review.getBook().getImageLink())
+                                    .isbn13(review.getBook().getIsbn13())
+                                    .build())
+                    .limit(3)
+                    .toList();
+            return list;
+        } catch (Exception e) {
+            throw new ReviewException.NotFoundReviewException();
+        }
+    }
+
+    public List<BookDTO> getPlusNewBooks(int page, Long bookId) {
+        try{
+            List<BookDTO> list = reviewRepository.findTop10ByOrderByReviewIdDesc()
+                    .stream()
+                    .map(review ->
+                            BookDTO.builder()
+                                    .title(review.getBook().getTitle())
+                                    .imageLink(review.getBook().getImageLink())
+                                    .isbn13(review.getBook().getIsbn13())
+                                    .build())
+                    .limit(3)
+                    .toList();
+            return list;
+        } catch (Exception e) {
+            throw new ReviewException.NotFoundReviewException();
+        }
+    }
+    public List<JoinMainPageResponseDTO.BookWithReview> getBestBooks() {
+        try{
+            return bookRepository.getBestBooks();
+        } catch (Exception e) {
+            throw new ReviewException.NotFoundReviewException();
+        }
+    }
+
+    public CategoryResponseDTO findCategoryBooks(String categoryName, int page) {
+        return bookRepository.findCategoryBooks(categoryName, (page-1)*10, page*10-1);
     }
 }

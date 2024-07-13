@@ -30,7 +30,7 @@ public class BookListResponseDTO {
                     .isbn13(bookData.get("isbn13"))
                     .imageLink(bookData.get("cover"))
                     .categoryId(String.valueOf(bookData.get("categoryId")))
-                    .categoryName(bookData.get("categoryName"))
+                    .categoryName(bookData.get("categoryName").substring(0, bookData.get("categoryName").lastIndexOf(">")))
                     .publisher(bookData.get("publisher"))
                     .build();
 

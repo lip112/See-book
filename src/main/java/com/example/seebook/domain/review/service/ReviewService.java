@@ -3,9 +3,11 @@ package com.example.seebook.domain.review.service;
 import com.example.seebook.domain.book.domain.Book;
 import com.example.seebook.domain.book.dto.BookDTO;
 import com.example.seebook.domain.review.domain.Review;
+import com.example.seebook.domain.review.dto.ReviewDTO;
 import com.example.seebook.domain.review.dto.request.ModifyReviewRequestDTO;
 import com.example.seebook.domain.review.dto.request.WriteReviewRequestDTO;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
+import com.example.seebook.domain.review.dto.response.HomeReviewListResponseDTO;
 import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
 import com.example.seebook.domain.review.repository.ReviewRepository;
 import com.example.seebook.domain.user.domain.User;
@@ -14,6 +16,8 @@ import com.example.seebook.global.jwt.UserAuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,8 +60,22 @@ public class ReviewService {
                 (page-1)*10, page*10-1);
     }
 
-    public void GetHomeReviewList() {
-
+    public HomeReviewListResponseDTO getHomeReviewList() {
+        try{
+        List<ReviewDTO> list = reviewRepository.findTop30ByOrderByReviewIdDesc()
+                .stream()
+                .map(review ->
+                        ReviewDTO.builder()
+                                .nickname(review.getNickname())
+                                .content(review.getContent())
+                                .build())
+                .toList();
+        return HomeReviewListResponseDTO.builder()
+                .review(list)
+                .build();
+        } catch (Exception e) {
+            throw new ReviewException.NotFoundReviewException();
+        }
     }
 
     public Review findById(Long reviewId) {

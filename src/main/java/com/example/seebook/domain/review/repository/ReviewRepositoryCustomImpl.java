@@ -114,20 +114,6 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     }
 
     @Override
-    public HomeReviewListResponseDTO getHomeReviewList() {
-        //미완
-        queryFactory
-                .select()
-                .from(review)
-                .orderBy(review.reviewId.desc())
-                .offset(0)
-                .limit(30)
-                .fetch();
-
-        return null;
-    }
-
-    @Override
     public AdminReviewListResponseDTO getAdminReviewList(int offset, int limit, String queryType, String query) {
         List<AdminReviewListDTO> list = queryFactory
                 .select(review.reviewId, review.nickname, review.content, review.starRating, review.createdDate,
@@ -177,4 +163,6 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
         }
         return null;
     }
+
+
 }

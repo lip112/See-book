@@ -7,17 +7,16 @@ import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class JoinMainPageResponseDTO {
     private int eventCount;
-    private int endPage;
     private List<EventDTO> event;
     private List<BookDTO> newBook;
     private List<BookWithReview> bestBook;
 
     @Builder
-    public JoinMainPageResponseDTO(int eventCount, int endPage, List<EventDTO> event, List<BookDTO> newBook, List<BookWithReview> bestBook) {
+    public JoinMainPageResponseDTO(int eventCount, List<EventDTO> event, List<BookDTO> newBook, List<BookWithReview> bestBook) {
         this.eventCount = eventCount;
-        this.endPage = endPage;
         this.event = event;
         this.newBook = newBook;
         this.bestBook = bestBook;

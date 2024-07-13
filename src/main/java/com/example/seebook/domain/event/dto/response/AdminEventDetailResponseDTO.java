@@ -12,17 +12,17 @@ public class AdminEventDetailResponseDTO {
     private String content;
     private String startDate;
     private String endDate;
-    private String imageUrl;
+    private String imageLink;
     private boolean isActivated;
 
     @Builder
-    public AdminEventDetailResponseDTO(Long eventId, String title, String content, String startDate, String endDate, String imageUrl) {
+    public AdminEventDetailResponseDTO(Long eventId, String title, String content, String startDate, String endDate, String imageLink) {
         this.eventId = eventId;
         this.title = title;
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.imageUrl = imageUrl;
+        this.imageLink = imageLink;
         this.isActivated = LocalDateTime.now().isBefore(LocalDateTime.parse(endDate));
     }
 }

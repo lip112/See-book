@@ -21,7 +21,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom{
     public AdminEventListResponseDTO getAdminEventList(int offset, int limit, String query, String queryType) {
 
         List<AdminEventListDTO> list = jpaQueryFactory
-                .select(event.eventId, event.title, event.startDate, event.endDate, event.imageUrl)
+                .select(event.eventId, event.title, event.startDate, event.endDate, event.imageLink)
                 .from(event)
                 .where(eqQueryType(queryType, query))
                 .offset(offset)
@@ -33,7 +33,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom{
                         .title(tuple.get(event.title))
                         .startDate(tuple.get(event.startDate).toString())
                         .endDate(tuple.get(event.endDate).toString())
-                        .imageUrl(tuple.get(event.imageUrl))
+                        .imageLink(tuple.get(event.imageLink))
                         .build())
                 .toList();
         Long count = jpaQueryFactory
@@ -60,7 +60,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom{
     @Override
     public AdminEventDetailResponseDTO getAdminEventDetail(Long eventId) {
         Tuple tuple = jpaQueryFactory
-                .select(event.eventId, event.title, event.startDate, event.endDate, event.imageUrl)
+                .select(event.eventId, event.title, event.startDate, event.endDate, event.imageLink)
                 .from(event)
                 .where(event.eventId.eq(eventId))
                 .fetchOne();
@@ -70,7 +70,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom{
                 .title(tuple.get(event.title))
                 .startDate(tuple.get(event.startDate).toString())
                 .endDate(tuple.get(event.endDate).toString())
-                .imageUrl(tuple.get(event.imageUrl))
+                .imageLink(tuple.get(event.imageLink))
                 .build();
     }
 }

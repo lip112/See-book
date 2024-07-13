@@ -11,16 +11,16 @@ public class EventDTO {
     private String title;
     private String startDate;
     private String endDate;
-    private String imageUrl;
+    private String imageLink;
     private boolean isActivated;
 
     @Builder
-    public EventDTO(Long eventId, String title, String startDate, String endDate, String imageUrl, boolean isActivated) {
+    public EventDTO(Long eventId, String title, String startDate, String endDate, String imageLink, boolean isActivated) {
         this.eventId = eventId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.imageUrl = imageUrl;
+        this.imageLink = imageLink;
         this.isActivated = isActivated;
     }
 
@@ -31,6 +31,6 @@ public class EventDTO {
     }
 
     public void changeImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        this.imageLink = imageUrl;
     }
 }

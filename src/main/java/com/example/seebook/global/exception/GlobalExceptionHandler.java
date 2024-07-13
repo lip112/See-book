@@ -54,6 +54,12 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(new ErrorResponse(e.getErrorCode().name(), e.getMessage()));
     }
+    @ExceptionHandler(SupportException.class)
+    public ResponseEntity<ErrorResponse> processSupportException(SupportException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorResponse(e.getErrorCode().name(), e.getMessage()));
+    }
     @ExceptionHandler(BookException.class)
     public ResponseEntity<ErrorResponse> processBookException(BookException e) {
         return ResponseEntity

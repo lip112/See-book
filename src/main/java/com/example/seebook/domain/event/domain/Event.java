@@ -7,11 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,22 +25,22 @@ public class Event {
 
     private LocalDateTime endDate;
 
-    private String imageUrl;
+    private String imageLink;
 
     @Builder
-    public Event(Long eventId, String title, LocalDateTime startDate, LocalDateTime endDate, String imageUrl) {
+    public Event(Long eventId, String title, LocalDateTime startDate, LocalDateTime endDate, String imageLink) {
         this.eventId = eventId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.imageUrl = imageUrl;
+        this.imageLink = imageLink;
     }
 
     public void changeEvent(EventDTO eventDTO) {
         this.title = eventDTO.getTitle();
         this.startDate = LocalDateTime.parse(eventDTO.getStartDate());
         this.endDate = LocalDateTime.parse(eventDTO.getEndDate());
-        this.imageUrl = eventDTO.getImageUrl();
+        this.imageLink = eventDTO.getImageLink();
     }
 
 }

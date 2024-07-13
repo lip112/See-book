@@ -2,7 +2,6 @@ package com.example.seebook.domain.event.service;
 
 import com.example.seebook.domain.event.domain.Event;
 import com.example.seebook.domain.event.dto.EventDTO;
-import com.example.seebook.domain.event.dto.request.AdminEventModifyRequestDTO;
 import com.example.seebook.domain.event.dto.response.AdminEventDetailResponseDTO;
 import com.example.seebook.domain.event.dto.response.AdminEventListResponseDTO;
 import com.example.seebook.domain.event.repository.EventRepository;
@@ -37,7 +36,7 @@ public class AdminEventService {
                 .title(eventDTO.getTitle())
                 .startDate(LocalDateTime.parse(eventDTO.getStartDate()))
                 .endDate(LocalDateTime.parse(eventDTO.getEndDate()))
-                .imageUrl(eventDTO.getImageUrl())
+                .imageLink(eventDTO.getImageLink())
                 .build();
 
         eventRepository.save(event);

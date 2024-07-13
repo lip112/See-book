@@ -39,7 +39,10 @@ public enum ErrorCode {
     EXPIRED_JWT_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다. 다시 로그인해주세요."),
 
     //Report
-    NOT_FOUND_REPORT(HttpStatus.BAD_REQUEST, "존재 하지 않는 reportId입니다.");
+    NOT_FOUND_REPORT(HttpStatus.BAD_REQUEST, "존재 하지 않는 reportId입니다."),
+
+    //support
+    NOT_FOUND_SUPPORT(HttpStatus.BAD_REQUEST, "존재 하지 않는 supportId입니다.");
 
 
     private final HttpStatus ErrorCode;

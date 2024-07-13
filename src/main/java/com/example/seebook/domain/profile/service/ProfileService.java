@@ -39,7 +39,7 @@ public class ProfileService {
         Profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(UserException.NotFoundUserException::new);
 
-        System.out.println("profile.getImageUrl() = " + profile.getImageUrl());
+        System.out.println("profile.getImageLink() = " + profile.getImageUrl());
         s3Uploader.deleteImageFromS3(profile.getImageUrl());
 
         String uploadUrl = s3Uploader.upload(multipartFile);

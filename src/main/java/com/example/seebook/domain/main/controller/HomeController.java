@@ -1,7 +1,6 @@
 package com.example.seebook.domain.main.controller;
 
-import com.example.seebook.domain.book.service.BookService;
-import com.example.seebook.domain.main.dto.response.JoinMainPageResponseDTO;
+import com.example.seebook.domain.review.dto.response.HomeReviewListResponseDTO;
 import com.example.seebook.domain.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,13 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/main/home")
 public class HomeController {
     private final ReviewService reviewService;
-    private final BookService bookService;
 
     @GetMapping("/review-list")
-    public ResponseEntity<?> getHomeReviewList(){
+    public ResponseEntity<HomeReviewListResponseDTO> getHomeReviewList(){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("sdf");
+                .body(reviewService.getHomeReviewList());
     }
 
 }
