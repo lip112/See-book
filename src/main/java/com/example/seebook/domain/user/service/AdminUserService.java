@@ -8,6 +8,7 @@ import com.example.seebook.domain.suspend.domain.Suspend;
 import com.example.seebook.domain.suspend.repository.SuspendRepository;
 import com.example.seebook.domain.user.domain.Gender;
 import com.example.seebook.domain.user.domain.User;
+import com.example.seebook.domain.user.dto.requset.AdminUserDeleteRequestDTO;
 import com.example.seebook.domain.user.dto.requset.AdminUserModifyRequestDTO;
 import com.example.seebook.domain.user.dto.requset.LoginRequestDTO;
 import com.example.seebook.domain.user.dto.response.AdminUserDetailResponseDTO;
@@ -17,6 +18,7 @@ import com.example.seebook.global.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -59,5 +61,10 @@ public class AdminUserService {
         user.changeRole(new RoleInfo(RoleCode.fromDescription(adminUserModifyRequestDTO.getRole())));
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(AdminUserDeleteRequestDTO adminUserDeleteRequestDTO){
+        userRepository.deleteAllByIdInBatch(adminUserDeleteRequestDTO.getUserId());
     }
 }

@@ -1,12 +1,14 @@
 package com.example.seebook.domain.report.service;
 
 import com.example.seebook.domain.report.domain.Report;
+import com.example.seebook.domain.report.dto.request.AdminDeleteReportRequestDTO;
 import com.example.seebook.domain.report.dto.request.AdminReportProcessRequestDTO;
 import com.example.seebook.domain.report.dto.response.AdminReportDetailResponseDTO;
 import com.example.seebook.domain.report.dto.response.AdminReportListResponseDTO;
 import com.example.seebook.domain.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,5 +28,10 @@ public class AdminReportService {
 
         report.changeProcessed(true);
         reportRepository.save(report);
+    }
+
+    @Transactional
+    public void deleteReport(AdminDeleteReportRequestDTO requestDTO) {
+        reportRepository.deleteAllByIdInBatch(requestDTO.getReportId());
     }
 }

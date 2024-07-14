@@ -1,6 +1,7 @@
 package com.example.seebook.domain.event.controller;
 
 import com.example.seebook.domain.event.dto.EventDTO;
+import com.example.seebook.domain.event.dto.request.AdminEventDeleteRequestDTO;
 import com.example.seebook.domain.event.dto.request.AdminEventModifyRequestDTO;
 import com.example.seebook.domain.event.dto.response.AdminEventDetailResponseDTO;
 import com.example.seebook.domain.event.dto.response.AdminEventListResponseDTO;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import retrofit2.http.POST;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/event")
+@RequestMapping("/api/admin/event")
 public class AdminEventController {
     private final AdminEventService adminEventService;
     private final S3Uploader s3Uploader;
@@ -26,8 +29,8 @@ public class AdminEventController {
                 .body(adminEventService.getAdminEventList(page, query, queryType));
     }
 
-    @PostMapping("/detail")
-    public ResponseEntity<AdminEventDetailResponseDTO> getAdminEventDetail(Long eventId) {
+    @GetMapping("/detail")
+    public ResponseEntity<AdminEventDetailResponseDTO> getAdminEventDetail(@RequestParam("eventId")Long eventId) {
         return ResponseEntity
                 .ok()
                 .body(adminEventService.getAdminEventDetail(eventId));
@@ -57,6 +60,14 @@ public class AdminEventController {
         eventDTO.changeImageUrl(uploadUrl);
 
         adminEventService.registerEvent(eventDTO);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteEvent(@RequestBody AdminEventDeleteRequestDTO requestDTO) {
+        adminEventService.deleteEvent(requestDTO);
         return ResponseEntity
                 .ok()
                 .build();

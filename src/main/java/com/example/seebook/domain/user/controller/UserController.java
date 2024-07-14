@@ -82,13 +82,9 @@ public class UserController {
 
     @PostMapping("/find-email")
     public ResponseEntity<FindEmailResponseDTO> findEmail(@Valid @RequestBody VerificationRequestDTO verificationRequestDTO) {
-        if (smsUtil.verifyCode(verificationRequestDTO)) {
-            return ResponseEntity
+        return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new FindEmailResponseDTO(userService.getEmail(verificationRequestDTO.getPhoneNumber())));
-        } else {
-            throw new UserException.InvalidVerificationCodeException();
-        }
     }
 
     @PutMapping("/change-password")
@@ -127,12 +123,13 @@ public class UserController {
                     .build();
         }
     }
+
     @GetMapping("/validation-email")
-    public ResponseEntity<?> validationEmail(@RequestParam("email") String email) {
+    public ResponseEntity<FindEmailResponseDTO> validationEmail(@RequestParam("email") String email) {
         if (userService.validationEmail(email)) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .build();
+                    .body(FindEmailResponseDTO.builder().email(email).build());
         } else {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

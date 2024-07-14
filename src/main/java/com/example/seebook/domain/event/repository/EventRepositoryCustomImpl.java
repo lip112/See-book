@@ -31,8 +31,8 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom{
                 .map(tuple -> AdminEventListDTO.builder()
                         .eventId(tuple.get(event.eventId))
                         .title(tuple.get(event.title))
-                        .startDate(tuple.get(event.startDate).toString())
-                        .endDate(tuple.get(event.endDate).toString())
+                        .startDate(tuple.get(event.startDate))
+                        .endDate(tuple.get(event.endDate))
                         .imageLink(tuple.get(event.imageLink))
                         .build())
                 .toList();
@@ -68,8 +68,8 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom{
         return AdminEventDetailResponseDTO.builder()
                 .eventId(tuple.get(event.eventId))
                 .title(tuple.get(event.title))
-                .startDate(tuple.get(event.startDate).toString())
-                .endDate(tuple.get(event.endDate).toString())
+                .startDate(tuple.get(event.startDate))
+                .endDate(tuple.get(event.endDate))
                 .imageLink(tuple.get(event.imageLink))
                 .build();
     }

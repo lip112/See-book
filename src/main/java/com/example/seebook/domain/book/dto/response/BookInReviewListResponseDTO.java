@@ -14,7 +14,7 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookInReviewListResponseDTO {
     private Long reviewCount = 0L;
-    private Long endPage = 0L;;
+    private Long endPage = 0L;
     private boolean isWished;
     private List<ReviewDTO> review;
     private BookDTO book;
@@ -50,7 +50,7 @@ public class BookInReviewListResponseDTO {
                     .isbn13(bookData.get("isbn13"))
                     .imageLink(bookData.get("cover"))
                     .categoryId(String.valueOf(bookData.get("categoryId")))
-                    .categoryName(bookData.get("categoryName"))
+                    .categoryName(parseCategoryName(bookData.get("categoryName")))
                     .publisher(bookData.get("publisher"))
                     .build();
 
@@ -61,5 +61,14 @@ public class BookInReviewListResponseDTO {
                 .review(null)
                 .isWished(false)
                 .build();
+    }
+
+    private static String parseCategoryName(String categoryName) {
+        String[] split = categoryName.split(">");
+        if (2 == split.length) {
+            return split[0] + ">" + split[1];
+        } else {
+            return split[0] + ">" + split[1] + ">" + split[2];
+        }
     }
 }

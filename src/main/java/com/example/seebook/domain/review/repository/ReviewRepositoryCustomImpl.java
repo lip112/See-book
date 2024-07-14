@@ -64,7 +64,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
         Long reviewCount = queryFactory
                 .select(review.count())
                 .from(review)
-                .where(review.book.bookId.eq(book.bookId))
+                .where(review.book.bookId.eq(bookDTO.getBookId()))
                 .fetchOne();
 
 

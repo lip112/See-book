@@ -5,6 +5,8 @@ import com.example.seebook.domain.profile.dto.request.ProfileChangePasswordReque
 import com.example.seebook.domain.profile.dto.request.ProfileReviewListRequestDTO;
 import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
 import com.example.seebook.domain.profile.service.ProfileService;
+import com.example.seebook.domain.suspend.dto.SuspendDTO;
+import com.example.seebook.domain.suspend.service.SuspendService;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.global.jwt.UserAuthorizationUtil;
 import jakarta.validation.Valid;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/profile")
 public class ProfileController {
     private final ProfileService profileService;
+    private final SuspendService suspendService;
     private final UserService userService;
 
 
@@ -30,9 +33,12 @@ public class ProfileController {
     @GetMapping("/join")
     public ResponseEntity<JoinResponseDTO> joinProfile(){
         Long userId = UserAuthorizationUtil.getLoginUserId();
+        JoinResponseDTO joinResponseDTO = profileService.joinProfile(userId);
+        SuspendDTO suspend = suspendService.getSuspend(userId);
+        joinResponseDTO.addSuspendDTO(suspend);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(profileService.joinProfile(userId));
+                .body(joinResponseDTO);
     }
 
     @PostMapping("/change-image")//RequestParam는 쿼리매개변수도 관여하지만 폼데이터를 핸들링할때도 사용

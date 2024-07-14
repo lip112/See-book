@@ -2,6 +2,7 @@ package com.example.seebook.domain.user.controller;
 
 import com.example.seebook.domain.profile.service.ProfileService;
 import com.example.seebook.domain.suspend.service.SuspendService;
+import com.example.seebook.domain.user.dto.requset.AdminUserDeleteRequestDTO;
 import com.example.seebook.domain.user.dto.requset.AdminUserModifyRequestDTO;
 import com.example.seebook.domain.user.dto.response.AdminUserDetailResponseDTO;
 import com.example.seebook.domain.user.dto.response.AdminUserListResponseDTO;
@@ -46,6 +47,14 @@ public class AdminUserController {
         }
         adminUserService.modifyUser(adminUserModifyRequestDTO);
 
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestBody AdminUserDeleteRequestDTO adminUserDeleteRequestDTO) {
+        adminUserService.deleteUser(adminUserDeleteRequestDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

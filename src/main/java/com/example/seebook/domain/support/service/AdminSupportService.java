@@ -1,21 +1,24 @@
 package com.example.seebook.domain.support.service;
 
 import com.example.seebook.domain.support.domain.Support;
+import com.example.seebook.domain.support.domain.SupportType;
 import com.example.seebook.domain.support.dto.SupportDTO;
+import com.example.seebook.domain.support.dto.request.AdminDeleteSupportRequestDTO;
 import com.example.seebook.domain.support.dto.response.AdminSupportDetailResponseDTO;
 import com.example.seebook.domain.support.dto.response.AdminSupportListResponseDTO;
 import com.example.seebook.domain.support.repository.SupportRepository;
 import com.example.seebook.global.exception.SupportException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class AdminSupportService {
     private final SupportRepository supportRepository;
 
-    public AdminSupportListResponseDTO getSupportList(int page) {
-        return supportRepository.getAdminList((page - 1) *10, page*10 -1 );
+    public AdminSupportListResponseDTO getSupportList(int page,String query, String queryType) {
+        return supportRepository.getAdminList((page - 1) *10, page*10 -1, query, queryType);
     }
 
     public AdminSupportDetailResponseDTO getSupportDetail(Long supportId) {
@@ -59,5 +62,10 @@ public class AdminSupportService {
                 .orElseThrow(SupportException.NotFoundSupportException::new);
         support.reply(replyContent);
         supportRepository.save(support);
+    }
+
+    @Transactional
+    public void deleteSupport(AdminDeleteSupportRequestDTO requestDTO) {
+        supportRepository.deleteAllByIdInBatch(requestDTO.getSupportId());
     }
 }

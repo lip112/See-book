@@ -2,13 +2,13 @@ package com.example.seebook.domain.event.service;
 
 import com.example.seebook.domain.event.domain.Event;
 import com.example.seebook.domain.event.dto.EventDTO;
+import com.example.seebook.domain.event.dto.request.AdminEventDeleteRequestDTO;
 import com.example.seebook.domain.event.dto.response.AdminEventDetailResponseDTO;
 import com.example.seebook.domain.event.dto.response.AdminEventListResponseDTO;
 import com.example.seebook.domain.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,19 +27,22 @@ public class AdminEventService {
         Event event = eventRepository.findById(modifyRequestDTO.getEventId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 존재하지 않습니다."));
 
-        event.changeEvent(modifyRequestDTO);
+        event.changeEventContent(modifyRequestDTO);
         eventRepository.save(event);
     }
 
     public void registerEvent(EventDTO eventDTO) {
         Event event = Event.builder()
                 .title(eventDTO.getTitle())
-                .startDate(LocalDateTime.parse(eventDTO.getStartDate()))
-                .endDate(LocalDateTime.parse(eventDTO.getEndDate()))
+                .startDate(eventDTO.getStartDate())
+                .endDate(eventDTO.getEndDate())
                 .imageLink(eventDTO.getImageLink())
                 .build();
 
         eventRepository.save(event);
     }
-
+    @Transactional
+    public void deleteEvent(AdminEventDeleteRequestDTO requestDTO) {
+        eventRepository.deleteAllByIdInBatch(requestDTO.getEventId());
+    }
 }

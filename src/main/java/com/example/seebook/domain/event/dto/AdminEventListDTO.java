@@ -9,19 +9,19 @@ import java.time.LocalDateTime;
 public class AdminEventListDTO {
     private Long eventId;
     private String title;
-    private String startDate;
-    private String endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String imageLink;
     private boolean isActivated;
 
     @Builder
-    public AdminEventListDTO(Long eventId, String title, String startDate, String endDate, String imageLink) {
+    public AdminEventListDTO(Long eventId, String title, LocalDateTime startDate, LocalDateTime endDate, String imageLink) {
         this.eventId = eventId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageLink = imageLink;
-        this.isActivated = LocalDateTime.now().isBefore(LocalDateTime.parse(endDate));
+        this.isActivated = LocalDateTime.now().isBefore(endDate);
     }
 
 

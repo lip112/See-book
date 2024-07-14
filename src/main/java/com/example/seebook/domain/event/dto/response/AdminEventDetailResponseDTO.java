@@ -9,20 +9,18 @@ import java.time.LocalDateTime;
 public class AdminEventDetailResponseDTO {
     private Long eventId;
     private String title;
-    private String content;
-    private String startDate;
-    private String endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String imageLink;
     private boolean isActivated;
 
     @Builder
-    public AdminEventDetailResponseDTO(Long eventId, String title, String content, String startDate, String endDate, String imageLink) {
+    public AdminEventDetailResponseDTO(Long eventId, String title, LocalDateTime startDate, LocalDateTime endDate, String imageLink) {
         this.eventId = eventId;
         this.title = title;
-        this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageLink = imageLink;
-        this.isActivated = LocalDateTime.now().isBefore(LocalDateTime.parse(endDate));
+        this.isActivated = LocalDateTime.now().isBefore(endDate);
     }
 }

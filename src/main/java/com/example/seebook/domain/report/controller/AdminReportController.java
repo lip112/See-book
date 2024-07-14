@@ -1,6 +1,7 @@
 package com.example.seebook.domain.report.controller;
 
 import com.example.seebook.domain.profile.service.ProfileService;
+import com.example.seebook.domain.report.dto.request.AdminDeleteReportRequestDTO;
 import com.example.seebook.domain.report.dto.request.AdminReportDetailRequestDTO;
 import com.example.seebook.domain.report.dto.request.AdminReportProcessRequestDTO;
 import com.example.seebook.domain.report.dto.response.AdminReportDetailResponseDTO;
@@ -59,6 +60,12 @@ public class AdminReportController {
             suspendService.changeSuspensionPeriod(requestDTO.getReportedId(), requestDTO.getSuspensionPeriod(), requestDTO.getReportType());
         }
         adminReportService.processReport(requestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteReport(@RequestBody AdminDeleteReportRequestDTO requestDTO) {
+        adminReportService.deleteReport(requestDTO);
         return ResponseEntity.ok().build();
     }
 }

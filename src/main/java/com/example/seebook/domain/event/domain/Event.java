@@ -36,11 +36,13 @@ public class Event {
         this.imageLink = imageLink;
     }
 
-    public void changeEvent(EventDTO eventDTO) {
+    public void changeEventContent(EventDTO eventDTO) {
         this.title = eventDTO.getTitle();
-        this.startDate = LocalDateTime.parse(eventDTO.getStartDate());
-        this.endDate = LocalDateTime.parse(eventDTO.getEndDate());
-        this.imageLink = eventDTO.getImageLink();
+        this.startDate = eventDTO.getStartDate();
+        this.endDate = eventDTO.getEndDate();
+        if (eventDTO.getImageLink() != null){
+            this.imageLink = eventDTO.getImageLink();
+        }
     }
 
 }

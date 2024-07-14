@@ -30,7 +30,7 @@ public class BookListResponseDTO {
                     .isbn13(bookData.get("isbn13"))
                     .imageLink(bookData.get("cover"))
                     .categoryId(String.valueOf(bookData.get("categoryId")))
-                    .categoryName(bookData.get("categoryName").substring(0, bookData.get("categoryName").lastIndexOf(">")))
+                    .categoryName(parseCategoryName(bookData.get("categoryName")))
                     .publisher(bookData.get("publisher"))
                     .build();
 
@@ -41,5 +41,14 @@ public class BookListResponseDTO {
                 .totalBookCount(Integer.parseInt(map.get("totalResults").toString()))
                 .endPage(Integer.parseInt(map.get("totalResults").toString()) / 10 + 1)
                 .build();
+    }
+
+    private static String parseCategoryName(String categoryName) {
+        String[] split = categoryName.split(">");
+        if (2 == split.length) {
+            return split[0] + ">" + split[1];
+        } else {
+            return split[0] + ">" + split[1] + ">" + split[2];
+        }
     }
 }
