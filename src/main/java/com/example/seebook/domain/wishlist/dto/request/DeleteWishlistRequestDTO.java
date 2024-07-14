@@ -7,8 +7,5 @@ import lombok.Getter;
 @Getter
 public class DeleteWishlistRequestDTO {
     @NotNull
-    private Long wishlistId;
-
-    @NotNull
     private Long bookId;
 }

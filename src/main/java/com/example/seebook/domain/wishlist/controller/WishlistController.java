@@ -41,7 +41,7 @@ public class WishlistController {
         Long userId = UserAuthorizationUtil.getLoginUserId();
         Book book = bookService.findById(deleteWishlistRequestDTO.getBookId());
         User user = userService.findById(userId);
-        wishlistService.deleteWishlist(book, user, deleteWishlistRequestDTO);
+        wishlistService.deleteWishlist(book, user);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

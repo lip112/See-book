@@ -28,8 +28,8 @@ public class WishlistService {
     }
 
     @Transactional
-    public void deleteWishlist(Book book, User user, DeleteWishlistRequestDTO deleteWishlistRequestDTO) {
-        wishlistRepository.deleteByBookAndUserAndWishlistId(book, user, deleteWishlistRequestDTO.getWishlistId());//만들긴 했는데 삭제 유무?
+    public void deleteWishlist(Book book, User user) {
+        wishlistRepository.deleteByBookAndUser(book, user);
     }
 
     public GetWishlistResponseDTO getWishlist(int page, Long userId) {

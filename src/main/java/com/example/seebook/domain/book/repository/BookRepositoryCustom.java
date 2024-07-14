@@ -15,5 +15,5 @@ public interface BookRepositoryCustom {
     List<JoinMainPageResponseDTO.BookWithReview> getBestBooks();
     CategoryResponseDTO findCategoryBooks(String categoryName, int offset, int limit);
 
-    NewBookResponseDTO getNewBooks(int page, Long bookId);
+    NewBookResponseDTO getNewBooks(int offset, int limit);
 }

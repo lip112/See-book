@@ -5,7 +5,9 @@ import com.example.seebook.domain.book.dto.response.BookListResponseDTO;
 import com.example.seebook.domain.main.dto.response.CategoryResponseDTO;
 import com.example.seebook.domain.main.dto.response.JoinMainPageResponseDTO;
 import com.example.seebook.domain.main.dto.response.NewBookResponseDTO;
+import com.example.seebook.domain.review.domain.Review;
 import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.example.seebook.domain.book.domain.QBook.book;
 import static com.example.seebook.domain.review.domain.QReview.review;
@@ -161,17 +164,46 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
     }
 
     @Override
-    public NewBookResponseDTO getNewBooks(int page, Long bookId) {
-
-        queryFactory
-                .selectFrom(review)
-                .where(review.book.bookId.eq(bookId)
-                        .and(review.createdDate.after(LocalDateTime.now().minusDays(30))))
+    public NewBookResponseDTO getNewBooks(int offset, int limit) {
+        List<BookDTO> list = queryFactory
+                .select(book.bookId, book.isbn13, book.title, book.author, book.publisher, book.imageLink
+                        , review.starRating.avg(), review.reviewId.count())
+                .from(review)
+                .leftJoin(book).on(review.book.bookId.eq(book.bookId))
+                .where(review.createdDate.after(LocalDateTime.now().minusDays(30)))
                 .orderBy(review.reviewId.desc())
                 .groupBy(review.book)
-                .limit(11)
-                .fetch();
-        //나중에 한다. 값을 어떻게 가져와야 할지 모르겠내
-        return null;
+                .offset(offset)
+                .limit(limit)
+                .fetch()
+                .stream()
+                .map(tuple ->
+                        BookDTO.builder()
+                                .bookId(tuple.get(book.bookId))
+                                .isbn13(tuple.get(book.isbn13))
+                                .title(tuple.get(book.title))
+                                .author(tuple.get(book.author))
+                                .publisher(tuple.get(book.publisher))
+                                .imageLink(tuple.get(book.imageLink))
+                                .avgStar(tuple.get(review.starRating.avg()))
+                                .totalReviewCount(tuple.get(review.reviewId.count()))
+                                .build()
+                )
+                .toList();
+
+        int totalBookCount = queryFactory
+                .selectFrom(review)
+                .where(review.createdDate.after(LocalDateTime.now().minusDays(30)))
+                .orderBy(review.reviewId.desc())
+                .groupBy(review.book)
+                .fetch()
+                .size();
+        int endPage = totalBookCount / 10 + 1;
+
+        return NewBookResponseDTO.builder()
+                .totalBookCount((long) totalBookCount)
+                .endPage(endPage)
+                .book(list)
+                .build();
     }
 }

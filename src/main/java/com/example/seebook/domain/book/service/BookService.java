@@ -7,6 +7,7 @@ import com.example.seebook.domain.book.repository.BookRepository;
 import com.example.seebook.domain.book.dto.response.BookInReviewListResponseDTO;
 import com.example.seebook.domain.main.dto.response.CategoryResponseDTO;
 import com.example.seebook.domain.main.dto.response.JoinMainPageResponseDTO;
+import com.example.seebook.domain.main.dto.response.NewBookResponseDTO;
 import com.example.seebook.domain.review.repository.ReviewRepository;
 import com.example.seebook.global.exception.BookException;
 import com.example.seebook.global.exception.ReviewException;
@@ -85,22 +86,8 @@ public class BookService {
         }
     }
 
-    public List<BookDTO> getPlusNewBooks(int page, Long bookId) {
-        try{
-            List<BookDTO> list = reviewRepository.findTop10ByOrderByReviewIdDesc()
-                    .stream()
-                    .map(review ->
-                            BookDTO.builder()
-                                    .title(review.getBook().getTitle())
-                                    .imageLink(review.getBook().getImageLink())
-                                    .isbn13(review.getBook().getIsbn13())
-                                    .build())
-                    .limit(3)
-                    .toList();
-            return list;
-        } catch (Exception e) {
-            throw new ReviewException.NotFoundReviewException();
-        }
+    public NewBookResponseDTO getNewBookList(int page) {
+        return bookRepository.getNewBooks((page-1)*10, page*10-1);
     }
     public List<JoinMainPageResponseDTO.BookWithReview> getBestBooks() {
         try{

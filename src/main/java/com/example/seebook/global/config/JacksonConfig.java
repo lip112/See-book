@@ -27,6 +27,8 @@ public class JacksonConfig {
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
         javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter));
 
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
         objectMapper.registerModule(javaTimeModule);
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         return objectMapper;

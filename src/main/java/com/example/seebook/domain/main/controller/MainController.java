@@ -42,16 +42,15 @@ public class MainController {
     }
 
     @GetMapping("/new-book-list")
-    public ResponseEntity<NewBookResponseDTO> getNewBookList(@RequestParam("page") int page, @RequestParam("bookId") Long bookId){
-        bookService.getPlusNewBooks(page, bookId);
+    public ResponseEntity<NewBookResponseDTO> getNewBookList(@RequestParam("page") int page){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(null);
+                .body(bookService.getNewBookList(page));
     }
 
     @GetMapping("/category")
     public ResponseEntity<CategoryResponseDTO> getCategoryBooks(@RequestParam("categoryName") String categoryName,
-                                                               @RequestParam("page") int page){
+                                                                @RequestParam("page") int page){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(bookService.findCategoryBooks(categoryName, page));

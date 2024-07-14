@@ -92,11 +92,11 @@ public class SupportRepositoryCustomImpl implements SupportRepositoryCustom {
     private BooleanExpression searchQuery(String query, String queryType) {
         if (!queryType.equals("all")) {
             if (queryType.equals("email")) {
-                return user.email.contains(query);
+                return support.userId.email.contains(query);
             } else if (queryType.equals("nickname")) {
-                return user.nickname.contains(query);
+                return support.userId.nickname.contains(query);
             } else if (queryType.equals("name")) {
-                return user.name.contains(query);
+                return support.userId.name.contains(query);
             } else if (queryType.equals("supportType")) {
                 return support.supportType.eq(SupportType.valueOf(query));
             } else if (queryType.equals("processed")) {

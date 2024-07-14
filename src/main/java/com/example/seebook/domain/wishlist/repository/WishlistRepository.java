@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface WishlistRepository extends JpaRepository<Wishlist, Long>, WishlistRepositoryCustom {
 
-    void deleteByBookAndUserAndWishlistId(Book book, User user, Long wishlistId);
+    void deleteByBookAndUser(Book book, User user);
 
     Optional<Wishlist> findByUserAndBook(User user, Book book);
 }
