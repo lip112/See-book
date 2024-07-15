@@ -28,7 +28,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public BookInReviewListResponseDTO getBookInReviewList(BookDTO bookDTO, int page, int offset, int limit) {
+    public BookInReviewListResponseDTO getBookInReviewList(BookDTO bookDTO, int offset, int limit) {
 
         List<ReviewDTO> reviewDTOList = queryFactory
                 .select(
@@ -144,7 +144,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
         return AdminReviewListResponseDTO.builder()
                 .totalReviewCount(reviewCount)
-                .endPage(reviewCount / 10 + 1)
+                .endPage(reviewCount / 4 + 1)
                 .review(list)
                 .build();
     }

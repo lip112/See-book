@@ -16,7 +16,7 @@ public class AdminEventService {
     private final EventRepository eventRepository;
 
     public AdminEventListResponseDTO getAdminEventList(int page, String query, String queryType) {
-        return eventRepository.getAdminEventList((page - 1) * 10, page*10 -1, query, queryType);
+        return eventRepository.getAdminEventList((page - 1) * 5, 5, query, queryType);
     }
 
     public AdminEventDetailResponseDTO getAdminEventDetail(Long eventId) {

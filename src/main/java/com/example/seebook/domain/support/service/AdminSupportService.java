@@ -1,7 +1,6 @@
 package com.example.seebook.domain.support.service;
 
 import com.example.seebook.domain.support.domain.Support;
-import com.example.seebook.domain.support.domain.SupportType;
 import com.example.seebook.domain.support.dto.SupportDTO;
 import com.example.seebook.domain.support.dto.request.AdminDeleteSupportRequestDTO;
 import com.example.seebook.domain.support.dto.response.AdminSupportDetailResponseDTO;
@@ -17,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminSupportService {
     private final SupportRepository supportRepository;
 
-    public AdminSupportListResponseDTO getSupportList(int page,String query, String queryType) {
-        return supportRepository.getAdminList((page - 1) *10, page*10 -1, query, queryType);
+    public AdminSupportListResponseDTO getAdminSupportList(int page, String query, String queryType) {
+        return supportRepository.getAdminList((page - 1) *5, 5, query, queryType);
     }
 
     public AdminSupportDetailResponseDTO getSupportDetail(Long supportId) {

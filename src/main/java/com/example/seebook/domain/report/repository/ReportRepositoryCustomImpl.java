@@ -53,7 +53,7 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
         return AdminReportListResponseDTO.builder()
                 .report(list)
                 .totalReportCount(count)
-                .endPage(count / 10 + 1)
+                .endPage(count / 5 + 1)
                 .build();
     }
 

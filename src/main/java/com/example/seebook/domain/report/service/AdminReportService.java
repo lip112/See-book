@@ -16,7 +16,7 @@ public class AdminReportService {
     private final ReportRepository reportRepository;
 
     public AdminReportListResponseDTO getReportList(int page, String queryType, String query) {
-        return reportRepository.getAdminReportList((page-1)*10, page*10-1, queryType, query);
+        return reportRepository.getAdminReportList((page-1)*5, 5, queryType, query);
     }
     public AdminReportDetailResponseDTO getReportDetail(Long reportId) {
         return reportRepository.getAdminReportDetail(reportId);

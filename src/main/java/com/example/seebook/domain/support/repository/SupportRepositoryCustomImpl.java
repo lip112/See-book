@@ -84,7 +84,7 @@ public class SupportRepositoryCustomImpl implements SupportRepositoryCustom {
 
         return AdminSupportListResponseDTO.builder()
                 .totalSupportCount(totalSupportCount)
-                .endPage(totalSupportCount / 10 + 1)
+                .endPage(totalSupportCount / 5 + 1)
                 .support(list)
                 .build();
     }

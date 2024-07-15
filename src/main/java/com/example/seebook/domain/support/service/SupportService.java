@@ -18,7 +18,7 @@ public class SupportService {
     private final SupportRepository supportRepository;
 
     public SupportListResponseDTO getSupportList(int page, Long userId) {
-        return supportRepository.getList(userId, (page - 1) *10, page*10 -1);
+        return supportRepository.getList(userId, (page - 1) *10, 10);
     }
 
     public SupportDetailResponseDTO getSupportDetail(Long supportId) {

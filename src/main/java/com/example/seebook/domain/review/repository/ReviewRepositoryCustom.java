@@ -8,7 +8,7 @@ import com.example.seebook.domain.review.dto.response.ProfileReviewResponseDTO;
 
 public interface ReviewRepositoryCustom {
 
-    BookInReviewListResponseDTO getBookInReviewList(BookDTO bookDTO, int page, int offset, int limit);
+    BookInReviewListResponseDTO getBookInReviewList(BookDTO bookDTO, int offset, int limit);
 
     ProfileReviewResponseDTO getProfileReviewList(Long userId, int offset, int limit);
 

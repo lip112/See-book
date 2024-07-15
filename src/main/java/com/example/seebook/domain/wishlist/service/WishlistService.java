@@ -34,7 +34,7 @@ public class WishlistService {
 
     public GetWishlistResponseDTO getWishlist(int page, Long userId) {
         return wishlistRepository.getWIshlist(userId,
-                (page -1) *10 , page*10-1);
+                (page -1) *10 , 10);
     }
 
     public boolean getWishedStatus(User user, Book book) {

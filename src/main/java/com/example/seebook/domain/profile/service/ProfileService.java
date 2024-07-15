@@ -19,7 +19,7 @@ public class ProfileService {
 
     public void getProfileWithReviewList(ProfileReviewListRequestDTO profileReviewListRequestDTO) {
         profileRepository.getProfileWithReviewListDTO(profileReviewListRequestDTO.getUserId(),
-                (profileReviewListRequestDTO.getPage()-1) * 10, profileReviewListRequestDTO.getPage()*10 -1);
+                (profileReviewListRequestDTO.getPage()-1) * 10, 10);
     }
     public JoinResponseDTO joinProfile(Long userId) {
         return profileRepository.joinProfile(userId);

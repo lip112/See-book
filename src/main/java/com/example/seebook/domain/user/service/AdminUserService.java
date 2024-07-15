@@ -42,7 +42,7 @@ public class AdminUserService {
     }
 
     public AdminUserListResponseDTO getUserList(int page, String queryType, String query) {
-        return userRepository.findAdminUserList((page-1)*10, page*10-1, queryType, query);
+        return userRepository.findAdminUserList((page-1)*5, 5, queryType, query);
     }
 
     public AdminUserDetailResponseDTO getUserDetail(Long userId) {

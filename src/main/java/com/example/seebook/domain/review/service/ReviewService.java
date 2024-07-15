@@ -49,15 +49,12 @@ public class ReviewService {
     }
 
     public BookInReviewListResponseDTO getBookInReviewList(BookDTO bookDTO, int page) { // page?
-        return reviewRepository.getBookInReviewList(bookDTO, page, (page-1)*10, page*10-1);
-        // 1 : 0 , 9
-        // 2 : 10 , 19
-        // 3 : 20 , 29
+        return reviewRepository.getBookInReviewList(bookDTO, (page-1)*10, 10);
     }
 
     public ProfileReviewResponseDTO getProfileReviewList(int page, Long userId) {
         return reviewRepository.getProfileReviewList(userId,
-                (page-1)*10, page*10-1);
+                (page-1)*10, 10);
     }
 
     public HomeReviewListResponseDTO getHomeReviewList() {

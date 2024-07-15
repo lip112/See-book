@@ -55,7 +55,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
                 .fetchOne();
         return AdminUserListResponseDTO.builder()
                 .totalUserCount(count)
-                .endPage((count / 10) + 1)
+                .endPage((count / 5) + 1)
                 .user(userList)
                 .build();
     }

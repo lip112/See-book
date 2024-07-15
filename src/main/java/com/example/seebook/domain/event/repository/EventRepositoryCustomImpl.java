@@ -43,7 +43,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom{
                 .fetchCount();
         return AdminEventListResponseDTO.builder()
                 .totalEventCount(count)
-                .endPage(count /10 +1)
+                .endPage(count /5 +1)
                 .event(list)
                 .build();
     }

@@ -12,7 +12,7 @@ public class AdminReviewService {
     private final ReviewRepository reviewRepository;
 
     public AdminReviewListResponseDTO getReviewList(int page, String queryType, String query) {
-        return reviewRepository.getAdminReviewList((page-1)*10, page*10-1, query, queryType);
+        return reviewRepository.getAdminReviewList((page-1)*4, 4, query, queryType);
     }
 
     @Transactional

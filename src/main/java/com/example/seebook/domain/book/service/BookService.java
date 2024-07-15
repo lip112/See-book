@@ -87,7 +87,7 @@ public class BookService {
     }
 
     public NewBookResponseDTO getNewBookList(int page) {
-        return bookRepository.getNewBooks((page-1)*10, page*10-1);
+        return bookRepository.getNewBooks((page-1)*10, 10);
     }
     public List<JoinMainPageResponseDTO.BookWithReview> getBestBooks() {
         try{
@@ -98,6 +98,6 @@ public class BookService {
     }
 
     public CategoryResponseDTO findCategoryBooks(String categoryName, int page) {
-        return bookRepository.findCategoryBooks(categoryName, (page-1)*10, page*10-1);
+        return bookRepository.findCategoryBooks(categoryName, (page-1)*10, 10);
     }
 }
