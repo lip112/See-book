@@ -50,4 +50,7 @@ public class SuspendService {
         suspendRepository.save(Suspend);
     }
 
+    public void deleteById(Long userId) {
+        suspendRepository.deleteByUserId(userId);
+    }
 }

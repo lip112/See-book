@@ -2,6 +2,8 @@ package com.example.seebook.domain.user.controller;
 
 import com.example.seebook.domain.level.service.LevelService;
 import com.example.seebook.domain.profile.service.ProfileService;
+import com.example.seebook.domain.review.service.ReviewService;
+import com.example.seebook.domain.support.service.SupportService;
 import com.example.seebook.domain.suspend.service.SuspendService;
 import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.dto.requset.*;
@@ -11,6 +13,8 @@ import com.example.seebook.domain.user.dto.response.FindEmailResponseDTO;
 import com.example.seebook.domain.user.dto.response.LoginResponseDTO;
 import com.example.seebook.domain.user.service.OauthService;
 import com.example.seebook.domain.user.service.UserService;
+import com.example.seebook.domain.wishlist.domain.Wishlist;
+import com.example.seebook.domain.wishlist.service.WishlistService;
 import com.example.seebook.global.exception.UserException;
 import com.example.seebook.global.jwt.CustomUserDetails;
 import com.example.seebook.global.jwt.JwtProvider;
@@ -37,6 +41,9 @@ public class UserController {
     private final SmsUtil smsUtil;
     private final JwtProvider jwtProvider;
     private final LevelService levelService;
+    private final SupportService supportService;
+    private final ReviewService reviewService;
+    private final WishlistService wishlistService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
@@ -140,10 +147,12 @@ public class UserController {
     @DeleteMapping("/delete-account")
     public ResponseEntity<?> deleteAccount(@Valid @RequestBody DeleteAccountRequestDTO deleteAccountRequestDTO) {
         Long userId = UserAuthorizationUtil.getLoginUserId();
-
+        User user = userService.findById(userId);
+        supportService.deleteSupportByUser(user);
+        reviewService.deleteReviewByUser(user);
+        wishlistService.deleteWishlistByUser(user);
         if (deleteAccountRequestDTO.getProvider().equals("kakao")) {
-            Long kakaoId = userService.findById(userId).getKakaoId();
-            oauthService.deleteAccount(kakaoId);
+            oauthService.deleteAccount(user.getKakaoId());
         }
 
         userService.deleteAccount(userId);

@@ -79,5 +79,9 @@ public class ReviewService {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(ReviewException.NotFoundReviewIdException::new);
     }
+    @Transactional
+    public void deleteReviewByUser(User user) {
+        reviewRepository.deleteByUser(user);
+    }
 
 }

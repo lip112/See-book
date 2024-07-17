@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface SupportRepository extends JpaRepository<Support, Long>, SupportRepositoryCustom{
     Optional<Support> findByUserId(User user);
+
+    void deleteByUserId(User user);
 }

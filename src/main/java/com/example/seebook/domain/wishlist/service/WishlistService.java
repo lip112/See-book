@@ -41,4 +41,9 @@ public class WishlistService {
         Optional<Wishlist> wished = wishlistRepository.findByUserAndBook(user, book);
         return wished.isPresent();
     }
+
+    @Transactional
+    public void deleteWishlistByUser(User user) {
+        wishlistRepository.deleteByUser(user);
+    }
 }

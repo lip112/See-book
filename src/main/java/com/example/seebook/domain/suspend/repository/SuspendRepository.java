@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface SuspendRepository extends JpaRepository<Suspend, Long> {
 
     Optional<Suspend> findByUserId(Long userId);
+
+    void deleteByUserId(Long userId);
 }

@@ -11,6 +11,7 @@ import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.global.exception.SupportException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,4 +59,8 @@ public class SupportService {
         supportRepository.save(support);
     }
 
+    @Transactional
+    public void deleteSupportByUser(User user) {
+        supportRepository.deleteByUserId(user);
+    }
 }

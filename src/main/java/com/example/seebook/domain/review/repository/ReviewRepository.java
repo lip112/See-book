@@ -14,4 +14,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
     List<Review> findTop30ByOrderByReviewIdDesc();
     List<Review> findTop10ByOrderByReviewIdDesc();
 
+    void deleteByUser(User user);
 }

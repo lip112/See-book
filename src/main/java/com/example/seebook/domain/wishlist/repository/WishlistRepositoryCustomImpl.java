@@ -29,7 +29,7 @@ public class WishlistRepositoryCustomImpl implements WishlistRepositoryCustom{
                 .fetch();
 
         List<BookDTO> bookDTOList = queryFactory
-                .select(book.bookId, book.title, book.author, book.publisher, book.isbn13,
+                .select(book.bookId, book.title, book.author, book.publisher, book.isbn13, book.imageLink,
                         review.starRating.avg(), review.reviewId.count())
                 .from(book)
                 .leftJoin(review).on(review.book.bookId.eq(book.bookId))
@@ -39,6 +39,7 @@ public class WishlistRepositoryCustomImpl implements WishlistRepositoryCustom{
                 .stream()
                 .map(tuple -> BookDTO.builder()
                         .bookId(tuple.get(book.bookId))
+                        .imageLink(tuple.get(book.imageLink))
                         .title(tuple.get(book.title))
                         .author(tuple.get(book.author))
                         .publisher(tuple.get(book.publisher))
