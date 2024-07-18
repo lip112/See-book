@@ -63,6 +63,7 @@ public class BookService {
         return bookRepository.save(Book.form(bookDTO));
     }
     public BookInReviewListResponseDTO saveAladinBook(BookInReviewListResponseDTO bookInReviewListResponseDTO) {
+        System.out.println("saveAladinBook = " + bookInReviewListResponseDTO.getBook().getTitle());
         Long bookId = bookRepository.save(Book.form(bookInReviewListResponseDTO.getBook())).getBookId();
         bookInReviewListResponseDTO.getBook().changeBookId(bookId);
         return bookInReviewListResponseDTO;

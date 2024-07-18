@@ -45,10 +45,9 @@ public class BookController {
                     .status(HttpStatus.OK)
                     .body(detailBookWithReviewList);
         } else {
-            BookInReviewListResponseDTO byAladinBook = bookService.findByAladin(isbn13);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(bookService.saveAladinBook(byAladinBook));
+                    .body(bookService.saveAladinBook(bookService.findByAladin(isbn13)));
         }
     }
 }

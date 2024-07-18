@@ -127,7 +127,7 @@ public class UserService {
     }
     public boolean validationEmail(String email) {
         Optional<User> byEmail = userRepository.findByEmail(email);
-        return byEmail.isPresent();
+        return byEmail.isEmpty();
     }
 
     public void changeNickname(Long userId, String nickname) {
