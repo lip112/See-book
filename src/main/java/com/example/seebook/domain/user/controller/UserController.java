@@ -133,10 +133,25 @@ public class UserController {
 
     @GetMapping("/validation-email")
     public ResponseEntity<FindEmailResponseDTO> validationEmail(@RequestParam("email") String email) {
+        //DB에 email이 존재하면 200 없으면 400
+        if (!userService.validationEmail(email)) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .build();
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+    }
+
+    @GetMapping("/duplication-email")
+    public ResponseEntity<Void> duplicationEmail(@RequestParam("email") String email) {
+        //DB에 email이 없으면 200 있으면 400
         if (userService.validationEmail(email)) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(FindEmailResponseDTO.builder().email(email).build());
+                    .build();
         } else {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
