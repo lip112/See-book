@@ -3,6 +3,8 @@ package com.example.seebook.domain.review.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class ProfileReviewDTO {
     private Long userId;
@@ -12,9 +14,10 @@ public class ProfileReviewDTO {
     private Long reviewId;
     private String content;
     private Double starRating;
+    private LocalDateTime createdDate;
 
     @Builder
-    public ProfileReviewDTO(Long userId, Long reviewId, String isbn13, String imageLink, String title, String content, Double starRating) {
+    public ProfileReviewDTO(Long userId, Long reviewId, String isbn13, String imageLink, String title, String content, Double starRating, LocalDateTime createdDate) {
         this.userId = userId;
         this.reviewId = reviewId;
         this.isbn13 = isbn13;
@@ -22,5 +25,6 @@ public class ProfileReviewDTO {
         this.title = title;
         this.content = content;
         this.starRating = starRating;
+        this.createdDate = createdDate;
     }
 }

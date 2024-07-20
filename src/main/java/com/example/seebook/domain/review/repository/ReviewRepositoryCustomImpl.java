@@ -38,6 +38,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                         profile.imageUrl,
                         review.nickname,
                         review.content,
+                        review.createdDate,
                         levelInfo.level
                 )
                 .from(review)
@@ -57,6 +58,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                         .level(tuple.get(levelInfo.level))
                         .starRating(tuple.get(review.starRating))
                         .content(tuple.get(review.content))
+                        .createdDate(tuple.get(review.createdDate))
                         .build()
                 )
                 .collect(Collectors.toList());
@@ -82,7 +84,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     public ProfileReviewResponseDTO getProfileReviewList(Long userId, int offset, int limit) {
         List<ProfileReviewDTO> list = queryFactory
                 .select(book.isbn13, book.title, book.imageLink,
-                        review.reviewId, review.content, review.starRating)
+                        review.reviewId, review.content, review.starRating, review.createdDate)
                 .from(review)
                 .leftJoin(book).on(book.bookId.eq(review.book.bookId))
                 .where(review.user.userId.eq(userId))
@@ -98,6 +100,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                         .reviewId(tuple.get(review.reviewId))
                         .content(tuple.get(review.content))
                         .starRating(tuple.get(review.starRating))
+                        .createdDate(tuple.get(review.createdDate))
                         .build())
                 .toList();
         Long reviewCount = queryFactory

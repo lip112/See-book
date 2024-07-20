@@ -1,7 +1,6 @@
 package com.example.seebook.global.audit;
 
 import jakarta.persistence.*;
-import lombok.Cleanup;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

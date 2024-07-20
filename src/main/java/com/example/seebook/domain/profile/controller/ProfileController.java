@@ -5,6 +5,7 @@ import com.example.seebook.domain.profile.dto.request.ProfileChangePasswordReque
 import com.example.seebook.domain.profile.dto.request.ProfileReviewListRequestDTO;
 import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
 import com.example.seebook.domain.profile.service.ProfileService;
+import com.example.seebook.domain.review.service.ReviewService;
 import com.example.seebook.domain.suspend.dto.SuspendDTO;
 import com.example.seebook.domain.suspend.service.SuspendService;
 import com.example.seebook.domain.user.service.UserService;
@@ -27,6 +28,7 @@ public class ProfileController {
 
     @PostMapping("/review-list")
     public void getProfileReviewList(@Valid @RequestBody ProfileReviewListRequestDTO profileReviewListRequestDTO) {
+        profileService.getProfileWithReviewList(profileReviewListRequestDTO);
 
     }
 

@@ -15,8 +15,9 @@ public class ReviewDTO {
     private int level;
     private Double starRating = 0.0;
     private String content;
+    private LocalDateTime createdDate;
     @Builder
-    public ReviewDTO(Long reviewId, Long userId, String profileImage, String nickname, int level, Double starRating, String content) {
+    public ReviewDTO(Long reviewId, Long userId, String profileImage, String nickname, int level, Double starRating, String content, LocalDateTime createdDate) {
         this.reviewId = reviewId;
         this.userId = userId;
         this.profileImage = profileImage;
@@ -24,5 +25,6 @@ public class ReviewDTO {
         this.level = level;
         this.starRating = starRating;
         this.content = content;
+        this.createdDate = createdDate;
     }
 }
