@@ -64,4 +64,13 @@ public class ReviewController {
                 .status(HttpStatus.OK)
                 .body(reviewService.getProfileReviewList(page, userId));
     }
+
+    @GetMapping("/validation")
+    public ResponseEntity<?> validation(@RequestParam("reviewId") Long reviewId) {
+        Long userId = UserAuthorizationUtil.getLoginUserId();
+        reviewService.validation(reviewId, userId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 }

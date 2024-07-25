@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -84,4 +85,10 @@ public class ReviewService {
         reviewRepository.deleteByUser(user);
     }
 
+    public void validation(Long reviewId, Long userId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(ReviewException.NotFoundReviewIdException::new);
+        if (!Objects.equals(review.getUser().getUserId(), userId))
+            throw new ReviewException.NotMatchUserException();
+    }
 }
