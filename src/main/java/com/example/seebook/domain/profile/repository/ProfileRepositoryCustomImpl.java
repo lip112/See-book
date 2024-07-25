@@ -32,7 +32,7 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom{
                 .fetchOne();
 
         List<AnotherProfileReviewDTO> list = queryFactory
-                .select(review.book.bookId, review.starRating,
+                .select(review.book.bookId, review.starRating, review.content, review.createdDate,
                         book.isbn13, book.imageLink, book.title)
                 .from(review)
                 //해당 책의 모든 리뷰들을 가져와서 평균을 구해야 하는데 모름 따로 구성해야 하는가 서브쿼리 이용?
@@ -49,6 +49,7 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom{
                         .title(tuple.get(book.title))
                         .content(tuple.get(review.content))
                         .starRating(tuple.get(review.starRating))
+                        .createdDate(tuple.get(review.createdDate))
                         .build())
                 .toList();
 
@@ -64,7 +65,7 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom{
                 .level(prifileTuple.get(levelInfo.level))
                 .levelCount(prifileTuple.get(levelInfo.levelCount))
                 .totalReviewCount(reviewCount)
-                .endPage(reviewCount /10 + 1)
+                .endPage(reviewCount / 10 + 1)
                 .reviewList(list)
                 .build();
     }
