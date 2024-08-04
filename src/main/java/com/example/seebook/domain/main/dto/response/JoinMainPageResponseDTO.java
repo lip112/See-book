@@ -10,13 +10,15 @@ import java.util.List;
 @Getter
 public class JoinMainPageResponseDTO {
     private int eventCount;
+    private int newBookCount;
     private List<EventDTO> event;
     private List<BookDTO> newBook;
     private List<BookWithReview> bestBook;
 
     @Builder
-    public JoinMainPageResponseDTO(int eventCount, List<EventDTO> event, List<BookDTO> newBook, List<BookWithReview> bestBook) {
+    public JoinMainPageResponseDTO(int eventCount, int newBookCount, List<EventDTO> event, List<BookDTO> newBook, List<BookWithReview> bestBook) {
         this.eventCount = eventCount;
+        this.newBookCount = newBookCount;
         this.event = event;
         this.newBook = newBook;
         this.bestBook = bestBook;

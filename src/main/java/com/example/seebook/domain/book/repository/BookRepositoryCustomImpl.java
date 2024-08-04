@@ -96,7 +96,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
         List<Long> bookIds = queryFactory
                 .select(book.bookId)
                 .from(review)
-                .groupBy(review.book.bookId)
+                .groupBy(review.book)
                 .orderBy(review.book.bookId.desc())
                 .limit(50)
                 .fetch();

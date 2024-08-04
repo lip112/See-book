@@ -13,11 +13,11 @@ import java.util.Objects;
 public interface AladinComponent {
 
     // base + EndPoint + 여기서 RequestParam이 추가됨
-    //http://www.aladin.co.kr/ttb/api/ + ItemSearch.aspx + ?TTBKey=aladinKey&Query=Title&Output=JS&Start=1&Version=20131101
+    //http://www.aladin.co.kr/ttb/api/ + ItemSearch.aspx + ?TTBKey=aladinKey&Query=Title&Output=JS&Start=1&Version=20131101&Cover=Big
     @GetExchange("/ItemSearch.aspx") //get 방식으로 요청, End Point로 /ItemSearch.aspx주소가 설정됨
     Map<String, Object> findAllByQuery(@RequestParam String TTBKey, @RequestParam String Query, @RequestParam String QueryType, @RequestParam String output,
-                                        @RequestParam int start, @RequestParam int version);
+                                        @RequestParam int start, @RequestParam int version, @RequestParam String cover);
     @GetExchange("/ItemLookUp.aspx")
     Map<String, Object> findByIsbn13(@RequestParam String TTBKey, @RequestParam String ItemId, @RequestParam String ItemIdType,
-                          @RequestParam String Output, @RequestParam int version);
+                          @RequestParam String Output, @RequestParam int version, @RequestParam String Cover);
 }

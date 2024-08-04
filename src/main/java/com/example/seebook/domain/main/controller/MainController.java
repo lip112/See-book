@@ -27,12 +27,13 @@ public class MainController {
     @GetMapping("/join")
     public ResponseEntity<JoinMainPageResponseDTO> getMainPage(){
         List<EventDTO> mainEventList = eventService.getMainEventList();
-        List<BookDTO> newBooks = bookService.getMainNewBooks();
+        List<BookDTO> newBooks = bookService.getTop3NewBooks();
         List<JoinMainPageResponseDTO.BookWithReview> bestBooks = bookService.getBestBooks();
 
         JoinMainPageResponseDTO joinMainPageResponseDTO = JoinMainPageResponseDTO.builder()
                 .eventCount(mainEventList.size())
                 .event(mainEventList)
+                .newBookCount(newBooks.size())
                 .newBook(newBooks)
                 .bestBook(bestBooks)
                 .build();

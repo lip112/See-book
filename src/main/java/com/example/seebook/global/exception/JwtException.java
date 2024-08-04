@@ -4,7 +4,7 @@ package com.example.seebook.global.exception;
 import lombok.Getter;
 
 @Getter
-public class JwtException extends Exception{
+public class JwtException extends RuntimeException{
     private final ErrorCode errorCode;
 
     public JwtException(ErrorCode errorCode) {

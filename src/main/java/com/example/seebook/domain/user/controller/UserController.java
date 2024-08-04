@@ -105,10 +105,13 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDTO logoutRequestDTO) {
         if (logoutRequestDTO.getProvider().equals("kakao")) {
-//            Long userId = UserAuthorizationUtil.getLoginUserId();
-//            Long kakaoId = userService.findById(userId).getKakaoId();
-//            oauthService.logoutAccount(kakaoId);
-//            SecurityContextHolder.clearContext();
+            Long userId = UserAuthorizationUtil.getLoginUserId();
+            Long kakaoId = userService.findById(userId).getKakaoId();
+            if (kakaoId == null) {
+                throw new UserException.NotKakaoAccountException();
+            }
+            oauthService.logoutAccount(kakaoId);
+            SecurityContextHolder.clearContext();
             //토큰 날리기
         } else {
             //토큰 날리기

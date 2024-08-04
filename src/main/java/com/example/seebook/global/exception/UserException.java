@@ -46,5 +46,11 @@ public class UserException extends RuntimeException{
         }
     }
 
+    public static class NotKakaoAccountException extends UserException {
+        public NotKakaoAccountException() {
+            super(ErrorCode.NOT_KAKAO_ACCOUNT_EXCEPTION);
+        }
+    }
+
 
 }

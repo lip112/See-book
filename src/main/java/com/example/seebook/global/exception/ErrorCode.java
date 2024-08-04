@@ -1,7 +1,5 @@
 package com.example.seebook.global.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +14,7 @@ public enum ErrorCode {
     NOT_FOUND_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "찾을 수 없는 전화번호 입니다"),
     LOGIN_FAILED(HttpStatus.BAD_REQUEST, "아이디 및 비밀번호가 일치하지 않습니다."),
     INVALID_VERIFICATION_CODE_EXCEPTION(HttpStatus.BAD_REQUEST, "인증번호가 일치하지 않습니다."),
+    NOT_KAKAO_ACCOUNT_EXCEPTION(HttpStatus.BAD_REQUEST, "카카오로 가입된 회원이 아닙니다."),
 
    //review
     NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "찾을 수 없는 리뷰입니다"),

@@ -14,6 +14,8 @@ import com.example.seebook.global.exception.ReviewException;
 import com.example.seebook.global.restclient.AladinComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,16 +33,16 @@ public class BookService {
     private String TTB_KEY;
 
     public BookListResponseDTO getBookByText(String query, String queryType, int start) {
-        BookListResponseDTO alainBookList = BookListResponseDTO.from(aladinComponent.findAllByQuery(TTB_KEY, query, queryType, "js", start, 20131101));
+        BookListResponseDTO alainBookList = BookListResponseDTO.from(aladinComponent.findAllByQuery(TTB_KEY, query, queryType, "js", start, 20131101, "Big"));
         return bookRepository.getBooksReviewSummary(alainBookList);
     }
 
     public BookInReviewListResponseDTO findByAladin(String isbn13) {
-        Map<String, Object> byIsbn13 = aladinComponent.findByIsbn13(TTB_KEY, isbn13, "ISBN", "js", 20131101);
+        Map<String, Object> byIsbn13 = aladinComponent.findByIsbn13(TTB_KEY, isbn13, "ISBN", "js", 20131101, "Big");
         if (byIsbn13.get("item") == null) {
             throw new BookException.NotFoundBookException();
         }
-        return BookInReviewListResponseDTO.fromMap(aladinComponent.findByIsbn13(TTB_KEY, isbn13, "ISBN", "js", 20131101));
+        return BookInReviewListResponseDTO.fromMap(aladinComponent.findByIsbn13(TTB_KEY, isbn13, "ISBN", "js", 20131101, "Big"));
     }
 
     public BookDTO getDetailBook(String isbn13) {
@@ -69,9 +71,9 @@ public class BookService {
         return bookInReviewListResponseDTO;
     }
 
-    public List<BookDTO> getMainNewBooks() {
+    public List<BookDTO> getTop3NewBooks() {
         try{
-            List<BookDTO> list = reviewRepository.findTop10ByOrderByReviewIdDesc()
+            List<BookDTO> list = reviewRepository.findTop3DistinctReviews(PageRequest.of(0, 3))
                     .stream()
                     .map(review ->
                             BookDTO.builder()
@@ -79,7 +81,6 @@ public class BookService {
                                     .imageLink(review.getBook().getImageLink())
                                     .isbn13(review.getBook().getIsbn13())
                                     .build())
-                    .limit(3)
                     .toList();
             return list;
         } catch (Exception e) {
