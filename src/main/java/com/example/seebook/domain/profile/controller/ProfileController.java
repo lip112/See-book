@@ -4,6 +4,7 @@ import com.example.seebook.domain.profile.dto.request.ChangeNicknameRequestDTO;
 import com.example.seebook.domain.profile.dto.request.ProfileChangePasswordRequestDTO;
 import com.example.seebook.domain.profile.dto.request.ProfileReviewListRequestDTO;
 import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
+import com.example.seebook.domain.profile.dto.response.ProfileReviewListResponseDTO;
 import com.example.seebook.domain.profile.service.ProfileService;
 import com.example.seebook.domain.review.service.ReviewService;
 import com.example.seebook.domain.suspend.dto.SuspendDTO;
@@ -27,9 +28,10 @@ public class ProfileController {
 
 
     @PostMapping("/review-list")
-    public void getProfileReviewList(@Valid @RequestBody ProfileReviewListRequestDTO profileReviewListRequestDTO) {
-        profileService.getProfileWithReviewList(profileReviewListRequestDTO);
-
+    public ResponseEntity<ProfileReviewListResponseDTO> getProfileReviewList(@Valid @RequestBody ProfileReviewListRequestDTO profileReviewListRequestDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(profileService.getProfileWithReviewList(profileReviewListRequestDTO));
     }
 
     @GetMapping("/join")

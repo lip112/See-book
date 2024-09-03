@@ -3,12 +3,16 @@ package com.example.seebook.domain.profile.service;
 import com.example.seebook.domain.profile.domain.Profile;
 import com.example.seebook.domain.profile.dto.request.ProfileReviewListRequestDTO;
 import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
+import com.example.seebook.domain.profile.dto.response.ProfileReviewListResponseDTO;
 import com.example.seebook.domain.profile.repository.ProfileRepository;
+import com.example.seebook.global.exception.ReviewException;
 import com.example.seebook.global.exception.UserException;
 import com.example.seebook.global.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -17,9 +21,9 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final S3Uploader s3Uploader;
 
-    public void getProfileWithReviewList(ProfileReviewListRequestDTO profileReviewListRequestDTO) {
-        profileRepository.getProfileWithReviewListDTO(profileReviewListRequestDTO.getUserId(),
-                (profileReviewListRequestDTO.getPage()-1) * 10, 10);
+    public ProfileReviewListResponseDTO getProfileWithReviewList(ProfileReviewListRequestDTO profileReviewListRequestDTO) {
+        return profileRepository.getProfileWithReviewListDTO(profileReviewListRequestDTO.getUserId(),
+                (profileReviewListRequestDTO.getPage() - 1) * 10, 10);
     }
     public JoinResponseDTO joinProfile(Long userId) {
         return profileRepository.joinProfile(userId);

@@ -17,19 +17,19 @@ public enum ErrorCode {
     NOT_KAKAO_ACCOUNT_EXCEPTION(HttpStatus.BAD_REQUEST, "카카오로 가입된 회원이 아닙니다."),
 
    //review
-    NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "찾을 수 없는 리뷰입니다"),
+    NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "작성된 리뷰가 없습니다."),
     NOT_MATCH_USER_EXCEPTION(HttpStatus.BAD_REQUEST, "본인이 작성한 리뷰가 아닙니다."),
 
     //Book
     NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "찾을 수 없는 책입니다"),
 
     //S3
-    EMPTY_FILE_EXCEPTION(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다"),
-    IO_EXCEPTION_ON_IMAGE_UPLOAD(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다"),
-    NO_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다"),
-    INVALID_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다"),
-    PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "이미지를 업로드 할 수 없습니다"),
-    IO_EXCEPTION_ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "찾을 수 없는 이메일 입니다"),
+    EMPTY_FILE_EXCEPTION(HttpStatus.BAD_REQUEST, "파일이 비어있습니다"),
+    IO_EXCEPTION_ON_IMAGE_UPLOAD(HttpStatus.BAD_REQUEST, "이미지를 업로드할 수 없습니다."),
+    NO_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "파일이 비어있습니다."),
+    INVALID_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "지원하지 않는 파일 형식입니다."),
+    PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "파일을 업로드할 수 없습니다."),
+    IO_EXCEPTION_ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "이미지를 삭제할 수 없습니다."),
 
 
     //jwt

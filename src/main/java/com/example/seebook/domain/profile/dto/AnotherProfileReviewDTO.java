@@ -10,17 +10,19 @@ public class AnotherProfileReviewDTO {
     private String isbn13;
     private String imageLink;
     private String title;
+    private Double avgBookStarRating;
     private String content;
-    private Double starRating;
+    private Double reviewStarRating;
     private LocalDateTime createdDate;
 
     @Builder
-    public AnotherProfileReviewDTO(String isbn13, String imageLink, String title, String content, Double starRating, LocalDateTime createdDate) {
+    public AnotherProfileReviewDTO(String isbn13, String imageLink, String title, Double avgBookStarRating, String content, Double reviewStarRating, LocalDateTime createdDate) {
         this.isbn13 = isbn13;
         this.imageLink = imageLink;
         this.title = title;
+        this.avgBookStarRating = avgBookStarRating;
         this.content = content;
-        this.starRating = starRating;
+        this.reviewStarRating = reviewStarRating;
         this.createdDate = createdDate;
     }
 }

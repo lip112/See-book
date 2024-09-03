@@ -26,5 +26,4 @@ public class ReviewException extends RuntimeException{
             super(ErrorCode.NOT_FOUND_REVIEW);
         }
     }
-
 }

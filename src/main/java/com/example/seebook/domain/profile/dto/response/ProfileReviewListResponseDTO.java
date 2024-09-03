@@ -3,9 +3,11 @@ package com.example.seebook.domain.profile.dto.response;
 import com.example.seebook.domain.profile.dto.AnotherProfileReviewDTO;
 import com.example.seebook.domain.review.dto.ReviewDTO;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class ProfileReviewListResponseDTO {
     private String profileImage;
     private String nickname;

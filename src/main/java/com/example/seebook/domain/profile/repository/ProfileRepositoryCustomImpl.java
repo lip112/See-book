@@ -4,8 +4,13 @@ import com.example.seebook.domain.profile.dto.AnotherProfileReviewDTO;
 import com.example.seebook.domain.profile.dto.request.ProfileReviewListRequestDTO;
 import com.example.seebook.domain.profile.dto.response.JoinResponseDTO;
 import com.example.seebook.domain.profile.dto.response.ProfileReviewListResponseDTO;
+import com.example.seebook.global.exception.ReviewException;
+import com.example.seebook.global.exception.UserException;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -31,33 +36,40 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom{
                 .where(profile.userId.eq(userId))
                 .fetchOne();
 
+        if (prifileTuple == null) {
+            throw new UserException.NotFoundUserException();
+        }
+
         List<AnotherProfileReviewDTO> list = queryFactory
-                .select(review.book.bookId, review.starRating, review.content, review.createdDate,
-                        book.isbn13, book.imageLink, book.title)
+                .select(Projections.constructor(
+                        AnotherProfileReviewDTO.class,
+                        book.isbn13,
+                        book.imageLink,
+                        book.title,
+                        JPAExpressions
+                                .select(review.starRating.avg())
+                                .from(review)
+                                .where(review.book.bookId.eq(book.bookId))
+                                .groupBy(review.book.bookId),
+                        review.content,
+                        review.starRating,
+                        review.createdDate
+                ))
                 .from(review)
-                //해당 책의 모든 리뷰들을 가져와서 평균을 구해야 하는데 모름 따로 구성해야 하는가 서브쿼리 이용?
                 .innerJoin(book).on(book.bookId.eq(review.book.bookId))
                 .where(review.user.userId.eq(userId))
-                .groupBy(review.book.bookId)
                 .offset(offset)
                 .limit(limit)
-                .fetch()
-                .stream()
-                .map(tuple -> AnotherProfileReviewDTO.builder()
-                        .isbn13(tuple.get(book.isbn13))
-                        .imageLink(tuple.get(book.imageLink))
-                        .title(tuple.get(book.title))
-                        .content(tuple.get(review.content))
-                        .starRating(tuple.get(review.starRating))
-                        .createdDate(tuple.get(review.createdDate))
-                        .build())
-                .toList();
+                .fetch();
 
         Long reviewCount = queryFactory
                 .select(review.count())
                 .from(review)
                 .where(review.user.userId.eq(userId))
                 .fetchOne();
+        if (reviewCount == 0) {
+            throw new ReviewException.NotFoundReviewException();
+        }
 
         return ProfileReviewListResponseDTO.builder()
                 .profileImage(prifileTuple.get(profile.imageUrl))
