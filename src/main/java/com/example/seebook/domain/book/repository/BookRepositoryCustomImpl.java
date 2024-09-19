@@ -63,16 +63,21 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
     public BookDTO getBooksReviewSummary(BookDTO bookDTO) {
 
         Tuple results = queryFactory
-                .select(book.bookId, book.title, review.starRating.avg(), review.reviewId.count(), wishlist.book.bookId.count())
+                .select(book.bookId,
+                        book.title,
+                        review.starRating.avg(),
+                        review.reviewId.count(),
+                        wishlist.book.bookId.countDistinct()) // 중복된 wishlist를 제거하고 카운트
                 .from(book)
                 .leftJoin(review).on(review.book.bookId.eq(book.bookId))
                 .leftJoin(wishlist).on(wishlist.book.bookId.eq(book.bookId))
                 .where(book.bookId.eq(bookDTO.getBookId()))
                 .fetchOne();
 
+
         Double avgStarRating = results.get(review.starRating.avg());
         Long reviewCount = results.get(review.reviewId.count());
-        Long wishlistCount = results.get(wishlist.book.bookId.count());
+        Long wishlistCount = results.get(wishlist.book.bookId.countDistinct());
 
         if (avgStarRating == null) {
             avgStarRating = 0.0;  // 기본값 설정
