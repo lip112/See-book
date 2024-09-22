@@ -5,9 +5,8 @@ import com.example.seebook.domain.book.dto.response.BookListResponseDTO;
 import com.example.seebook.domain.main.dto.response.CategoryResponseDTO;
 import com.example.seebook.domain.main.dto.response.JoinMainPageResponseDTO;
 import com.example.seebook.domain.main.dto.response.NewBookResponseDTO;
-import com.example.seebook.domain.review.domain.Review;
+import com.example.seebook.domain.review.domain.QReview;
 import com.querydsl.core.Tuple;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.example.seebook.domain.book.domain.QBook.book;
 import static com.example.seebook.domain.review.domain.QReview.review;
@@ -28,28 +26,28 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
 
     @Override
     public BookListResponseDTO getBooksReviewSummary(BookListResponseDTO bookList) {
-        List<Long> bookIds = bookList.getBook().stream()
-                .map(BookDTO::getBookId)
+        List<String> bookIsbn13s = bookList.getBook().stream()
+                .map(BookDTO::getIsbn13)
                 .toList();
 
-        Map<Long, Tuple> results = queryFactory
-                .select(book.bookId, book.title, review.starRating.avg(), review.reviewId.count())
+        Map<String, Tuple> results = queryFactory
+                .select(book.isbn13, review.starRating.avg(), review.reviewId.count())
                 .from(book)
-                .leftJoin(review).on(review.book.bookId.eq(book.bookId))
-                .where(book.bookId.in(bookIds))
-                .groupBy(book.bookId, book.title)
+                .leftJoin(review).on(review.book.isbn13.eq(book.isbn13))
+                .where(book.isbn13.in(bookIsbn13s))
+                .groupBy(book.isbn13)
                 .fetch()
                 //결과를 bookList에 쉽게 매칭하기 위해 Map으로 전환
                 .stream()
                 .collect(Collectors.toMap(
-                        tuple -> tuple.get(book.bookId),
+                        tuple -> tuple.get(book.isbn13),
                         tuple -> tuple
                 ));
         //sql에서 가져온 값과 일치하는 값에 매칭해서 값을 넣음 O(1)
         for (BookDTO bookDTO : bookList.getBook()) {
-            if (results.containsKey(bookDTO.getBookId())){
-                bookDTO.addAvgStar(results.get(bookDTO.getBookId()).get(review.starRating.avg()));
-                bookDTO.addTotalReviewCount(results.get(bookDTO.getBookId()).get(review.reviewId.count()));
+            if (results.containsKey(bookDTO.getIsbn13())){
+                bookDTO.addAvgStar(results.get(bookDTO.getIsbn13()).get(review.starRating.avg()));
+                bookDTO.addTotalReviewCount(results.get(bookDTO.getIsbn13()).get(review.reviewId.count()));
             } else {
                 bookDTO.addAvgStar(0);
                 bookDTO.addTotalReviewCount(0L);
