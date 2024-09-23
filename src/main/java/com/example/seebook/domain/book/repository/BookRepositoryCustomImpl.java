@@ -103,9 +103,10 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                 .select(book.bookId)
                 .from(review)
                 .groupBy(review.book)
-                .orderBy(review.book.bookId.desc())
+                .orderBy(review.count().desc())
                 .limit(50)
                 .fetch();
+
         List<JoinMainPageResponseDTO.BookWithReview> list = queryFactory
                 .select(book.isbn13, book.title, book.author, book.publisher, book.imageLink
                         , review.starRating.avg(), review.reviewId.count(),
@@ -113,7 +114,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                 .from(book)
                 .leftJoin(review).on(review.book.bookId.in(bookIds))
                 .where(book.bookId.in(bookIds))
-                .groupBy(review.book.bookId)
+                .groupBy(book.bookId)
                 .fetch()
                 .stream()
                 .map(tuple ->
