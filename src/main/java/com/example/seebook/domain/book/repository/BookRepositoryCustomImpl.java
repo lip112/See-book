@@ -112,7 +112,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                         , review.starRating.avg(), review.reviewId.count(),
                         review.nickname, review.content)
                 .from(book)
-                .leftJoin(review).on(review.book.bookId.in(bookIds))
+                .leftJoin(review).on(review.book.bookId.eq(book.bookId))
                 .where(book.bookId.in(bookIds))
                 .groupBy(book.bookId)
                 .fetch()
