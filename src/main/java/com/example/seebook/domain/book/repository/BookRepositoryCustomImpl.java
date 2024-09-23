@@ -115,6 +115,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                 .leftJoin(review).on(review.book.bookId.eq(book.bookId))
                 .where(book.bookId.in(bookIds))
                 .groupBy(book.bookId)
+                .orderBy(review.reviewId.count().desc())
                 .fetch()
                 .stream()
                 .map(tuple ->
