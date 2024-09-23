@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.seebook.domain.book.domain.QBook.book;
@@ -46,8 +47,10 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
         //sql에서 가져온 값과 일치하는 값에 매칭해서 값을 넣음 O(1)
         for (BookDTO bookDTO : bookList.getBook()) {
             if (results.containsKey(bookDTO.getIsbn13())){
-                bookDTO.addAvgStar(results.get(bookDTO.getIsbn13()).get(review.starRating.avg()));
-                bookDTO.addTotalReviewCount(results.get(bookDTO.getIsbn13()).get(review.reviewId.count()));
+                Double avgStar = Optional.ofNullable(results.get(bookDTO.getIsbn13()).get(review.starRating.avg())).orElse(0.0);
+                Long totalCount = Optional.ofNullable(results.get(bookDTO.getIsbn13()).get(review.reviewId.count())).orElse(0L);
+                bookDTO.addAvgStar(avgStar);
+                bookDTO.addTotalReviewCount(totalCount);
             } else {
                 bookDTO.addAvgStar(0);
                 bookDTO.addTotalReviewCount(0L);
