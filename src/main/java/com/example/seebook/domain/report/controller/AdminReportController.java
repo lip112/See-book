@@ -43,7 +43,7 @@ public class AdminReportController {
                 .body(adminReportService.getReportDetail(requestDTO.getReportId()));
     }
 
-    @PutMapping("/process")
+    @PostMapping("/process")
     public ResponseEntity<Void> processReport(@Valid @RequestBody AdminReportProcessRequestDTO requestDTO) {
         if (requestDTO.isDeleteReview()) {
             User user = userService.findById(requestDTO.getReportedId());

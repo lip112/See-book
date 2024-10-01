@@ -71,6 +71,7 @@ public class SecurityConfig  {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000"));
+        // 허용할 요청 헤더들
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowCredentials(true);
