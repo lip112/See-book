@@ -34,7 +34,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
 
-
     //Controller로 전달된 객체의 유효성 검증을 위한 validation 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
