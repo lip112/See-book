@@ -49,6 +49,17 @@ public class ReviewService {
         reviewRepository.deleteByReviewIdAndUser(reviewId, user);
     }
 
+    @Transactional
+    public void resetReview(Long reviewId, User user) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(ReviewException.NotFoundReviewIdException::new);
+        if (review.getUser().getUserId() != user.getUserId())
+            throw new ReviewException.NotMatchUserException();
+        review.changeContent("신고로 인해 삭제된 리뷰입니다.");
+        review.changeStarRating(5.0);
+        reviewRepository.save(review);
+    }
+
     public BookInReviewListResponseDTO getBookInReviewList(BookDTO bookDTO, int page) { // page?
         return reviewRepository.getBookInReviewList(bookDTO, (page-1)*10, 10);
     }

@@ -47,7 +47,7 @@ public class AdminReportController {
     public ResponseEntity<Void> processReport(@Valid @RequestBody AdminReportProcessRequestDTO requestDTO) {
         if (requestDTO.isDeleteReview()) {
             User user = userService.findById(requestDTO.getReportedId());
-            reviewService.deleteReview(requestDTO.getReviewId(), user);
+            reviewService.resetReview(requestDTO.getReviewId(), user);
         }
         if (requestDTO.isResetNickname()) {
             String randomNickname = "오둥이" + String.valueOf(new Random().nextInt(8999999) + 1000000);
