@@ -46,4 +46,5 @@ public class WishlistService {
     public void deleteWishlistByUser(User user) {
         wishlistRepository.deleteByUser(user);
     }
+
 }

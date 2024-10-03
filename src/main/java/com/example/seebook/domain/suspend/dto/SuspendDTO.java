@@ -29,7 +29,6 @@ public class SuspendDTO {
                 .endDate(suspend.getEndDate())
                 .reason(suspend.getReason())
                 .build();
-
     }
 
     public static SuspendDTO notSuspend() {

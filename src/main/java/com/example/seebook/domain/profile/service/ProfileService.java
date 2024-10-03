@@ -59,4 +59,11 @@ public class ProfileService {
                 .orElseThrow(UserException.NotFoundUserException::new);
         profile.resetDefaultImage();
     }
+
+    @Transactional
+    public void deleteProfile(Long userId) {
+        Profile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(UserException.NotFoundUserException::new);
+        profileRepository.delete(profile);
+    }
 }
