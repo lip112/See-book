@@ -65,15 +65,15 @@ public class AdminUserController {
     public ResponseEntity<?> deleteUser(@RequestBody AdminUserDeleteRequestDTO adminUserDeleteRequestDTO) {
 //        연관관계를 많이 맺어놔서 삭제하면 자식들이 삭제가 안돼서 섞여버려서 처리해야함
 // 리포트가 핵심인데 만약 해당사람이 신고를 당한게 아닌 다른 사람도 신고를 했는데 적당했으면 그 리뷰들도 삭제해야해서 복잡해짐
-//        for (Long userId: adminUserDeleteRequestDTO.getUserId()) {
-//            User user = userService.findById(userId);
-//            wishlistService.deleteWishlistByUser(user);
-//            reviewService.deleteReviewByUser(user);
-//            suspendService.deleteById(userId);
-//            profileService.deleteProfile(userId);
-//
-//        }
-//        adminUserService.deleteUser(adminUserDeleteRequestDTO);
+        for (Long userId: adminUserDeleteRequestDTO.getUserId()) {
+            User user = userService.findById(userId);
+            wishlistService.deleteWishlistByUser(user);
+            reviewService.deleteReviewByUser(user);
+            suspendService.deleteById(userId);
+            profileService.deleteProfile(userId);
+
+        }
+        adminUserService.deleteUser(adminUserDeleteRequestDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
