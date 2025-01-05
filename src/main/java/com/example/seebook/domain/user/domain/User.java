@@ -3,10 +3,7 @@ package com.example.seebook.domain.user.domain;
 import com.example.seebook.domain.role.domain.RoleInfo;
 import com.example.seebook.global.audit.BaseTime;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,6 +13,7 @@ import java.util.Collection;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class User extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
