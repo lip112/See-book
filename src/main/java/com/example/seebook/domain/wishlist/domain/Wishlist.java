@@ -15,10 +15,10 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishlistId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Book book;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private User user;
 
     @Builder

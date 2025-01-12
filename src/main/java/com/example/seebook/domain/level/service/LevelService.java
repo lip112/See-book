@@ -6,6 +6,7 @@ import com.example.seebook.domain.level.repository.LevelRepository;
 import com.example.seebook.global.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +39,11 @@ public class LevelService {
                 .level(1)
                 .levelCount(0)
                 .build());
+    }
+
+    @Transactional
+    public void deleteLevel(Long userId){
+        levelRepository.deleteByUserId(userId);
     }
 
 }

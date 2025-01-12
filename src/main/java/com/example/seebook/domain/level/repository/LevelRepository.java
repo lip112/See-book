@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface LevelRepository extends JpaRepository<LevelInfo, Long> {
 
     Optional<LevelInfo> findByUserId(Long userId);
+
+    void deleteByUserId(Long userId);
 }

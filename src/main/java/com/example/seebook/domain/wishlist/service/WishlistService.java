@@ -44,7 +44,7 @@ public class WishlistService {
 
     @Transactional
     public void deleteWishlistByUser(User user) {
-        wishlistRepository.deleteByUser(user);
+        wishlistRepository.deleteAllByUser(user);
     }
 
 }

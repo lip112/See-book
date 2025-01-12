@@ -93,7 +93,7 @@ public class ReviewService {
     }
     @Transactional
     public void deleteReviewByUser(User user) {
-        reviewRepository.deleteByUser(user);
+        reviewRepository.deleteAllByUser(user);
     }
 
     public void validation(Long reviewId, Long userId) {

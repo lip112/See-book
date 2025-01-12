@@ -3,7 +3,9 @@ package com.example.seebook.domain.review.repository;
 import com.example.seebook.domain.review.domain.Review;
 import com.example.seebook.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 
@@ -20,5 +22,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
             "order by r.reviewId desc ")
     List<Review> findTop3DistinctReviews(Pageable pageable);
 
-    void deleteByUser(User user);
+    @Modifying
+    @Query("DELETE FROM Review r WHERE r.user = :user")
+    void deleteAllByUser(@Param("user") User user);
 }

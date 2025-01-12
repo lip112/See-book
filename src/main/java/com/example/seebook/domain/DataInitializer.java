@@ -22,16 +22,25 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.BootstrapRegistry;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.core.task.TaskRejectedException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
+@RequiredArgsConstructor
 public class DataInitializer implements ApplicationRunner {
 
     private final RoleRepository roleRepository;
@@ -40,17 +49,8 @@ public class DataInitializer implements ApplicationRunner {
     private final WishlistRepository wishlistRepository;
     private final BookRepository bookRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TaskExecutor taskExecutor;
     Faker faker = new Faker(new java.util.Locale("ko"));
-    @Autowired
-    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder,
-                           WishlistRepository wishlistRepository, ReviewRepository reviewRepository, BookRepository bookRepository){
-        this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
-        this.reviewRepository = reviewRepository;
-        this.wishlistRepository = wishlistRepository;
-        this.bookRepository = bookRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -60,51 +60,83 @@ public class DataInitializer implements ApplicationRunner {
                 new RoleInfo(RoleCode.USER)
         ));
 
-        List<Book> books = bookRepository.findAll();
-
-        for(int i = 1; i <= 100; i++){
-            System.out.println();
-            User user = User.builder()
-                    .email("test" + i + "@test.com")
-                    .password(passwordEncoder.encode("StringSd$" + i))
-                    .nickname(faker.name().firstName() + faker.name().lastName() + faker.name().lastName())
-                    .name(faker.name().firstName() + faker.name().lastName())
-                    .gender(i%2 == 0 ? Gender.FEMALE : Gender.MALE)
-                    .birthday(faker.date().birthday().toString().substring(0, 10))
-                    .phoneNumber(faker.phoneNumber().phoneNumber())
-                    .role(new RoleInfo(RoleCode.USER))
-                    .build();
-            userRepository.save(user);
-            review(user, books);
-            wishList(user, books);
-
-        }
-
+//        List<Book> books = bookRepository.findAll();
+//
+//        // 비동기 작업 개수
+//        int taskCount = 60000;
+//
+//        CountDownLatch latch = new CountDownLatch(taskCount);  // 작업 완료 대기용
+//
+//        // 시작 시간 기록
+//        LocalDateTime start = LocalDateTime.now();
+//
+//        // 100개의 비동기 작업 제출
+//        for (int i = 40001; i <= taskCount; i++) {
+//            int finalI = i;
+//            taskExecutor.execute(() -> {
+//                try {
+//                    // User 객체 생성 및 데이터 저장 작업
+//                    User user = User.builder()
+//                            .email("test" + finalI + "@test.com")
+//                            .password(passwordEncoder.encode("StringSd$" + finalI))
+//                            .nickname(faker.name().firstName() + faker.name().lastName() + faker.name().lastName())
+//                            .name(faker.name().firstName() + faker.name().lastName())
+//                            .gender(finalI % 2 == 0 ? Gender.FEMALE : Gender.MALE)
+//                            .birthday(faker.date().birthday().toString().substring(0, 10))
+//                            .phoneNumber(faker.phoneNumber().phoneNumber())
+//                            .role(new RoleInfo(RoleCode.USER))
+//                            .build();
+//                    userRepository.save(user);
+//                    System.out.println(Thread.currentThread().getName());
+//                    review(user, books);
+//                    wishList(user, books);
+//                }
+//                finally {
+//                    latch.countDown(); // 작업이 끝날 때마다 카운트다운
+//                }
+//            });
+//        }
+//
+//        // 비동기 작업들이 끝날 때까지 대기
+//        latch.await();  // 모든 작업이 끝날 때까지 대기
+//
+//        // 종료 시간 기록
+//        LocalDateTime end = LocalDateTime.now();
+//
+//        // 걸린 시간 출력
+//        System.out.println("비동기 작업 완료 시간: " + (end.getSecond() - start.getSecond()) + "초");
     }
 
+    @Transactional
     void review(User user, List<Book> books){
-        for (int i =0; i < 50; i++){
+        List<Review> reviews = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
             String content = faker.lorem().paragraph();
             content = content.length() > 50 ? content.substring(0, 50) : content;
 
             Review review = Review.builder()
                     .user(user)
-                    .book(books.get(faker.random().nextInt(0, 49)))
+                    .book(books.get(faker.random().nextInt(0, books.size() - 1)))
                     .nickname(user.getNickname())
                     .content(content)
                     .starRating(faker.random().nextDouble(0.1, 5))
                     .build();
-            reviewRepository.save(review);
+            reviews.add(review);
         }
+        reviewRepository.saveAll(reviews); // Batch Insert 실행
     }
 
+    @Transactional
     void wishList(User user, List<Book> books){
+        List<Wishlist> wishlists = new ArrayList<>();
+
         for (int i =0; i < 20; i++){
             Wishlist wishlist = Wishlist.builder()
                     .user(user)
                     .book(books.get(faker.random().nextInt(0, 49)))
                     .build();
-            wishlistRepository.save(wishlist);
+            wishlists.add(wishlist);
         }
+        wishlistRepository.saveAll(wishlists);
     }
 }

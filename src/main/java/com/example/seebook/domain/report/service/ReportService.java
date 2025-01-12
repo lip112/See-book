@@ -10,6 +10,7 @@ import com.example.seebook.domain.user.domain.User;
 import com.example.seebook.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +28,11 @@ public class ReportService {
                         .isProcessed(false)
                         .reportDate(LocalDateTime.now())
                 .build());
+    }
+
+    @Transactional
+    public void deleteReport(User user){
+        reportRepository.deleteByReportedIdOrReporterId(user, user);
     }
 
 

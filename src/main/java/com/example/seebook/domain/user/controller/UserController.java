@@ -2,6 +2,7 @@ package com.example.seebook.domain.user.controller;
 
 import com.example.seebook.domain.level.service.LevelService;
 import com.example.seebook.domain.profile.service.ProfileService;
+import com.example.seebook.domain.report.service.ReportService;
 import com.example.seebook.domain.review.service.ReviewService;
 import com.example.seebook.domain.support.service.SupportService;
 import com.example.seebook.domain.suspend.service.SuspendService;
@@ -11,6 +12,7 @@ import com.example.seebook.domain.user.dto.requset.sms.DeleteAccountRequestDTO;
 import com.example.seebook.domain.user.dto.requset.sms.VerificationRequestDTO;
 import com.example.seebook.domain.user.dto.response.FindEmailResponseDTO;
 import com.example.seebook.domain.user.dto.response.LoginResponseDTO;
+import com.example.seebook.domain.user.service.AdminUserService;
 import com.example.seebook.domain.user.service.OauthService;
 import com.example.seebook.domain.user.service.UserService;
 import com.example.seebook.domain.wishlist.domain.Wishlist;
@@ -23,6 +25,7 @@ import com.example.seebook.global.sms.SmsUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 @Validated
+@Slf4j
 public class UserController {
     private final UserService userService;
     private final ProfileService profileService;
@@ -44,7 +48,7 @@ public class UserController {
     private final SupportService supportService;
     private final ReviewService reviewService;
     private final WishlistService wishlistService;
-
+    private final ReportService reportService;
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
         Long userId = userService.signUp(signUpRequestDTO);
@@ -166,9 +170,48 @@ public class UserController {
     public ResponseEntity<?> deleteAccount(@Valid @RequestBody DeleteAccountRequestDTO deleteAccountRequestDTO) {
         Long userId = UserAuthorizationUtil.getLoginUserId();
         User user = userService.findById(userId);
-        supportService.deleteSupportByUser(user);
-        reviewService.deleteReviewByUser(user);
-        wishlistService.deleteWishlistByUser(user);
+
+        try {
+            wishlistService.deleteWishlistByUser(user);
+        } catch (UserException.NotFoundUserException e) {
+            log.warn("Wishlist for user ID {} not found. Skipping wishlist deletion.", userId);
+        }
+        try {
+            reviewService.deleteReviewByUser(user);
+        } catch (UserException.NotFoundUserException e) {
+            log.warn("Review for user ID {} not found. Skipping review deletion.", userId);
+        }
+
+        try {
+            levelService.deleteLevel(userId);
+        } catch (UserException.NotFoundUserException e) {
+            log.warn("Level for user ID {} not found. Skipping level deletion.", userId);
+        }
+
+        try {
+            profileService.deleteProfile(userId);
+        } catch (UserException.NotFoundUserException e) {
+            log.warn("Profile for user ID {} not found. Skipping profile deletion.", userId);
+        }
+
+        try {
+            reportService.deleteReport(user);
+        } catch (UserException.NotFoundUserException e) {
+            log.warn("Report for user ID {} not found. Skipping report deletion.", userId);
+        }
+
+        try {
+            suspendService.deleteById(userId);
+        } catch (UserException.NotFoundUserException e) {
+            log.warn("Suspension for user ID {} not found. Skipping suspension deletion.", userId);
+        }
+
+        try {
+            supportService.deleteSupportByUser(user);
+        } catch (UserException.NotFoundUserException e) {
+            log.warn("Support for user ID {} not found. Skipping support deletion.", userId);
+        }
+
         if (deleteAccountRequestDTO.getProvider().equals("kakao")) {
             oauthService.deleteAccount(user.getKakaoId());
         }
