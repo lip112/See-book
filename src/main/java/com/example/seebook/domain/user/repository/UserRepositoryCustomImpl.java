@@ -9,6 +9,7 @@ import com.example.seebook.domain.user.dto.response.AdminUserDetailResponseDTO;
 import com.example.seebook.domain.user.dto.response.AdminUserListResponseDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -30,24 +31,20 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
     @Override
     public AdminUserListResponseDTO findAdminUserList(int offset, int limit, String queryType, String query) {
         List<UserDTO> userList = jpaQueryFactory
-                .select(user.userId, user.email, user.name, user.nickname,
-                        user.gender, user.role.Description, user.createdDate)
+                .select(Projections.constructor(UserDTO.class,
+                        user.userId,
+                        user.email,
+                        user.name,
+                        user.nickname,
+                        user.gender,
+                        user.role.Description,
+                        user.createdDate))
                 .from(user)
-                .where(eqQueryType(queryType, query))
-                .offset(offset)
+                .where(eqQueryType(queryType, query)
+                        .and(user.userId.gt(offset*5)))
                 .limit(limit)
-                .fetch()
-                .stream()
-                .map(tuple -> UserDTO.builder()
-                        .userId(tuple.get(user.userId))
-                        .email(tuple.get(user.email))
-                        .name(tuple.get(user.name))
-                        .nickname(tuple.get(user.nickname))
-                        .gender(tuple.get(user.gender))
-                        .role(RoleCode.fromDescription(tuple.get(user.role.Description)))
-                        .createdDate(tuple.get(user.createdDate))
-                        .build())
-                .collect(Collectors.toList());
+                .fetch();
+
         Long count = jpaQueryFactory
                 .select(user.count())
                 .from(user)
@@ -61,20 +58,23 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
     }
 
     private BooleanExpression eqQueryType(String queryType, String query) {
-        if (!queryType.equals("all")) {
-            if (queryType.equals("email")) {
-                return user.email.contains(query);
-            } else if (queryType.equals("name")) {
-                return user.name.contains(query);
-            } else if (queryType.equals("nickname")) {
-                return user.nickname.contains(query);
-            } else if (queryType.equals("gender")) {
-                return user.gender.eq(Gender.fromString(query));
-            } else if (queryType.equals("role")) {
-                return user.role.eq(new RoleInfo(RoleCode.fromDescription(query)));
-            }
+        if (queryType == null || queryType.equals("all")) {
+            return null;  // 조건이 없는 경우 null 반환
         }
-        return null;
+        switch (queryType) {
+            case "email":
+                return user.email.contains(query);
+            case "name":
+                return user.name.contains(query);
+            case "nickname":
+                return user.nickname.contains(query);
+            case "gender":
+                return user.gender.eq(Gender.fromString(query));
+            case "role":
+                return user.role.eq(new RoleInfo(RoleCode.fromDescription(query)));
+            default:
+                return null;
+        }
     }
 
     @Override

@@ -6,12 +6,14 @@ import com.example.seebook.domain.role.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.Arrays;
 
 @EnableJpaAuditing
+@EnableCaching
 @SpringBootApplication
 public class SeeBookApplication {
     public static void main(String[] args) {

@@ -3,6 +3,7 @@ package com.example.seebook.domain.main.controller;
 import com.example.seebook.domain.review.dto.response.HomeReviewListResponseDTO;
 import com.example.seebook.domain.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
     private final ReviewService reviewService;
 
+    @Cacheable(value = "homeReviewList")
     @GetMapping("/review-list")
     public ResponseEntity<HomeReviewListResponseDTO> getHomeReviewList(){
         return ResponseEntity

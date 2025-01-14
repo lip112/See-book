@@ -52,11 +52,9 @@ public class SecurityConfig  {
                         new JwtAuthFilter(customUserDetailsService, jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers( "/","/error/**",
-                                "/api/user/**", "/api/main/home/**",
-                                                    //swagger 전용
-                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"
+                                "/api/user/**", "/api/main/home/**", "/api/admin/**"
                         ).permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        //.requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

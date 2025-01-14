@@ -56,6 +56,16 @@ dependencies {
 
     //더미 데이터
     implementation 'net.datafaker:datafaker:2.2.2'
+
+    // Spring Boot Cache Starter
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    // Ehcache
+    implementation 'org.ehcache:ehcache:3.10.8'
+    // cache JAXB API가 JDK 버전과 호환되지 해결용 JAXB API 추가
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    implementation 'javax.activation:activation:1.1.1'
+
 }
 //Querydsl -> gradle에서 compileJava
 clean {

@@ -2,12 +2,14 @@ package com.example.seebook.domain.user.dto;
 
 import com.example.seebook.domain.role.domain.RoleCode;
 import com.example.seebook.domain.user.domain.Gender;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class UserDTO {
     private Long userId;
     private String email;
