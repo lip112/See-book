@@ -1,0 +1,23 @@
+# .github/workflows/ci-cd.yml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 푸시될 때 워크플로우 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # 실행 환경: 최신 Ubuntu
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # 코드를 체크아웃하는 GitHub 공식 Action
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'  # JDK 17 설치
+
+      - name: Build with Gradle
+        run: ./gradlew build  # Gradle로 빌드 실행
