@@ -14,6 +14,7 @@ import com.example.seebook.global.exception.ReviewException;
 import com.example.seebook.global.restclient.AladinComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class BookService {
     @Value("${aladin.ttbKey}")
     private String TTB_KEY;
 
+    @Cacheable(value = "bookTextSearch", condition = "#start < 6")
     public BookListResponseDTO getBookByText(String query, String queryType, int start) {
         BookListResponseDTO alainBookList = BookListResponseDTO.from(aladinComponent.findAllByQuery(TTB_KEY, query, queryType, "js", start, 20131101, "Big"));
         return bookRepository.getBooksReviewSummary(alainBookList);

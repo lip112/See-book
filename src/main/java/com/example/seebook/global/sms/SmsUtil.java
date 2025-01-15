@@ -10,6 +10,7 @@ import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
@@ -35,6 +36,7 @@ public class SmsUtil {
         this.messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecretKey, "https://api.coolsms.co.kr");
     }
 
+    @Async
     public SingleMessageSentResponse sendOneSMS(String to) {
         String code = String.valueOf(new Random().nextInt(899999) + 100000);
         Message message = new Message();
