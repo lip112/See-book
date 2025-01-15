@@ -17,6 +17,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
+          distribution: 'amazon'
           java-version: '17'  # JDK 17 설치
 
       - name: Build with Gradle
