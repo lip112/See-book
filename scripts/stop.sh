@@ -1,19 +1,23 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-PROJECT_ROOT="/home/ec2-user/apps/spring-practice"
-JAR_FILE="$PROJECT_ROOT/spring-webapp.jar"
+APP_DIR="/home/ec2-user/SeeBook"  # 애플리케이션이 위치한 디렉터리
+PID_FILE="$APP_DIR/app.pid"       # PID 파일 경로
 
-DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
+if [ -f $PID_FILE ]; then
+    PID=$(cat $PID_FILE)
+    echo "Stopping application with PID $PID..."
+    kill $PID
 
-TIME_NOW=$(date +%c)
+    # 종료 확인
+    sleep 2
+    if ps -p $PID > /dev/null; then
+        echo "Force killing application..."
+        kill -9 $PID
+    fi
 
-# 현재 구동 중인 애플리케이션 pid 확인
-CURRENT_PID=$(pgrep -f $JAR_FILE)
-
-# 프로세스가 켜져 있으면 종료
-if [ -z $CURRENT_PID ]; then
-  echo "$TIME_NOW > 현재 실행중인 애플리케이션이 없습니다" >> $DEPLOY_LOG
+    # PID 파일 삭제
+    rm $PID_FILE
+    echo "Application stopped."
 else
-  echo "$TIME_NOW > 실행중인 $CURRENT_PID 애플리케이션 종료 " >> $DEPLOY_LOG
-  kill -15 $CURRENT_PID
+    echo "No PID file found. Application may not be running."
 fi
