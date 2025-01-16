@@ -1,47 +1,54 @@
-# .github/workflows/ci-cd.yml
 name: CI/CD Pipeline
 
-on: #트리거 -> push할떄 실행 , pull_request 등등
+on:
   push:
     branches:
-      - main  # main 브랜치에 푸시될 때 워크플로우 실행
+      - main
 
-jobs: # 트러가 발생시 어떤 작업을 할 것인지?
-  build:
-    runs-on: ubuntu-latest  # 깃 허브 액션에서 실행되는 OS , 실행 환경: 최신 Ubuntu
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
     steps:
+      # 1. 코드 체크아웃
       - name: Checkout code
-        uses: actions/checkout@v3  # 코드를 체크아웃하는 GitHub 공식 Action
+        uses: actions/checkout@v3
 
+      # 2. JDK 설정
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '17'  # JDK 17 설치
+          java-version: '17'
 
-      ## application-S3.yml 생성 후 secret 값 복붙
-      - uses: actions/checkout@v3
+      # 3. application-S3.yml 생성
       - run: touch ./src/main/resources/application-S3.yml
       - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-S3.yml
 
-
-      # Gradle Build를 위한 권한 부여
+      # 4. Gradle 빌드
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Gradle Build
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      # GitHub Actions에서 AWS CLI를 사용할 수 있도록 자격 증명을 설정하는 공식 GitHub Action입니다.
+      # 5. AWS 자격 증명 설정
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-        # 5. 빌드된 JAR 파일을 S3로 업로드
+      # 6. S3에 JAR 파일 업로드
       - name: Upload JAR to S3
         run: aws s3 cp ./build/libs/See-book-0.0.1-SNAPSHOT.jar s3://${{ secrets.S3_BUCKET_NAME }}/See-book-0.0.1-SNAPSHOT.jar
+
+      # 7. CodeDeploy 배포 트리거
+      - name: Deploy with CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ secrets.CODEDEPLOY_APP_NAME }} \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP }} \
+            --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=See-book-0.0.1-SNAPSHOT.jar
