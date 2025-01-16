@@ -1,26 +1,16 @@
 version: 0.0
 os: linux
-
-# 배포 파일 설정
-## source: 인스턴스에 복사할 디렉터리 경로
-## destination: 인스턴스에서 파일이 복사되는 위치
-## overwrite: 복사할 위치에 파일이 있는 경우 대체
 files:
   - source: /build/libs/See-book-0.0.1-SNAPSHOT.jar
     destination: /home/ec2-user/SeeBook/
 
-# 배포 이후에 실행할 일련의 라이프사이클
-# 파일을 설치한 후 `AfterInstall` 에서 기존에 실행중이던 애플리케이션을 종료
-# `ApplicationStart` 에서 새로운 애플리케이션을 실행
-## location: hooks 에서 실행할 스크립트 위치
-## timeout (optional): 스크립트 실행에 허용되는 최대 시간이며, 넘으면 배포 실패로 간주됨
-## runas (optional): 스크립트를 실행하는 사용자
 hooks:
-  AfterInstall:
+  BeforeInstall:  # 배포 전에 애플리케이션 종료
     - location: scripts/stop.sh
-      timeout: 60
+      timeout: 300
       runas: ec2-user
-  ApplicationStart:
+
+  AfterInstall:   # 배포 후 애플리케이션 시작
     - location: scripts/start.sh
-      timeout: 60
+      timeout: 300
       runas: ec2-user
