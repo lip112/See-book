@@ -80,3 +80,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// 빌드시 스냅샷 생성 안되게 하는 기능
+jar {
+    enabled = false
+}
