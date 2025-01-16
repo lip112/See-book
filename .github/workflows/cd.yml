@@ -32,18 +32,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      # 5. 배포 패키지 생성 (JAR + AppSpec + 스크립트)
-      - name: Create deployment package
-        run: |
-          mkdir -p deployment
-          cp appspec.yml deployment/
-          cp -r scripts deployment/
-          cp ./build/libs/See-book-0.0.1-SNAPSHOT.jar deployment/
-          cd deployment
-          zip -r ../deployment.zip .
-          cd ..
-
-      # 6. AWS 자격 증명 설정
+      # 5. AWS 자격 증명 설정
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -51,15 +40,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 7. S3에 ZIP 파일 업로드
-      - name: Upload ZIP to S3
-        run: aws s3 cp deployment.zip s3://${{ secrets.S3_BUCKET_NAME }}/deployment.zip
+      # 6. S3에 JAR 파일 업로드
+      - name: Upload JAR to S3
+        run: aws s3 cp ./build/libs/See-book-0.0.1-SNAPSHOT.jar s3://${{ secrets.S3_BUCKET_NAME }}/See-book-0.0.1-SNAPSHOT.jar
 
-      # 8. CodeDeploy 배포 트리거
+      # 7. CodeDeploy 배포 트리거
       - name: Deploy with CodeDeploy
         run: |
           aws deploy create-deployment \
             --application-name ${{ secrets.CODEDEPLOY_APP_NAME }} \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP }} \
-            --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=deployment.zip
+            --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=See-book-0.0.1-SNAPSHOT.jar
+
