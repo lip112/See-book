@@ -25,6 +25,7 @@ jobs: # 트러가 발생시 어떤 작업을 할 것인지?
       - run: touch ./src/main/resources/application-S3.yml
       - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-S3.yml
 
+
       # Gradle Build를 위한 권한 부여
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
