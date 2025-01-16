@@ -1,8 +1,15 @@
 version: 0.0
 os: linux
+
 files:
-  - source: See-book-0.0.1-SNAPSHOT.jar # S3에서 해당 경로에 있는 파일을 복사 한다는 의미
+  - source: See-book-0.0.1-SNAPSHOT.jar # S3에서 해당 경로에 있는 파일을 복사 한다는 의미, 루트 계정이라 경오 없음
     destination: /home/ec2-user/SeeBook/ # 복사한 파일을 해당 경로에 설치 한다는 의미
+
+permissions: # CodeDeploy에서 EC2서버로 넘겨준 파일들을 모두 ubuntu권한을 갖도록 합니다.
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
 
 hooks:
   BeforeInstall:  # 배포 전에 애플리케이션 종료
