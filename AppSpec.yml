@@ -1,8 +1,8 @@
 version: 0.0
 os: linux
 files:
-  - source: /build/libs/See-book-0.0.1-SNAPSHOT.jar
-    destination: /home/ec2-user/SeeBook/
+  - source: See-book-0.0.1-SNAPSHOT.jar # S3에서 해당 경로에 있는 파일을 복사 한다는 의미
+    destination: /home/ec2-user/SeeBook/ # 복사한 파일을 해당 경로에 설치 한다는 의미
 
 hooks:
   BeforeInstall:  # 배포 전에 애플리케이션 종료
